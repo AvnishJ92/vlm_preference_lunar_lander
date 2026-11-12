@@ -5,3 +5,4 @@ __pycache__/
 results/runs/
 results/calibration/*
 !results/calibration/calibration.csv
+results/ablation/

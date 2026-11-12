@@ -107,11 +107,29 @@ The calibration set did not reveal any of this. Its clips came from landers of v
 pilot with varying amounts of random actions), where 76% agreement was measured. The clips an agent produces during
 training are either all crashes or all competent, and those are the two regimes where the VLM fails.
 
+## Why the true-reward baseline is below 200: the policy network
+
+Run `20261112-prefrl-ablation-aa3621`: PPO on the true reward only, 2M timesteps, three seeds per variant, everything
+else as in the main run.
+
+| episode ends | policy network | final return, mean [95% CI] | per seed | landings | first evaluation at 200 or more |
+|---|---|---|---|---|---|
+| hidden (paper) | 1 layer of 64 (main run, 5 seeds) | 166 [134, 197] | 176, 202, 159, 153, 137 | 68% | 1.7M in one seed |
+| hidden (paper) | 2 layers of 64 | 272 [253, 290] | 273, 278, 264 | 96% | 0.46M to 0.66M |
+| hidden (paper) | 2 layers of 256 | 271 [250, 292] | 278, 262, 274 | 95% | 0.41M to 0.46M |
+| visible | 1 layer of 64 | 117 [94, 141] | 128, 114, 110 | 63% | never |
+| visible | 2 layers of 64 | 277 [272, 282] | 279, 276, 276 | 99% | 0.70M to 0.85M |
+
+The single hidden layer is the bottleneck. With two hidden layers PPO solves the task in the paper's setting, in about
+a quarter of the timesteps. Hiding the episode ends, which the paper requires, costs little or nothing here. All
+learned-reward conditions in the main run used the same one-layer policy, so their results are held back by it too;
+how much is not known until they are rerun.
+
 ## Caveats
 
 - Five seeds give wide intervals; see the summary for what they do and do not support.
-- The true-reward baseline itself averages 166, below 200. It uses PPO with one hidden layer of 64 units and no
-  episode-end signal, which is a harder setting than standard LunarLander benchmarks (see the ablation below).
+- The true-reward baseline itself averages 166, below 200, because the policy has a single hidden layer of 64 units
+  (see the ablation above). Every condition shares that limit.
 - The oracle condition underperforms the paper's result. Label budget, label schedule, predictor regularisation and
   PPO settings were not tuned; the adaptive l2 coefficient sat at its ceiling during pretraining.
 - The 50/50 mixing ratio is a placeholder; the paper has no such condition.
@@ -122,6 +140,7 @@ training are either all crashes or all competent, and those are the two regimes 
 ## Where everything is
 
 - `results/plots/` and `results/calibration/calibration.csv`: in git.
+- `results/ablation/<variant>/seed_<n>/`: the policy-network ablation runs (curves and summaries, no videos). Not in git.
 - `results/runs/<condition>/seed_<n>/`: per-run curves (`eval.csv`, `progress.csv`, `rounds.csv`), `summary.json`,
   `queries.jsonl` with every VLM reply, the final policy and reward model, and videos. Not in git (176 MB).
   - `videos/eval/step<timestep>_ep0_return<R>.mp4`: one evaluation episode every 50k timesteps.
