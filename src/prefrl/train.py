@@ -195,6 +195,9 @@ def run(cfg, condition, seed, out, judge=None):
     cond, p, n_envs = cfg["conditions"][condition], cfg["pref"], cfg["n_envs"]
     (out / "config.yaml").write_text(yaml.safe_dump(dict(cfg, condition=condition, seed=seed), sort_keys=False))
     torch.set_num_threads(cfg["threads"])
+    # The adaptive l2 penalty shrinks unused predictor weights into the subnormal float range, where CPU arithmetic is
+    # ~10x slower (measured: 28 ms per label per fit instead of 3.5 ms). Treat them as the zeros they effectively are.
+    torch.set_flush_denormal(True)
     rng = np.random.default_rng(seed)
 
     learned = "oracle_fraction" in cond  # otherwise: PPO on the true reward

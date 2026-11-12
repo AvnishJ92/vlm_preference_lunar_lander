@@ -15,8 +15,29 @@ Four conditions, five seeds each:
 | `vlm` | learned predictor | Qwen2.5-VL |
 | `mixed` | learned predictor | each query: oracle with probability `oracle_fraction`, else Qwen2.5-VL |
 
-**Status: code written and unit-tested on CPU. No experiment has been run, and the VLM has not been loaded yet.**
-The prompt is designed but not yet measured against the oracle; that is the `calibrate` stage below.
+**Status (2026-11-12):** gates passed, main experiment launched; see *External runs* at the bottom.
+
+Gate results that shaped the configuration:
+
+- **GPU smoke test** (run `...-7bf969`): the whole VLM path works. It also showed the describe-then-answer prompt
+  running into its token limit, which led to the calibration grid below.
+- **Prompt calibration** (run `...-7a4e47`, 200 clip pairs from landers of mixed skill, each asked in both orders):
+
+  | variant | labelled | ties | agrees with oracle | correct / query | wrong / query | answers "1" |
+  |---|---|---|---|---|---|---|
+  | answer only, 8-frame video (**chosen**) | 59% | 0% | 76% | 0.45 | 0.14 | 31% |
+  | answer only, 6 separate images | 69% | 0% | 73% | 0.50 | 0.19 | 47% |
+  | answer only, 16-frame video | 54% | 1% | 76% | 0.41 | 0.13 | 28% |
+  | answer only, 8 frames upscaled 1.5x | 51% | 0% | 76% | 0.39 | 0.12 | 26% |
+  | one line per clip, then answer | 69% | 17% | 78% | 0.40 | 0.12 | 57% |
+  | describe, compare, then answer | 72% | 30% | 80% | 0.34 | 0.09 | 47% |
+
+  "Labelled" = the two orders gave the same answer. "Agrees" is among clear-cut labels. Differences in agreement
+  are within noise (about 4 points); the answer-only video prompt gives the most signal per query and costs about
+  0.4 s per model call against 1.0 s for the long prompt. The paper assumes a rater who is wrong about 5% of the
+  time; this one is wrong about 24% of the time, and 87% right only when the two clips differ a lot.
+- **Baselines at 1M timesteps** (run `...-7bf969`): PPO on the true reward ended at -18 to 159 (mean 89) and was
+  still rising, so the experiment runs for 2M. Oracle-preference runs tracked or beat it at equal timesteps.
 
 ## How it follows the paper
 
@@ -49,8 +70,8 @@ Differences worth knowing:
 - Every VLM query is asked in both clip orders and kept only if the two answers agree (`swap_check`). This removes
   position bias at the cost of two model calls per query.
 - LunarLander's fuel cost stays in the true reward (engine exhaust is visible in the clips).
-- Label budget, timesteps, annealing constant and predictor epochs are choices for LunarLander that no training run
-  has validated yet.
+- Label budget, annealing constant and predictor epochs are choices for LunarLander that were not tuned; the
+  timestep budget (2M) was set from the 1M baselines above.
 
 ## Layout
 
