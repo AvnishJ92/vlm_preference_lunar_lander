@@ -59,6 +59,8 @@ class QwenJudge:
     def __init__(self, model, processor, cfg, prompts, segment_len):
         self.model, self.processor, self.cfg = model, processor, cfg
         self.system, self.question = prompts["system"], prompts["variants"][cfg["prompt"]]
+        if cfg["mark_out_of_view"]:
+            self.system += prompts["out_of_view_rule"]
         self.clip_label = prompts["clip_label"][cfg["input_mode"]]
         self.dt = (segment_len - 1) / (cfg["frames_per_clip"] - 1) / FPS  # seconds between shown frames
 

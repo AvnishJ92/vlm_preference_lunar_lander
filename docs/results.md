@@ -1,4 +1,8 @@
-# Results: preference-based RL on LunarLander with a VLM rater
+# First attempt (superseded): one-hidden-layer policy
+
+> These are the results of the first attempt, kept as a record of why the setup changed. Its runs, videos and
+> figures were deleted on 2026-11-12 when the experiment was restarted with a two-layer policy; the figures are in
+> git history (revision `8744d48`, `results/plots/`).
 
 Main run `20261112-prefrl-lunarlander-26ecf3`, 12 November 2026. Four conditions, five seeds each, 2M timesteps per
 run, 1,400 preference queries per learned-reward run. Method and configuration are described in the
@@ -22,20 +26,6 @@ Final return is the mean over 100 evaluation episodes of the deterministic final
 environment reward. Intervals are Student-t 95% intervals of the mean over the five seeds. With five seeds they are
 wide: the only differences they support are that the VLM-only condition is far worse than the other three, and that
 the oracle condition is below the true-reward baseline. Oracle and mixed cannot be told apart.
-
-## Figures
-
-![Evaluation return during training](../results/plots/learning_curves.png)
-
-![Final return and landing rate](../results/plots/final_performance.png)
-
-![Evaluation return per seed](../results/plots/learning_curves_per_seed.png)
-
-![Reward predictor diagnostics](../results/plots/reward_predictor.png)
-
-![VLM label statistics](../results/plots/vlm_labels.png)
-
-Also in `results/plots/`: `training_return.png` (return of the stochastic policy during training) and `summary.csv`.
 
 ## What happened in each condition
 
@@ -136,18 +126,6 @@ how much is not known until they are rerun.
 - One VLM, one prompt, 8 frames per clip. Nothing here says what a larger model, a reasoning prompt or a different
   clip presentation would do.
 - "Agreement with the oracle" measures agreement with LunarLander's reward, which rewards progress within a clip.
-
-## Where everything is
-
-- `results/plots/` and `results/calibration/calibration.csv`: in git.
-- `results/ablation/<variant>/seed_<n>/`: the policy-network ablation runs (curves and summaries, no videos). Not in git.
-- `results/runs/<condition>/seed_<n>/`: per-run curves (`eval.csv`, `progress.csv`, `rounds.csv`), `summary.json`,
-  `queries.jsonl` with every VLM reply, the final policy and reward model, and videos. Not in git (176 MB).
-  - `videos/eval/step<timestep>_ep0_return<R>.mp4`: one evaluation episode every 50k timesteps.
-  - `videos/eval/final_ep<0-4>_return<R>.mp4`: five episodes of the final policy.
-  - `videos/queries/q<id>_vlm-<answer>_oracle-<answer>.mp4` and `..._shown.png`: every 10th VLM query, both clips side
-    by side, and the eight frames per clip the VLM was shown.
-- The original outputs and logs: `/projects/data/ttsteam/avnish/artifacts/vlm_preference_lunar_lander/runs/20261112-prefrl-lunarlander-26ecf3/`.
 
 ## How it was run
 

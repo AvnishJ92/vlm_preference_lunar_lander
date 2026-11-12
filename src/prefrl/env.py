@@ -3,6 +3,7 @@
 import gymnasium as gym
 import imageio
 import numpy as np
+from PIL import Image, ImageDraw, ImageFont
 from stable_baselines3.common.vec_env import DummyVecEnv, VecEnvWrapper
 
 ENV_ID = "LunarLander-v3"
@@ -112,6 +113,20 @@ def make_venv(n_envs, seed, capacity, reward_fn=None, hide_episode_ends=True):
     return Experience(DummyVecEnv([make(i) for i in range(n_envs)]), capacity, reward_fn)
 
 
+def out_of_view(obs):
+    """True where the lander is outside the rendered picture. obs[..., 0] spans the picture width as -1..1; the top
+    edge is at obs[..., 1] = 1.41 (viewport height 13.33 world units, pad at 3.33, legs 0.6 long, scaled by 6.67)."""
+    return (np.abs(obs[..., 0]) > 1) | (obs[..., 1] > 1.41)
+
+
+def _stamp_out_of_view(frame):
+    """Write on a frame what someone watching the whole video sees for themselves: the lander has left the picture."""
+    image = Image.fromarray(frame)
+    ImageDraw.Draw(image).text((frame.shape[1] // 2, 60), "LANDER OUT OF VIEW", fill=(255, 60, 60), anchor="mm",
+                               font=ImageFont.load_default(size=40))  # fmt: skip
+    return np.asarray(image)
+
+
 def _tick_particles(lander):
     """What LunarLander.render() does to exhaust particles, minus the drawing, so skipped frames age them the same."""
     for p in lander.particles:
@@ -129,10 +144,11 @@ class Renderer:
     def __init__(self):
         self.env = gym.make(ENV_ID, render_mode="rgb_array")
 
-    def frames(self, xp, env, start, k, offsets=None):
+    def frames(self, xp, env, start, k, offsets=None, mark_out_of_view=False):
         """uint8 (len(offsets), 400, 600, 3) for the window's steps `offsets` (default: all k).
 
-        Frame j shows the world right after action j (its engine flames included).
+        Frame j shows the world right after action j (its engine flames included). With mark_out_of_view, frames in
+        which the lander is outside the picture carry the words LANDER OUT OF VIEW.
         """
         wanted = set(range(k) if offsets is None else np.asarray(offsets).tolist())
         lander, out = self.env.unwrapped, []
@@ -148,7 +164,8 @@ class Renderer:
                 raise RuntimeError(f"replay diverged from the log at env {env} step {g}")
             obs = self.env.step(int(xp.act[env, g]))[0]
             if j in wanted:
-                out.append(self.env.render())
+                frame = self.env.render()
+                out.append(_stamp_out_of_view(frame) if mark_out_of_view and out_of_view(obs) else frame)
             else:
                 _tick_particles(lander)
         return np.stack(out)

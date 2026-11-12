@@ -80,7 +80,7 @@ class Feedback:
         """The frames of one segment that the VLM gets to see."""
         k = self.p["segment_len"]
         offsets = clip_offsets(k, self.v["frames_per_clip"], self.xp.ends(*where, k))
-        return self.renderer.frames(self.xp, *where, k, offsets)
+        return self.renderer.frames(self.xp, *where, k, offsets, self.v["mark_out_of_view"])
 
     def _save_clip(self, qid, pair, shown, mu, oracle):
         """Side-by-side mp4 of a query (clip 1 left, clip 2 right) and a strip of exactly the frames the VLM saw."""

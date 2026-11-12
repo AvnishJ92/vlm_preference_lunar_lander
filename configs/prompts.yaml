@@ -28,6 +28,10 @@ system: |
   - If the lander suddenly jumps back to the top of the picture, that attempt ended and a new one began. If it was resting upright on its legs just before the jump, it had landed successfully (best). If it was hitting the ground with its body, tipping over, or leaving the picture, it crashed (worst).
   - The two clips come from different attempts with different terrain. Compare the behaviour, not the scenery.
 
+# Appended to the system prompt when vlm.mark_out_of_view is on (frames then carry that text).
+out_of_view_rule: |
+  - When the lander has left the picture, the frame says LANDER OUT OF VIEW in red. That lander has flown away, which is as bad as a crash: a clip that says LANDER OUT OF VIEW is worse than a clip in which the lander stays in the picture.
+
 # Text placed before each clip. {n} is 1 or 2, {frames} the number of frames, {dt} the seconds between frames.
 clip_label:
   video: "Clip {n}:"
@@ -43,6 +47,12 @@ variants:
   brief: |
     In at most 15 words each, say what the lander does in Clip 1 and in Clip 2: where it ends up relative to the flags, whether it is upright or tilted, and whether it lands, crashes or is still flying. Then decide in which clip better things happen by the judging criteria.
     Reply with exactly three lines and nothing else. Line 1 starts with `Clip 1:`. Line 2 starts with `Clip 2:`. Line 3 is `ANSWER: 1`, `ANSWER: 2`, `ANSWER: TIE` (about equally good) or `ANSWER: UNSURE` (you cannot tell what is happening; avoid this unless you are truly confused).
+
+  # Answer only, asked about the change between the start and the end of each clip, which is what the environment
+  # reward pays for. (With `direct`, the model preferred whichever lander was in the better place.)
+  progress: |
+    For each clip, compare its first moment with its last moment. In which clip does the lander's situation improve more, or get worse less, between the first and the last moment? Improving means ending closer to the landing pad, slower, more upright, or resting on its legs. Getting worse means ending farther from the pad, faster, more tilted, crashed, or out of the picture. Do not prefer a clip merely because its lander starts in a better place; a lander that sits still neither improves nor gets worse.
+    Reply with exactly one line and nothing else: `ANSWER: 1` if it is Clip 1, `ANSWER: 2` if it is Clip 2, `ANSWER: TIE` if they are about equally good, or `ANSWER: UNSURE` if you cannot tell what is happening. Avoid UNSURE unless you are truly confused.
 
   # Answer only. About 5 generated tokens per query.
   direct: |

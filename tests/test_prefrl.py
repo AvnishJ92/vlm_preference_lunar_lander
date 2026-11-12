@@ -57,6 +57,21 @@ def test_replay_renders_exactly_what_was_logged():
     assert spans_reset  # the sample covered windows that cross a hidden reset
 
 
+def test_out_of_view_frames_are_marked_only_when_asked():
+    xp = E.make_venv(1, 0, 400)
+    xp.reset()
+    for _ in range(400):
+        xp.step(np.array([2]))  # main engine only: the lander climbs out of the picture
+    gone = E.out_of_view(xp.obs[0])
+    assert gone.any() and not gone[:20].any()
+    start = int(np.flatnonzero(gone)[0]) - 10  # a window that begins in view and ends out of it
+    renderer = E.Renderer()
+    plain, marked = renderer.frames(xp, 0, start, 30), renderer.frames(xp, 0, start, 30, mark_out_of_view=True)
+    changed = (plain != marked).any((1, 2, 3))
+    # frame j shows the state after action j, which is what the next logged observation records
+    assert not changed[:8].any() and (changed[:-1] == gone[start + 1 : start + 30]).all()
+
+
 def test_replay_detects_a_trajectory_that_does_not_match():
     xp, _, _ = rollout(n_envs=1, steps=80)
     xp.act[0, 5:40] = 2  # pretend the lander fired its main engine: the log no longer matches the physics
