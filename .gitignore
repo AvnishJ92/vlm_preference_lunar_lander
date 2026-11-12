@@ -1,3 +1,7 @@
 __pycache__/
 .pytest_cache/
 .venv/
+# results/: a copy of the run outputs. Plots and tables are committed; videos, models and per-run files are not.
+results/runs/
+results/calibration/*
+!results/calibration/calibration.csv

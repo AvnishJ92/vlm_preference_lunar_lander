@@ -34,6 +34,14 @@ def test_episode_ends_are_hidden_but_logged():
     assert xp.rew[crash[0], crash[1]] == -100
 
 
+def test_episode_ends_can_be_left_visible():
+    xp, rng = E.make_venv(2, 0, 300, hide_episode_ends=False), np.random.default_rng(0)
+    xp.reset()
+    dones = np.array([xp.step(rng.integers(4, size=2))[2] for _ in range(300)])
+    assert dones.sum() >= 2 and ((xp.ep_step[:, 1:] == 0) == dones[:-1].T).all()  # a done is followed by a new episode
+    E.Renderer().frames(xp, 0, 100, 75)  # and the log still replays exactly
+
+
 def test_replay_renders_exactly_what_was_logged():
     xp, rng, _ = rollout()
     renderer, k = E.Renderer(), 75

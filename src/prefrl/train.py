@@ -203,7 +203,7 @@ def run(cfg, condition, seed, out, judge=None):
     learned = "oracle_fraction" in cond  # otherwise: PPO on the true reward
     update = n_envs * cfg["ppo"]["n_steps"]  # timesteps per policy update
     capacity = (cfg["total_timesteps"] + p["pretrain_steps"]) // n_envs + 2 * cfg["ppo"]["n_steps"]
-    xp = E.make_venv(n_envs, seed, capacity)
+    xp = E.make_venv(n_envs, seed, capacity, hide_episode_ends=cfg["hide_episode_ends"])
     policy = PPO("MlpPolicy", xp, seed=seed, device="cpu", **cfg["ppo"])
     policy.set_logger(configure(str(out), ["stdout", "csv"]))
 

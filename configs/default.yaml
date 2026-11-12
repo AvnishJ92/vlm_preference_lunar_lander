@@ -3,6 +3,7 @@
 
 total_timesteps: 2000000   # at 1M the true-reward baseline was still climbing (final returns -18 to 159 over 5 seeds)
 n_envs: 16
+hide_episode_ends: true   # (paper) [A] the agent gets no termination signal; false = the standard episodic task
 threads: 2            # torch CPU threads per run; policy and reward predictor are small MLPs and run on CPU
 
 ppo:                  # the paper used TRPO for its control tasks [A.1]; PPO is its successor and has the entropy bonus

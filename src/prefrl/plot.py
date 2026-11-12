@@ -38,6 +38,7 @@ MILLIONS = FuncFormatter(lambda v, _: f"{v / 1e6:g}M")
 # Two-sided 95% Student-t critical value by number of seeds (scipy is not a dependency); 1.96 beyond the table.
 T975 = {2: 12.706, 3: 4.303, 4: 3.182, 5: 2.776, 6: 2.571, 7: 2.447, 8: 2.365, 9: 2.306, 10: 2.262}
 CI_NOTE = "Line: mean over seeds. Band: 95% confidence interval of that mean (Student t)."
+ZOOM = (-600, 330)  # return range shown in zoomed panels: a run that flies away scores thousands below zero
 
 
 def ci95(std, n):
@@ -57,7 +58,7 @@ def load(root, filename):
     return {c: found[c] for c in CONDITIONS if c in found}
 
 
-def curves(ax, runs, x, y, title, ylabel=None, label_ends=False):
+def curves(ax, runs, x, y, title, ylabel=None, label_ends=False, ylim=None):
     """One line per condition: mean over seeds with its 95% confidence band. Returns the legend handles."""
     ends = []
     for condition, by_seed in runs.items():
@@ -73,13 +74,16 @@ def curves(ax, runs, x, y, title, ylabel=None, label_ends=False):
     ax.set_xlabel("environment timesteps")
     ax.set_ylabel(ylabel)
     ax.xaxis.set_major_formatter(MILLIONS)
+    if ylim:
+        ax.set_ylim(*ylim)
     if label_ends:  # name each line at its right end, pushed apart so the names never overlap
         low, high = ax.get_ylim()
         y_text = -np.inf
         for y_end, name in sorted(ends):
-            y_text = max(y_end, y_text + 0.055 * (high - low))
-            ax.annotate(name, (1.0, y_text), xycoords=("axes fraction", "data"), xytext=(6, 0),
-                        textcoords="offset points", va="center", fontsize=9, annotation_clip=False)  # fmt: skip
+            y_text = max(min(max(y_end, low), high), y_text + 0.055 * (high - low))
+            ax.annotate(name + (" (below the axis)" if y_end < low else ""), (1.0, y_text),
+                        xycoords=("axes fraction", "data"), xytext=(6, 0), textcoords="offset points", va="center",
+                        fontsize=9, annotation_clip=False)  # fmt: skip
     return ax.get_legend_handles_labels()
 
 
@@ -100,19 +104,22 @@ def save(fig, out, name, handles=None):
     plt.close(fig)
 
 
-def learning_curves(evals, progress, out):
-    fig, ax = plt.subplots(figsize=(8, 4.6))
-    handles = curves(ax, evals, "t", "mean", "Evaluation return (deterministic policy, true reward)",
-                     "mean return over 20 fixed evaluation episodes", label_ends=True)  # fmt: skip
-    reference(ax, 200, "solved (200)")
-    save(fig, out, "learning_curves.png", handles)
+def returns_over_training(runs, x, y, title, ylabel, out, name):
+    """The same curves twice: full range, and zoomed so that runs which fly away do not flatten the others."""
+    fig, (full, zoom) = plt.subplots(1, 2, figsize=(15, 4.6), gridspec_kw={"wspace": 0.2})
+    handles = curves(full, runs, x, y, f"{title}: full range", ylabel)
+    curves(zoom, runs, x, y, f"{title}: zoomed to {ZOOM[0]} .. {ZOOM[1]}", label_ends=True, ylim=ZOOM)
+    for ax in (full, zoom):
+        reference(ax, 200, "solved (200)")
+    save(fig, out, name, handles)
 
-    fig, ax = plt.subplots(figsize=(8, 4.6))
-    handles = curves(ax, progress, "time/total_timesteps", "rollout/ep_rew_mean",
-                     "Training return (stochastic policy, true reward)",
-                     "mean return of the last 100 training episodes", label_ends=True)  # fmt: skip
-    reference(ax, 200, "solved (200)")
-    save(fig, out, "training_return.png", handles)
+
+def learning_curves(evals, progress, out):
+    returns_over_training(evals, "t", "mean", "Evaluation return", "mean return over 20 fixed evaluation episodes\n"
+                          "(deterministic policy, true reward)", out, "learning_curves.png")  # fmt: skip
+    returns_over_training(progress, "time/total_timesteps", "rollout/ep_rew_mean", "Training return",
+                          "mean return of the last 100 training episodes\n(stochastic policy, true reward)", out,
+                          "training_return.png")  # fmt: skip
 
     fig, axes = plt.subplots(1, len(evals), figsize=(3.4 * len(evals), 3.6), sharey=True, squeeze=False)
     for ax, (condition, by_seed) in zip(axes[0], evals.items()):
@@ -124,32 +131,56 @@ def learning_curves(evals, progress, out):
         ax.set_title(name)
         ax.set_xlabel("environment timesteps")
         ax.xaxis.set_major_formatter(MILLIONS)
+        ax.set_ylim(*ZOOM)
         reference(ax, 200, "solved")
     axes[0, 0].set_ylabel("evaluation return (thin: one seed, thick: mean)")
+    fig.text(0.5, -0.04, f"Axis cut at {ZOOM[0]}: lower returns are off the bottom (full range in learning_curves.png).",
+             ha="center", fontsize=8.5, color=MUTED)  # fmt: skip
     save(fig, out, "learning_curves_per_seed.png")
 
 
 def final_performance(summaries, out):
-    """One bar per condition (mean over seeds of the final 100-episode evaluation), one dot per seed."""
-    fig, ax = plt.subplots(figsize=(1.6 + 1.5 * len(summaries), 4.2))
+    """Final 100-episode evaluation per condition: return (left) and share of episodes that landed (right).
+
+    Dot = one seed, bar = mean over seeds, whisker and brackets = 95% confidence interval of the mean.
+    """
+    fig, (ret, land) = plt.subplots(1, 2, figsize=(3.2 + 2.9 * len(summaries), 4.4), gridspec_kw={"wspace": 0.3})
+    floor = ZOOM[0]
     for i, (condition, by_seed) in enumerate(summaries.items()):
         name, color = CONDITIONS[condition]
-        finals = np.array([s["final_eval"]["mean"] for s in by_seed.values()])
-        ax.bar(i, finals.mean(), width=0.3, color=color, alpha=0.35)
-        ax.scatter(i + np.linspace(-0.08, 0.08, len(finals)), finals, s=42, color=color, edgecolor=SURFACE, lw=1.5, zorder=3)
-        half = float(ci95(finals.std(ddof=1), len(finals))) if len(finals) > 1 else 0.0
-        ax.errorbar(i, finals.mean(), yerr=half, color=INK, lw=1.2, capsize=4, zorder=2)
-        text = f"{finals.mean():.0f}  [{finals.mean() - half:.0f}, {finals.mean() + half:.0f}]"
-        ax.annotate(text, (i, max(finals.max(), finals.mean() + half, 0)), xytext=(0, 8),
-                    textcoords="offset points", ha="center", fontsize=9)  # fmt: skip
-    ax.set_xticks(range(len(summaries)), [CONDITIONS[c][0].replace(" preferences", "\npreferences") for c in summaries])
-    ax.set_title("Final return (100 evaluation episodes per seed)")
-    ax.set_ylabel("mean return over 100 episodes")
-    fig.text(0.5, -0.04, "Dot: one seed. Bar: mean over seeds. Whisker and [ ]: 95% confidence interval (Student t).",
-             ha="center", fontsize=8.5, color=MUTED)  # fmt: skip
-    ax.grid(axis="x", visible=False)
-    ax.margins(y=0.12)  # room for the value labels under the title
-    reference(ax, 200, "solved (200)", outside=True)
+        dots = dict(s=42, color=color, edgecolor=SURFACE, lw=1.5, zorder=3)
+        xs = i + np.linspace(-0.08, 0.08, len(by_seed))
+        for ax, values, fmt in ((ret, [s["final_eval"]["mean"] for s in by_seed.values()], "{:.0f}"),
+                                (land, [100 * s["final_eval"]["landed"] for s in by_seed.values()], "{:.0f}%")):  # fmt: skip
+            values = np.array(values)
+            mean = values.mean()
+            half = float(ci95(values.std(ddof=1), len(values))) if len(values) > 1 else 0.0
+            low = values < floor if ax is ret else np.zeros(len(values), bool)
+            ax.scatter(xs[~low], values[~low], **dots)
+            ax.scatter(xs[low], np.full(low.sum(), floor + 30), marker="v", **dots)  # a seed below the axis
+            top = max(values[~low].max(initial=0), 0)
+            # a share cannot leave 0..100%, so its interval is cut there
+            lo, hi = (mean - half, mean + half) if ax is ret else (max(mean - half, 0), min(mean + half, 100))
+            if not (ax is ret and mean < floor):  # a bar cut off by the axis would misstate the mean
+                ax.bar(i, mean, width=0.3, color=color, alpha=0.35)
+                ax.errorbar(i, mean, yerr=[[mean - lo], [hi - mean]], color=INK, lw=1.2, capsize=4, zorder=2)
+                top = max(top, min(hi, ZOOM[1] if ax is ret else 100))
+            text = f"{fmt.format(mean)}  [{fmt.format(lo)}, {fmt.format(hi)}]"
+            ax.annotate(text, (i, top), xytext=(0, 8), textcoords="offset points", ha="center", fontsize=9)
+    labels = [CONDITIONS[c][0].replace(" preferences", "\npreferences") for c in summaries]
+    for ax in (ret, land):
+        ax.set_xticks(range(len(summaries)), labels)
+        ax.grid(axis="x", visible=False)
+    ret.set_title("Final return")
+    ret.set_ylabel("mean return over 100 episodes")
+    ret.set_ylim(floor, ZOOM[1] + 90)
+    reference(ret, 200, "solved (200)", outside=True)
+    land.set_title("Successful landings")
+    land.set_ylabel("share of the 100 final episodes")
+    land.set_ylim(0, 118)
+    land.set_yticks(range(0, 101, 20), [f"{v}%" for v in range(0, 101, 20)])
+    fig.text(0.5, -0.06, "Dot: one seed (triangle: below the axis). Bar: mean over seeds. Whisker and [ ]: 95% confidence "
+             "interval of the mean (Student t).", ha="center", fontsize=8.5, color=MUTED)  # fmt: skip
     save(fig, out, "final_performance.png")
 
 

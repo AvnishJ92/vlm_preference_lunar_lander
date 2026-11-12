@@ -15,11 +15,14 @@ class HiddenReset(gym.Wrapper):
     Paper App. A: termination conditions leak the task, so the agent gets one continuous episode. The true reward keeps
     LunarLander's own -100 (crash) / +100 (landed) on the final step: the "penalty the agent must learn".
     Each real episode is reset with an explicit seed so that it can be replayed, and therefore rendered, later.
+
+    With hide=False the episode ends are passed through as usual (the standard, easier task; used to measure what
+    hiding them costs) and the caller resets.
     """
 
-    def __init__(self, env, seed):
+    def __init__(self, env, seed, hide=True):
         super().__init__(env)
-        self._seeds = np.random.default_rng(seed)
+        self._seeds, self.hide = np.random.default_rng(seed), hide
 
     def reset(self, **_):
         self.ep_seed = int(self._seeds.integers(2**31))
@@ -34,8 +37,10 @@ class HiddenReset(gym.Wrapper):
         if terminated or truncated:
             # SB3 averages info["episode"] into rollout/ep_rew_mean: the true return of real training episodes.
             info["episode"] = {"r": self.ep_return, "l": self.ep_step}
-            obs, _ = self.reset()
-        return obs, reward, False, False, info
+            if self.hide:
+                obs, _ = self.reset()
+                terminated = truncated = False
+        return obs, reward, terminated, truncated, info
 
 
 class Experience(VecEnvWrapper):
@@ -100,9 +105,9 @@ class Experience(VecEnvWrapper):
         return np.flatnonzero(self.ep_step[env, start + 1 : start + k] == 0)
 
 
-def make_venv(n_envs, seed, capacity, reward_fn=None):
+def make_venv(n_envs, seed, capacity, reward_fn=None, hide_episode_ends=True):
     def make(i):
-        return lambda: HiddenReset(gym.make(ENV_ID), seed=[seed, i])
+        return lambda: HiddenReset(gym.make(ENV_ID), seed=[seed, i], hide=hide_episode_ends)
 
     return Experience(DummyVecEnv([make(i) for i in range(n_envs)]), capacity, reward_fn)
 

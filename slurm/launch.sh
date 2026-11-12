@@ -8,6 +8,7 @@
 #   slurm/launch.sh smoke     <run>    GPU: short end-to-end run of the VLM condition    -> smoke/
 #   slurm/launch.sh train     <run> <name> [run_all options]   runs, e.g. `baselines --conditions pure_rl oracle`
 #                                      or `all`                -> outputs/<condition>/seed_<n>/
+#   slurm/launch.sh ablation  <run>    true-reward PPO variants (episode ends, policy size) -> outputs/ablation/
 #   slurm/launch.sh plot      <run>    figures + summary table                           -> outputs/plots/
 #
 # calibrate / smoke / train are `srun --overlap` steps inside the allocation, started in the background. Follow one
@@ -16,7 +17,7 @@ set -euo pipefail
 ALLOC="${ALLOC:-26911}"
 ARTIFACTS="${ARTIFACTS:-/projects/data/ttsteam/avnish/artifacts}"
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-stage="${1:?usage: launch.sh prepare | launch.sh <model|calibrate|smoke|train|plot> <run dir> [...]}"
+stage="${1:?usage: launch.sh prepare | launch.sh <model|calibrate|smoke|train|ablation|plot> <run dir> [...]}"
 
 if [ "$stage" = prepare ]; then
   source "$REPO/scripts/env.sh"
@@ -72,6 +73,9 @@ print(v["model"], v["revision"])' "$CFG")
   train) # runs of prefrl.run_all; a second call must name other conditions than one still running
     step "train_${3:?step name, e.g. baselines}" 16 "$PY" -m prefrl.run_all --config "$CFG" --out "$RUN/outputs" \
       --logs "$LOGS" "${@:4}"
+    ;;
+  ablation) # true-reward PPO variants (slurm/ablation.sh), CPU only -> outputs/ablation/<variant>/seed_<n>/
+    step ablation 16 bash "$RUN/code/slurm/ablation.sh" "$RUN" "$PY"
     ;;
   plot)
     "$PY" -m prefrl.plot "$RUN/outputs"
