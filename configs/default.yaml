@@ -1,0 +1,71 @@
+# Every hyperparameter of the experiment. "Paper" = Christiano et al. 2017, arXiv:1706.03741; section in brackets.
+# Values marked (paper) are taken from it; the rest are choices for LunarLander that no training run has tuned yet.
+
+total_timesteps: 1000000
+n_envs: 16
+threads: 2            # torch CPU threads per run; policy and reward predictor are small MLPs and run on CPU
+
+ppo:                  # the paper used TRPO for its robotics tasks [A.1]; PPO is the same family and has the entropy bonus
+  n_steps: 1024       # per env, so one rollout (= one feedback round) is 16 x 1024 = 16384 timesteps
+  batch_size: 64
+  n_epochs: 4
+  learning_rate: 3.0e-4
+  gamma: 0.995        # (paper) [A.1]
+  gae_lambda: 0.97    # (paper) [A.1]
+  ent_coef: 0.01      # (paper) [A.1] entropy bonus, kept for all four conditions
+
+eval:                 # deterministic policy, true reward, standard episodic LunarLander-v3, same seeds for every run
+  every: 50000        # timesteps
+  episodes: 20
+  video_episodes: 1   # episodes per evaluation saved as mp4
+  final_episodes: 100
+  final_video_episodes: 5
+
+pref:
+  n_queries: 1400         # (paper) [3.1.1] used 350 / 700 / 1400 synthetic and 700 human labels per task
+  segment_len: 75         # (paper) [A.1] 1.5 s clips; LunarLander runs at 50 steps per second
+  pretrain_frac: 0.25     # (paper) [A.1] share of the comparisons made on the untrained policy before RL starts
+  pretrain_steps: 16000   # timesteps of the untrained policy those first comparisons are drawn from
+  anneal_tau_frac: 0.1    # label rate ~ tau/(T+tau) [A.1, A.2]; tau = this x total_timesteps (paper Atari: 5e6 of 50e6)
+  candidate_factor: 10    # (paper) [A] candidate pairs per query; the highest ensemble variance ones are asked
+  ensemble: 3             # (paper) [A]
+  hidden: 64              # (paper) [A.1] two hidden layers of 64, leaky ReLU 0.01
+  label_noise: 0.1        # (paper) [2.2.3] assumed chance that the rater answers uniformly at random
+  val_ratio: [1.1, 1.5]   # (paper) [2.2.3] l2 is adapted to keep validation loss within this multiple of train loss
+  l2_init: 1.0e-4
+  lr: 1.0e-3
+  batch_size: 64          # preference pairs per gradient step
+  pretrain_epochs: 100    # passes over the first comparisons before RL starts
+  epochs_per_round: 10    # passes over all comparisons after every PPO rollout
+
+vlm:
+  model: Qwen/Qwen2.5-VL-7B-Instruct
+  revision: cc594898137f460bfe9f0759e9844b3ce807cfb5
+  prompt: reasoned        # a variant in prompts.yaml
+  input_mode: video       # video: each clip as one Qwen video | images: each frame as a separate image
+  frames_per_clip: 8      # must be even for video (Qwen merges frames in pairs)
+  frame_scale: 1.0        # upscale the 600x400 frames before the model sees them (more vision tokens)
+  batch_size: 8           # conversations per generate() call
+  max_new_tokens: 200
+  swap_check: true        # ask every pair in both orders; contradictory answers give no label
+  save_clip_every: 10     # save an mp4 + the frames shown for every Nth VLM query
+
+# What supplies the reward. No oracle_fraction: PPO on the true reward. Otherwise each query is answered by the
+# true-reward oracle with this probability and by the VLM the rest of the time.
+conditions:
+  pure_rl: {}
+  oracle: {oracle_fraction: 1.0}
+  vlm: {oracle_fraction: 0.0}
+  mixed: {oracle_fraction: 0.5}   # NOT from the paper, which never mixes raters. Set the ratio you want here.
+
+seeds: [0, 1, 2, 3, 4]
+
+# Prompt tuning (python -m prefrl.calibrate): each variant overrides keys of `vlm` and is scored against the oracle.
+calibration:
+  n_pairs: 300
+  variants:
+    reasoned_video8: {}
+    direct_video8: {prompt: direct, max_new_tokens: 12}
+    reasoned_video16: {frames_per_clip: 16}
+    reasoned_video8_x1.5: {frame_scale: 1.5}
+    reasoned_images6: {input_mode: images, frames_per_clip: 6}

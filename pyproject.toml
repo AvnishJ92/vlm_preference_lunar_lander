@@ -1,0 +1,28 @@
+[project]
+name = "prefrl"
+version = "0.1.0"
+description = "Deep RL from preferences (Christiano et al. 2017) on LunarLander with a VLM as the human"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "gymnasium[box2d]>=1.4",
+    "stable-baselines3>=2.9",
+    "torch>=2.15",
+    "torchvision",
+    "transformers>=5.22",
+    "accelerate",
+    "pillow",
+    "imageio[ffmpeg]",
+    "matplotlib",
+    "pandas",
+    "pyyaml",
+]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.uv]
+package = false  # deps only; code is run with PYTHONPATH=src so a run can execute a frozen snapshot
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
