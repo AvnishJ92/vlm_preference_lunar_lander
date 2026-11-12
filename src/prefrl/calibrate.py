@@ -16,6 +16,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import torch
 from gymnasium.envs.box2d.lunar_lander import heuristic
 
 from prefrl import env as E
@@ -63,6 +64,7 @@ def main():
     parser.add_argument("--config", default="configs/default.yaml")
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--variants", nargs="*", help="only these (default: all); lets two processes share the work")
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
     cfg = load_config(args.config)
@@ -79,9 +81,11 @@ def main():
         E.write_video(args.out / "pairs" / f"p{i:03d}_oracle-{name[oracle[i]]}.mp4", np.concatenate(clips, axis=2))
 
     model, processor = load_qwen(cfg["vlm"])
-    rows = []
     for variant, overrides in cfg["calibration"]["variants"].items():
+        if args.variants and variant not in args.variants:
+            continue
         vlm = {**cfg["vlm"], **overrides}
+        torch.cuda.reset_peak_memory_stats()
         judge, tic, labels = QwenJudge(model, processor, vlm, cfg["prompts"], k), time.time(), []
         for a in range(0, n, 32):  # bounds the frames held in memory
             shown = [
@@ -90,16 +94,19 @@ def main():
             ]
             labels += judge.label(shown)
         mu, replies = zip(*labels)
-        row = {"variant": variant, **score(mu, replies, oracle, gap), "seconds_per_query": (time.time() - tic) / n}
-        rows.append(row)
-        log.info("%s", {key: round(v, 3) if isinstance(v, float) else v for key, v in row.items()})
+        row = {"variant": variant, **score(mu, replies, oracle, gap), "seconds_per_query": (time.time() - tic) / n,
+               "peak_gpu_gb": torch.cuda.max_memory_allocated() / 2**30}  # fmt: skip
+        row = {key: float(v) if key != "variant" else v for key, v in row.items()}
+        log.info("%s", {key: round(v, 3) if key != "variant" else v for key, v in row.items()})
+        (args.out / f"score_{variant}.json").write_text(json.dumps(row))
         with (args.out / f"answers_{variant}.jsonl").open("w") as f:
             for i in range(n):
                 record = dict(pair=i, segments=pairs[i].tolist(), true_returns=ret[i].tolist(),
                               oracle_mu=float(oracle[i]), mu=mu[i], replies=replies[i])  # fmt: skip
                 f.write(json.dumps(record) + "\n")
-        pd.DataFrame(rows).to_csv(args.out / "calibration.csv", index=False)  # rewritten after every variant
-    print(pd.DataFrame(rows).round(3).to_string(index=False))
+        # Rebuilt from the score files after every variant, so processes working on other variants are included.
+        rows = [json.loads(path.read_text()) for path in sorted(args.out.glob("score_*.json"))]
+        pd.DataFrame(rows).sort_values("correct_per_query", ascending=False).to_csv(args.out / "calibration.csv", index=False)
 
 
 if __name__ == "__main__":

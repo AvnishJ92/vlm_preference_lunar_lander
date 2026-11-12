@@ -84,7 +84,7 @@ slurm/launch.sh train <run> all             # the 20 runs (or e.g. `baselines --
 slurm/launch.sh plot <run>                  # can be run while training is in progress
 ```
 
-`calibrate` scores each variant in `calibration.variants` on 300 clip pairs from landers of mixed skill. The column
+`calibrate` scores each variant in `calibration.variants` on 200 clip pairs from landers of mixed skill. The column
 to compare is `correct_per_query`; `agreement` near 0.5 means the VLM cannot judge these clips and the `vlm`
 condition should not be expected to learn. To adopt a variant, copy its settings into `vlm:` in `default.yaml`,
 commit, and `prepare` a new run.
@@ -110,3 +110,7 @@ bodhanai-node040). Runs execute a read-only snapshot of the committed code under
 `<run>/outputs/plots/`: `learning_curves.png`, `learning_curves_per_seed.png`, `training_return.png`,
 `final_performance.png`, `reward_predictor.png`, `vlm_labels.png`, `summary.csv`.
 Logs: `<run>/attempts/001/logs/`.
+
+## External runs
+
+- [20261112-prefrl-lunarlander-7bf969](</projects/data/ttsteam/avnish/artifacts/vlm_preference_lunar_lander/runs/20261112-prefrl-lunarlander-7bf969/summary.md>) — Deep RL from preferences on LunarLander-v3: PPO on the true reward vs a reward learned from oracle, Qwen2.5-VL-7B and mixed preferences; 5 seeds each; code `7bf96907a283`.

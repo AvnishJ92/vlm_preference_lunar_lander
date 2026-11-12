@@ -1,5 +1,6 @@
 """Qwen2.5-VL as the rater: show it two clips, read back which one it prefers."""
 
+import logging
 import re
 
 import numpy as np
@@ -47,6 +48,8 @@ def load_qwen(cfg):
     model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
         cfg["model"], revision=cfg["revision"], dtype=torch.bfloat16, device_map="cuda"
     )
+    gb = torch.cuda.memory_allocated() / 2**30
+    logging.getLogger("prefrl").info("loaded %s@%s: %s, %.1f GB on GPU", cfg["model"], cfg["revision"][:8], model.dtype, gb)
     return model.eval(), processor
 
 

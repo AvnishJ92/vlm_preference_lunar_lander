@@ -3,7 +3,8 @@
 #
 #   slurm/launch.sh prepare            snapshot the committed code + configs into a new external run directory
 #   slurm/launch.sh model     <run>    download the pinned Qwen2.5-VL weights into the HF cache (login node, no GPU)
-#   slurm/launch.sh calibrate <run>    GPU: score the prompt variants against the oracle -> outputs/calibration/
+#   slurm/launch.sh calibrate <run> [name --variants ...]   GPU: score prompt variants against the oracle
+#                                                           -> outputs/calibration/
 #   slurm/launch.sh smoke     <run>    GPU: short end-to-end run of the VLM condition    -> smoke/
 #   slurm/launch.sh train     <run> <name> [run_all options]   runs, e.g. `baselines --conditions pure_rl oracle`
 #                                      or `all`                -> outputs/<condition>/seed_<n>/
@@ -22,7 +23,8 @@ if [ "$stage" = prepare ]; then
   id="${RUN_ID:-$(date -u +%Y%m%d)-prefrl-lunarlander-$(git -C "$REPO" rev-parse --short=6 HEAD)}"
   run=$(agent-run prepare --repo "$REPO" --root "$ARTIFACTS" --project vlm_preference_lunar_lander --id "$id" \
     --purpose "Deep RL from preferences on LunarLander-v3: PPO on the true reward vs a reward learned from oracle, Qwen2.5-VL-7B and mixed preferences; 5 seeds each" \
-    --config "$REPO/configs/default.yaml" --config "$REPO/configs/prompts.yaml" --environment "$REPO/uv.lock")
+    --config "$REPO/configs/default.yaml" --config "$REPO/configs/prompts.yaml" --environment "$REPO/uv.lock" \
+    ${PARENT_RUN:+--parent-run "$PARENT_RUN"})
   mkdir "$run/code" "$run/outputs" "$run/smoke"
   tar -xf "$run/provenance/source.tar" -C "$run/code"
   chmod -R a-w "$run/code" # the run executes this snapshot, not the development tree
@@ -49,7 +51,7 @@ step() { # step <name> <cpus> <command...>: one background step inside the alloc
     --command-json "[\"slurm/launch.sh\",\"$name\",\"$RUN\"]" > /dev/null
   # HF_HUB_OFFLINE: the weights come from the cache filled by the `model` stage, or the step fails at once.
   nohup srun --jobid="$ALLOC" --overlap --ntasks=1 --cpus-per-task="$cpus" --job-name="prefrl_$name" \
-    env HF_HUB_OFFLINE=1 "$@" > "$LOGS/$name.out" 2>&1 &
+    env HF_HUB_OFFLINE=1 PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True "$@" > "$LOGS/$name.out" 2>&1 &
   echo "started step prefrl_$name in job $ALLOC; log: $LOGS/$name.out"
 }
 
@@ -59,8 +61,8 @@ case "$stage" in
 print(v["model"], v["revision"])' "$CFG")
     "$(dirname "$PY")/hf" download "$model" --revision "$revision"
     ;;
-  calibrate)
-    step calibrate 8 "$PY" -m prefrl.calibrate --config "$CFG" --out "$RUN/outputs/calibration"
+  calibrate) # optional: a step name and `--variants a b` to split the variants over two concurrent steps
+    step "calibrate${3:+_$3}" 4 "$PY" -m prefrl.calibrate --config "$CFG" --out "$RUN/outputs/calibration" "${@:4}"
     ;;
   smoke) # exercises model load, clip rendering, VLM labelling, predictor training, PPO, evaluation and videos
     step smoke 4 "$PY" -m prefrl.train --config "$CFG" --condition vlm --seed 0 --out "$RUN/smoke/vlm_$(date +%H%M%S)" \

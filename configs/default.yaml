@@ -48,7 +48,7 @@ vlm:
   input_mode: video       # video: each clip as one Qwen video | images: each frame as a separate image
   frames_per_clip: 8      # must be even for video (Qwen merges frames in pairs)
   frame_scale: 1.0        # upscale the 600x400 frames before the model sees them (more vision tokens)
-  batch_size: 16          # conversations per generate() call
+  batch_size: 8           # conversations per generate() call; 16 and 32 were no faster per query (measured)
   max_new_tokens: 200
   swap_check: true        # ask every pair in both orders; contradictory answers give no label
   save_clip_every: 10     # save an mp4 + the frames shown for every Nth VLM query
@@ -65,10 +65,11 @@ seeds: [0, 1, 2, 3, 4]
 
 # Prompt tuning (python -m prefrl.calibrate): each variant overrides keys of `vlm` and is scored against the oracle.
 calibration:
-  n_pairs: 300
-  variants:
-    reasoned_video8: {}
-    direct_video8: {prompt: direct, max_new_tokens: 12}
-    reasoned_video16: {frames_per_clip: 16}
-    reasoned_video8_x1.5: {frame_scale: 1.5}
-    reasoned_images6: {input_mode: images, frames_per_clip: 6}
+  n_pairs: 200
+  variants:   # measured cost per model call on the H100 in brackets
+    direct_video8: {prompt: direct, max_new_tokens: 12}                                              # [0.4 s]
+    brief_video8: {prompt: brief, max_new_tokens: 96}
+    direct_images6: {prompt: direct, max_new_tokens: 12, input_mode: images, frames_per_clip: 6}     # [0.5 s]
+    reasoned_video8: {prompt: reasoned, max_new_tokens: 320}                                         # [1.0 s]
+    direct_video16: {prompt: direct, max_new_tokens: 12, frames_per_clip: 16}                        # [0.7 s]
+    direct_video8_x1.5: {prompt: direct, max_new_tokens: 12, frame_scale: 1.5}                       # [0.9 s]

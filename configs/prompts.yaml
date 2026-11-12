@@ -34,10 +34,15 @@ clip_label:
   images: "Clip {n} ({frames} frames in time order, {dt:.1f} s apart):"
 
 variants:
-  # Describe, compare, then answer. Slower (about 100 generated tokens) but the answer is grounded in what was seen.
+  # Describe, compare, then answer. About 180 generated tokens (measured), so it needs max_new_tokens of 320.
   reasoned: |
     First describe each clip in one or two sentences: where the lander is relative to the two flags, which way and how fast it moves, how much it is tilted, whether its engines fire, and whether it touches the ground, crashes, or the attempt ends. Then compare the two clips using the judging criteria.
     Finish with exactly one line in this form: `ANSWER: 1` if better things happen in Clip 1, `ANSWER: 2` if better things happen in Clip 2, `ANSWER: TIE` if they are about equally good, or `ANSWER: UNSURE` if you cannot tell what is happening. Avoid UNSURE unless you are truly confused.
+
+  # One short line per clip, then the answer. About 45 generated tokens.
+  brief: |
+    In at most 15 words each, say what the lander does in Clip 1 and in Clip 2: where it ends up relative to the flags, whether it is upright or tilted, and whether it lands, crashes or is still flying. Then decide in which clip better things happen by the judging criteria.
+    Reply with exactly three lines and nothing else. Line 1 starts with `Clip 1:`. Line 2 starts with `Clip 2:`. Line 3 is `ANSWER: 1`, `ANSWER: 2`, `ANSWER: TIE` (about equally good) or `ANSWER: UNSURE` (you cannot tell what is happening; avoid this unless you are truly confused).
 
   # Answer only. About 5 generated tokens per query.
   direct: |
