@@ -15,7 +15,10 @@ Four conditions, five seeds each:
 | `vlm` | learned predictor | Qwen2.5-VL |
 | `mixed` | learned predictor | each query: oracle with probability `oracle_fraction`, else Qwen2.5-VL |
 
-**Status (2026-11-12):** gates passed, main experiment launched; see *External runs* at the bottom.
+**Status (2026-11-12):** the main experiment is complete. **Results and analysis: [docs/results.md](docs/results.md).**
+In short: the VLM-only condition did not learn to land (0% landings, four of five seeds fly out of view), oracle
+preferences reached a final return of 39 [-60, 138] against 166 [134, 197] for PPO on the true reward, and the 50/50
+mix reached 84 [-91, 259] (mean and 95% interval over five seeds).
 
 Gate results that shaped the configuration:
 
@@ -74,6 +77,8 @@ Differences worth knowing:
   timestep budget (2M) was set from the 1M baselines above.
 
 ## Layout
+
+Results copied from the runs live in `results/` (plots and tables in git; videos and per-run files on disk only).
 
 ```
 configs/default.yaml     every hyperparameter, the four conditions, the calibration grid
@@ -139,3 +144,5 @@ Logs: `<run>/attempts/001/logs/`.
 - [20261112-prefrl-lunarlander-7a4e47](</projects/data/ttsteam/avnish/artifacts/vlm_preference_lunar_lander/runs/20261112-prefrl-lunarlander-7a4e47/summary.md>) — Deep RL from preferences on LunarLander-v3: PPO on the true reward vs a reward learned from oracle, Qwen2.5-VL-7B and mixed preferences; 5 seeds each; code `7a4e4703fa02`.
 
 - [20261112-prefrl-lunarlander-26ecf3](</projects/data/ttsteam/avnish/artifacts/vlm_preference_lunar_lander/runs/20261112-prefrl-lunarlander-26ecf3/summary.md>) — Deep RL from preferences on LunarLander-v3: PPO on the true reward vs a reward learned from oracle, Qwen2.5-VL-7B and mixed preferences; 5 seeds each; code `26ecf31cc15a`.
+
+- [20261112-prefrl-ablation-aa3621](</projects/data/ttsteam/avnish/artifacts/vlm_preference_lunar_lander/runs/20261112-prefrl-ablation-aa3621/summary.md>) — Deep RL from preferences on LunarLander-v3: PPO on the true reward vs a reward learned from oracle, Qwen2.5-VL-7B and mixed preferences; 5 seeds each; code `aa36217015ec`.
