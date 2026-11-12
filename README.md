@@ -107,10 +107,12 @@ bodhanai-node040). Runs execute a read-only snapshot of the committed code under
 | `videos/queries/*.mp4`, `*_shown.png` | every 10th VLM query: both clips side by side, and the exact frames the VLM saw, with its answer and the oracle's in the filename |
 | `policy.zip`, `reward_model.pt`, `preferences.npz` | final policy, reward ensemble, preference database |
 
-`<run>/outputs/plots/`: `learning_curves.png`, `learning_curves_per_seed.png`, `training_return.png`,
+`<run>/outputs/plots/` (curves are the mean over seeds with a 95% Student-t confidence band): `learning_curves.png`, `learning_curves_per_seed.png`, `training_return.png`,
 `final_performance.png`, `reward_predictor.png`, `vlm_labels.png`, `summary.csv`.
 Logs: `<run>/attempts/001/logs/`.
 
 ## External runs
 
 - [20261112-prefrl-lunarlander-7bf969](</projects/data/ttsteam/avnish/artifacts/vlm_preference_lunar_lander/runs/20261112-prefrl-lunarlander-7bf969/summary.md>) — Deep RL from preferences on LunarLander-v3: PPO on the true reward vs a reward learned from oracle, Qwen2.5-VL-7B and mixed preferences; 5 seeds each; code `7bf96907a283`.
+
+- [20261112-prefrl-lunarlander-7a4e47](</projects/data/ttsteam/avnish/artifacts/vlm_preference_lunar_lander/runs/20261112-prefrl-lunarlander-7a4e47/summary.md>) — Deep RL from preferences on LunarLander-v3: PPO on the true reward vs a reward learned from oracle, Qwen2.5-VL-7B and mixed preferences; 5 seeds each; code `7a4e4703fa02`.

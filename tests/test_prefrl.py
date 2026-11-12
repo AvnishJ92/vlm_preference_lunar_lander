@@ -218,3 +218,6 @@ def test_run_all_then_plot(tmp_path, monkeypatch):
                     "final_performance.png", "reward_predictor.png", "summary.csv"}  # fmt: skip
     table = pd.read_csv(outputs / "plots/summary.csv")
     assert table.seeds.tolist() == [2, 2] and table.queries_asked.tolist() == [0, 24]
+    assert (table.ci95_low < table.final_return_mean).all() and (table.final_return_mean < table.ci95_high).all()
+    # two seeds one apart: the 95% t interval of their mean is +-12.706 * (sd / sqrt 2) = +-6.353
+    assert plot.ci95(np.std([0.0, 1.0], ddof=1), 2) == pytest.approx(6.353) and plot.ci95(np.nan, 1) == 0

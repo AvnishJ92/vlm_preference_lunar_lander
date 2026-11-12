@@ -2,7 +2,7 @@
 
     python -m prefrl.plot <run dir>/outputs        # reads <condition>/seed_<n>/, writes plots/
 
-Curves are the mean over seeds with a +-1 std band. Every condition keeps one fixed colour in every figure.
+Curves are the mean over seeds with a 95% confidence band. Every condition keeps one fixed colour in every figure.
 """
 
 import json
@@ -35,6 +35,16 @@ plt.rcParams.update({
     "legend.frameon": False,
 })  # fmt: skip
 MILLIONS = FuncFormatter(lambda v, _: f"{v / 1e6:g}M")
+# Two-sided 95% Student-t critical value by number of seeds (scipy is not a dependency); 1.96 beyond the table.
+T975 = {2: 12.706, 3: 4.303, 4: 3.182, 5: 2.776, 6: 2.571, 7: 2.447, 8: 2.365, 9: 2.306, 10: 2.262}
+CI_NOTE = "Line: mean over seeds. Band: 95% confidence interval of that mean (Student t)."
+
+
+def ci95(std, n):
+    """Half-width of the 95% confidence interval of a mean of n seeds with sample std `std`; 0 for a single seed."""
+    n = np.asarray(n, float)
+    t = np.vectorize(lambda k: T975.get(int(k), 1.96))(n)
+    return np.nan_to_num(t * np.asarray(std, float) / np.sqrt(n))
 
 
 def load(root, filename):
@@ -48,14 +58,14 @@ def load(root, filename):
 
 
 def curves(ax, runs, x, y, title, ylabel=None, label_ends=False):
-    """One mean +- std line per condition. Returns the legend handles."""
+    """One line per condition: mean over seeds with its 95% confidence band. Returns the legend handles."""
     ends = []
     for condition, by_seed in runs.items():
         name, color = CONDITIONS[condition]
-        stat = pd.concat(by_seed.values()).groupby(x)[y].agg(["mean", "std"]).dropna(subset="mean")
+        stat = pd.concat(by_seed.values()).groupby(x)[y].agg(["mean", "std", "count"]).dropna(subset="mean")
         if stat.empty:
             continue
-        spread = stat["std"].fillna(0)
+        spread = ci95(stat["std"], stat["count"])
         ax.fill_between(stat.index, stat["mean"] - spread, stat["mean"] + spread, color=color, alpha=0.15, lw=0)
         ax.plot(stat.index, stat["mean"], color=color, lw=2, label=f"{name} ({len(by_seed)} seeds)")
         ends.append((stat["mean"].iloc[-1], name))
@@ -84,6 +94,7 @@ def reference(ax, y, text, outside=False):
 def save(fig, out, name, handles=None):
     if handles and handles[0]:
         fig.legend(*handles, loc="upper center", bbox_to_anchor=(0.5, 0.0), ncol=len(handles[0]))
+        fig.text(0.5, -0.09, CI_NOTE, ha="center", fontsize=8.5, color=MUTED)
     out.mkdir(parents=True, exist_ok=True)
     fig.savefig(out / name)
     plt.close(fig)
@@ -126,11 +137,16 @@ def final_performance(summaries, out):
         finals = np.array([s["final_eval"]["mean"] for s in by_seed.values()])
         ax.bar(i, finals.mean(), width=0.3, color=color, alpha=0.35)
         ax.scatter(i + np.linspace(-0.08, 0.08, len(finals)), finals, s=42, color=color, edgecolor=SURFACE, lw=1.5, zorder=3)
-        ax.annotate(f"{finals.mean():.0f} ± {finals.std():.0f}", (i, max(finals.max(), 0)), xytext=(0, 8),
+        half = float(ci95(finals.std(ddof=1), len(finals))) if len(finals) > 1 else 0.0
+        ax.errorbar(i, finals.mean(), yerr=half, color=INK, lw=1.2, capsize=4, zorder=2)
+        text = f"{finals.mean():.0f}  [{finals.mean() - half:.0f}, {finals.mean() + half:.0f}]"
+        ax.annotate(text, (i, max(finals.max(), finals.mean() + half, 0)), xytext=(0, 8),
                     textcoords="offset points", ha="center", fontsize=9)  # fmt: skip
     ax.set_xticks(range(len(summaries)), [CONDITIONS[c][0].replace(" preferences", "\npreferences") for c in summaries])
     ax.set_title("Final return (100 evaluation episodes per seed)")
-    ax.set_ylabel("mean return; dot = one seed, bar = mean over seeds")
+    ax.set_ylabel("mean return over 100 episodes")
+    fig.text(0.5, -0.04, "Dot: one seed. Bar: mean over seeds. Whisker and [ ]: 95% confidence interval (Student t).",
+             ha="center", fontsize=8.5, color=MUTED)  # fmt: skip
     ax.grid(axis="x", visible=False)
     ax.margins(y=0.12)  # room for the value labels under the title
     reference(ax, 200, "solved (200)", outside=True)
@@ -178,10 +194,13 @@ def summary_table(summaries, out):
     for condition, by_seed in summaries.items():
         runs = list(by_seed.values())
         finals = np.array([s["final_eval"]["mean"] for s in runs])
+        half = float(ci95(finals.std(ddof=1), len(finals))) if len(finals) > 1 else 0.0
         vlm = [s["vlm"] for s in runs if s.get("vlm", {}).get("hard")]
         rows.append({
             "condition": CONDITIONS[condition][0], "seeds": len(runs),
-            "final_return_mean": finals.mean().round(1), "final_return_std_over_seeds": finals.std().round(1),
+            "final_return_mean": finals.mean().round(1),
+            "ci95_low": (finals.mean() - half).round(1), "ci95_high": (finals.mean() + half).round(1),
+            "std_over_seeds": finals.std(ddof=1).round(1) if len(finals) > 1 else 0.0,
             "worst_seed": finals.min().round(1), "best_seed": finals.max().round(1),
             "landed_share": np.mean([s["final_eval"]["landed"] for s in runs]).round(3),
             "queries_asked": np.mean([s.get("asked", 0) for s in runs]),
