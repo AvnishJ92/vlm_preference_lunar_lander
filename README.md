@@ -117,3 +117,5 @@ Logs: `<run>/attempts/001/logs/`.
 ## External runs
 
 Runs before this line (the first attempt and its gate, calibration and ablation runs) were deleted on 2026-11-12.
+
+- [20261112-prefrl-lunarlander-42961b](</projects/data/ttsteam/avnish/artifacts/vlm_preference_lunar_lander/runs/20261112-prefrl-lunarlander-42961b/summary.md>) — Deep RL from preferences on LunarLander-v3: PPO on the true reward vs a reward learned from oracle, Qwen2.5-VL-7B and mixed preferences; 5 seeds each; code `42961bdbdea4`.
