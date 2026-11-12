@@ -1,4 +1,4 @@
-"""One run: PPO on LunarLander, rewarded by the true reward or by a predictor learned from pairwise preferences.
+"""One run: A2C on LunarLander, rewarded by the true reward or by a predictor learned from pairwise preferences.
 
     python -m prefrl.train --config configs/default.yaml --condition vlm --seed 0 --out <run dir>
 """
@@ -14,7 +14,7 @@ import imageio
 import numpy as np
 import torch
 import yaml
-from stable_baselines3 import PPO
+from stable_baselines3 import A2C
 from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.logger import configure
 
@@ -72,6 +72,7 @@ class Feedback:
         self.db = PrefDB(self.p["ensemble"], rng)
         self.renderer = E.Renderer() if judge else None
         self.asked = 0  # queries sent to a labeller; len(self.db) is how many came back with a label
+        self.mark = 0  # log position (steps per env) of the previous round; a round looks at what came after it
         self.vlm = dict(asked=0, labelled=0, ties=0, hard=0, agree=0)
         self.pred_acc = float("nan")
 
@@ -90,10 +91,10 @@ class Feedback:
         strip = np.concatenate([np.concatenate(list(clip[:, ::2, ::2]), axis=1) for clip in shown], axis=0)
         imageio.imwrite(stem.with_name(stem.name + "_shown.png"), strip)
 
-    def query(self, n, since, t):
-        """Ask for n labels on pairs of segments recorded at or after step `since` (per env)."""
+    def query(self, n, t):
+        """Ask for n labels on pairs of segments recorded since the previous round."""
         k, tic = self.p["segment_len"], time.time()
-        cand = self.xp.sample_pairs(self.rng, n * self.p["candidate_factor"], k, since)
+        cand = self.xp.sample_pairs(self.rng, n * self.p["candidate_factor"], k, self.mark)
         obs, act, ret = self.xp.segments(cand, k)
         oracle = 0.5 * (1 + np.sign(ret[:, 0] - ret[:, 1]))  # true-reward preference: 1, 0, or 0.5 on an exact tie
         with torch.no_grad():
@@ -131,12 +132,14 @@ class Feedback:
         self.asked += n
         log.info("t=%d asked %d queries (%d by VLM) in %.0fs; %d labels in D", t, n, len(by_vlm), time.time() - tic, len(self.db))
 
-    def fit(self, epochs, t, n_recent):
+    def fit(self, epochs, t):
+        """Train the predictor, renormalise it on the experience since the previous round, and close the round."""
         train = val = float("nan")
         if len(self.db):  # a VLM that never commits to an answer leaves D empty; r-hat then stays as initialised
             train, val = self.model.fit(self.db, epochs, self.p["batch_size"], self.rng)
-        obs, act, rew = self.xp.recent(n_recent)
+        obs, act, rew = self.xp.recent(self.xp.t - self.mark)
         self.model.set_normalisation(obs, act)
+        self.mark = self.xp.t
         s = self.vlm
         row = dict(
             t=t, asked=self.asked, labels=len(self.db), train_loss=train, val_loss=val,
@@ -149,11 +152,15 @@ class Feedback:
 
 
 class Loop(BaseCallback):
-    """After every PPO rollout: a feedback round if rewards are learned, and an evaluation when one is due."""
+    """Runs a feedback round every `pref.round_every` timesteps (if rewards are learned) and the evaluations.
+
+    A2C updates the policy every n_envs x n_steps = 80 timesteps; both schedules are checked after each update.
+    """
 
     def __init__(self, cfg, out, feedback=None):
         super().__init__()
-        self.cfg, self.out, self.fb, self.next_eval = cfg, out, feedback, 0
+        self.cfg, self.out, self.fb = cfg, out, feedback
+        self.next_eval, self.next_round = cfg["eval"]["every"], cfg["pref"]["round_every"]
 
     def evaluate(self, t, n_episodes, n_videos, tag=None):
         rets, lens, landed = E.evaluate(
@@ -170,12 +177,12 @@ class Loop(BaseCallback):
 
     def _on_rollout_end(self):
         t, p, e = self.num_timesteps, self.cfg["pref"], self.cfg["eval"]
-        if self.fb:
-            n_steps = self.cfg["ppo"]["n_steps"]
+        if self.fb and t >= self.next_round:
             due = labels_due(t, self.cfg["total_timesteps"], p["n_queries"], p["pretrain_frac"], p["anneal_tau_frac"])
             if due > self.fb.asked:
-                self.fb.query(due - self.fb.asked, self.fb.xp.t - n_steps, t)
-            self.fb.fit(p["epochs_per_round"], t, n_steps)
+                self.fb.query(due - self.fb.asked, t)
+            self.fb.fit(p["epochs_per_round"], t)
+            self.next_round += p["round_every"]
         if t >= self.next_eval:
             self.evaluate(t, e["episodes"], e["video_episodes"])
             self.next_eval += e["every"]
@@ -190,10 +197,11 @@ def run(cfg, condition, seed, out, judge=None):
     torch.set_num_threads(cfg["threads"])
     rng = np.random.default_rng(seed)
 
-    learned = "oracle_fraction" in cond  # otherwise: PPO on the true reward
-    capacity = (cfg["total_timesteps"] + p["pretrain_steps"]) // n_envs + 2 * cfg["ppo"]["n_steps"]
+    learned = "oracle_fraction" in cond  # otherwise: A2C on the true reward
+    update = n_envs * cfg["a2c"]["n_steps"]  # timesteps per policy update
+    capacity = (cfg["total_timesteps"] + p["pretrain_steps"]) // n_envs + 2 * cfg["a2c"]["n_steps"]
     xp = E.make_venv(n_envs, seed, capacity)
-    policy = PPO("MlpPolicy", xp, seed=seed, device="cpu", **cfg["ppo"])
+    policy = A2C("MlpPolicy", xp, seed=seed, device="cpu", **cfg["a2c"])
     policy.set_logger(configure(str(out), ["stdout", "csv"]))
 
     feedback = None
@@ -210,14 +218,14 @@ def run(cfg, condition, seed, out, judge=None):
         obs = xp.reset()
         for _ in range(p["pretrain_steps"] // n_envs):
             obs = xp.step(policy.predict(obs)[0])[0]
-        feedback.query(labels_due(0, 1, p["n_queries"], p["pretrain_frac"], 1), 0, 0)
-        feedback.fit(p["pretrain_epochs"], 0, xp.t)
+        feedback.query(labels_due(0, 1, p["n_queries"], p["pretrain_frac"], 1), 0)
+        feedback.fit(p["pretrain_epochs"], 0)
 
     loop = Loop(cfg, out, feedback)
     loop.init_callback(policy)
     loop.evaluate(0, cfg["eval"]["episodes"], cfg["eval"]["video_episodes"])
-    loop.next_eval = cfg["eval"]["every"]
-    policy.learn(cfg["total_timesteps"], callback=loop)
+    # progress.csv gets about ten rows per evaluation interval
+    policy.learn(cfg["total_timesteps"], callback=loop, log_interval=max(1, cfg["eval"]["every"] // update // 10))
 
     e = cfg["eval"]
     final = loop.evaluate(policy.num_timesteps, e["final_episodes"], e["final_video_episodes"], tag="final")

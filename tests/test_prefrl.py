@@ -149,9 +149,10 @@ class FakeJudge:
 def tiny_config():
     cfg = load_config(CONFIG)
     cfg.update(total_timesteps=1024, n_envs=2)
-    cfg["ppo"].update(n_steps=256, batch_size=64, n_epochs=1)
+    cfg["a2c"].update(n_steps=8)
     cfg["eval"].update(every=512, episodes=2, final_episodes=2, final_video_episodes=1)
-    cfg["pref"].update(n_queries=24, segment_len=30, pretrain_steps=400, pretrain_epochs=2, epochs_per_round=1)
+    cfg["pref"].update(n_queries=24, segment_len=30, pretrain_steps=400, pretrain_epochs=2, round_every=512,
+                       epochs_per_round=1)
     cfg["vlm"].update(frames_per_clip=4, save_clip_every=4)
     return cfg
 

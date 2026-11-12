@@ -2,7 +2,7 @@
 
 An implementation of Christiano et al. 2017, *Deep Reinforcement Learning from Human Preferences*
 ([arXiv:1706.03741](https://arxiv.org/abs/1706.03741)), on Gymnasium `LunarLander-v3`. The agent never sees the
-environment reward. A reward predictor is fit to pairwise preferences over 1.5 s clips, and PPO maximises the
+environment reward. A reward predictor is fit to pairwise preferences over 1.5 s clips, and A2C maximises the
 predicted reward. The preferences come from the true reward (the paper's synthetic oracle) or from
 `Qwen/Qwen2.5-VL-7B-Instruct` watching the two clips (standing in for the paper's human raters).
 
@@ -22,7 +22,7 @@ The prompt is designed but not yet measured against the oracle; that is the `cal
 
 | paper | here |
 |---|---|
-| Policy optimised on predicted reward; entropy bonus 0.01, gamma 0.995, lambda 0.97 (A.1) | same values, with PPO instead of TRPO |
+| A2C for discrete actions: 16 workers, 5 steps per update, lr 7e-4, gamma 0.99, entropy bonus 0.01, RMSProp (A.2) | same, except the learning rate is not decayed |
 | No episode-end signal reaches the agent (A) | `HiddenReset`: silent reset, never `done`; the crash/landing reward stays on the last step |
 | Clips of 1.5 s (A.1) | 75 steps at 50 FPS, cut from the continuous stream, so a clip can contain a crash and the restart |
 | Preference, tie, or can't tell (2.2.2) | VLM answers `1`, `2`, `TIE` or `UNSURE`; ties give mu = 0.5, can't-tell is dropped |
@@ -41,7 +41,9 @@ Differences worth knowing:
 
 - **The oracle/VLM mixing ratio is not from the paper.** The paper never mixes raters, so there is no ratio to copy.
   `conditions.mixed.oracle_fraction` is 0.5 as a placeholder.
-- PPO replaces TRPO, and the predictor is trained after every rollout rather than asynchronously.
+- The predictor is trained in a feedback round every 20,000 timesteps rather than asynchronously, and A2C's
+  learning rate is constant rather than linearly decayed.
+- The policy and value networks each have one hidden layer of 64 tanh units (`a2c.policy_kwargs.net_arch`).
 - The query budget counts queries asked. A VLM query that comes back "can't tell" is spent but adds no label, so the
   VLM conditions end with fewer labels than the oracle condition.
 - Every VLM query is asked in both clip orders and kept only if the two answers agree (`swap_check`). This removes
@@ -98,7 +100,7 @@ bodhanai-node040). Runs execute a read-only snapshot of the committed code under
 |---|---|
 | `summary.json` | written last; its presence means the run finished. Final 100-episode evaluation, label counts, VLM agreement |
 | `eval.csv` | true-reward evaluation every 50k steps (deterministic policy, 20 fixed episodes); last row is the final evaluation |
-| `progress.csv` | PPO statistics per rollout; `rollout/ep_rew_mean` is the true return of the last 100 training episodes |
+| `progress.csv` | A2C training statistics, a row about every 5,000 timesteps; `rollout/ep_rew_mean` is the true return of the last 100 training episodes |
 | `rounds.csv` | per feedback round: queries asked, labels held, predictor losses, predictor-vs-oracle accuracy on unseen pairs, r-hat vs true reward correlation, VLM agreement with the oracle |
 | `queries.jsonl` | every query: the two segments, their true returns, the oracle's label, who answered, the VLM's raw replies, the label used |
 | `videos/eval/*.mp4` | one evaluation episode per evaluation point and five from the final policy, return in the filename |

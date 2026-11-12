@@ -20,7 +20,7 @@ if [ "$stage" = prepare ]; then
   source "$REPO/scripts/env.sh"
   id="${RUN_ID:-$(date -u +%Y%m%d)-prefrl-lunarlander-$(git -C "$REPO" rev-parse --short=6 HEAD)}"
   run=$(agent-run prepare --repo "$REPO" --root "$ARTIFACTS" --project vlm_preference_lunar_lander --id "$id" \
-    --purpose "Deep RL from preferences on LunarLander-v3: PPO on the true reward vs a reward learned from oracle, Qwen2.5-VL-7B and mixed preferences; 5 seeds each" \
+    --purpose "Deep RL from preferences on LunarLander-v3: A2C on the true reward vs a reward learned from oracle, Qwen2.5-VL-7B and mixed preferences; 5 seeds each" \
     --config "$REPO/configs/default.yaml" --config "$REPO/configs/prompts.yaml" --environment "$REPO/uv.lock")
   mkdir "$run/code" "$run/outputs" "$run/smoke"
   tar -xf "$run/provenance/source.tar" -C "$run/code"
@@ -61,10 +61,10 @@ print(v["model"], v["revision"])' "$CFG")
   calibrate)
     step calibrate 8 "$PY" -m prefrl.calibrate --config "$CFG" --out "$RUN/outputs/calibration"
     ;;
-  smoke) # exercises model load, clip rendering, VLM labelling, predictor training, PPO, evaluation and videos
+  smoke) # exercises model load, clip rendering, VLM labelling, predictor training, A2C, evaluation and videos
     step smoke 4 "$PY" -m prefrl.train --config "$CFG" --condition vlm --seed 0 --out "$RUN/smoke/vlm_$(date +%H%M%S)" \
-      --set total_timesteps=32768 pref.n_queries=48 pref.pretrain_steps=4000 pref.pretrain_epochs=5 \
-      eval.every=16384 eval.final_episodes=5 eval.final_video_episodes=1
+      --set total_timesteps=32000 pref.n_queries=48 pref.pretrain_steps=4000 pref.pretrain_epochs=5 \
+      pref.round_every=8000 eval.every=16000 eval.final_episodes=5 eval.final_video_episodes=1
     ;;
   train) # 20 runs: 4 CPU-only at a time plus 2 VLM runs sharing the GPU (prefrl.run_all)
     step train 16 "$PY" -m prefrl.run_all --config "$CFG" --out "$RUN/outputs" --logs "$LOGS"
