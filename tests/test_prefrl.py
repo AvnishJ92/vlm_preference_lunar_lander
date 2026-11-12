@@ -149,7 +149,7 @@ class FakeJudge:
 def tiny_config():
     cfg = load_config(CONFIG)
     cfg.update(total_timesteps=1024, n_envs=2)
-    cfg["a2c"].update(n_steps=8)
+    cfg["ppo"].update(n_steps=256, batch_size=64, n_epochs=1)
     cfg["eval"].update(every=512, episodes=2, final_episodes=2, final_video_episodes=1)
     cfg["pref"].update(n_queries=24, segment_len=30, pretrain_steps=400, pretrain_epochs=2, round_every=512,
                        epochs_per_round=1)
@@ -196,11 +196,18 @@ def test_run_all_then_plot(tmp_path, monkeypatch):
     (outputs / "oracle/seed_1").mkdir(parents=True)  # left behind by a run that died: must not be reused
     (outputs / "oracle/seed_1/eval.csv").write_text("t,mean\n0,-999\n")
     monkeypatch.setenv("PYTHONPATH", str(CONFIG.parent.parent / "src"))
-    monkeypatch.setattr(sys, "argv", ["run_all", "--config", str(tmp_path / "default.yaml"), "--out", str(outputs),
-                                      "--logs", str(tmp_path / "logs")])  # fmt: skip
+    argv = ["run_all", "--config", str(tmp_path / "default.yaml"), "--out", str(outputs), "--logs", str(tmp_path / "logs")]
+    monkeypatch.setattr(sys, "argv", [*argv, "--conditions", "pure_rl", "--set", "eval.final_episodes=3"])
+    with pytest.raises(SystemExit):
+        run_all.main()
+    done = sorted(outputs.glob("*/seed_?/summary.json"))
+    assert [path.parts[-3] for path in done] == ["pure_rl", "pure_rl"]  # only the requested condition ran ...
+    assert json.loads(done[0].read_text())["final_eval"]["episodes"] == 3  # ... with the override applied
+    stamp = done[0].stat().st_mtime_ns
+    monkeypatch.setattr(sys, "argv", argv)
     with pytest.raises(SystemExit) as finished:
         run_all.main()
-    assert finished.value.code == 0
+    assert finished.value.code == 0 and done[0].stat().st_mtime_ns == stamp  # finished runs are not repeated
     assert len(list(outputs.glob("*/seed_?/summary.json"))) == 4 and len(list((tmp_path / "logs").glob("*.log"))) == 4
     assert len(list(outputs.glob("oracle/seed_1.incomplete-*"))) == 1
     assert pd.read_csv(outputs / "oracle/seed_1/eval.csv")["mean"].min() > -999

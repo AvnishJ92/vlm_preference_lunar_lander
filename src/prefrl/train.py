@@ -1,4 +1,4 @@
-"""One run: A2C on LunarLander, rewarded by the true reward or by a predictor learned from pairwise preferences.
+"""One run: PPO on LunarLander, rewarded by the true reward or by a predictor learned from pairwise preferences.
 
     python -m prefrl.train --config configs/default.yaml --condition vlm --seed 0 --out <run dir>
 """
@@ -14,7 +14,7 @@ import imageio
 import numpy as np
 import torch
 import yaml
-from stable_baselines3 import A2C
+from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.logger import configure
 
@@ -154,7 +154,7 @@ class Feedback:
 class Loop(BaseCallback):
     """Runs a feedback round every `pref.round_every` timesteps (if rewards are learned) and the evaluations.
 
-    A2C updates the policy every n_envs x n_steps = 80 timesteps; both schedules are checked after each update.
+    Both schedules are checked after each PPO rollout (n_envs x n_steps timesteps).
     """
 
     def __init__(self, cfg, out, feedback=None):
@@ -197,11 +197,11 @@ def run(cfg, condition, seed, out, judge=None):
     torch.set_num_threads(cfg["threads"])
     rng = np.random.default_rng(seed)
 
-    learned = "oracle_fraction" in cond  # otherwise: A2C on the true reward
-    update = n_envs * cfg["a2c"]["n_steps"]  # timesteps per policy update
-    capacity = (cfg["total_timesteps"] + p["pretrain_steps"]) // n_envs + 2 * cfg["a2c"]["n_steps"]
+    learned = "oracle_fraction" in cond  # otherwise: PPO on the true reward
+    update = n_envs * cfg["ppo"]["n_steps"]  # timesteps per policy update
+    capacity = (cfg["total_timesteps"] + p["pretrain_steps"]) // n_envs + 2 * cfg["ppo"]["n_steps"]
     xp = E.make_venv(n_envs, seed, capacity)
-    policy = A2C("MlpPolicy", xp, seed=seed, device="cpu", **cfg["a2c"])
+    policy = PPO("MlpPolicy", xp, seed=seed, device="cpu", **cfg["ppo"])
     policy.set_logger(configure(str(out), ["stdout", "csv"]))
 
     feedback = None

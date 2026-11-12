@@ -21,10 +21,12 @@ def main():
     parser.add_argument("--config", required=True)
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--logs", required=True, type=Path)
+    parser.add_argument("--conditions", nargs="*", help="only these conditions (default: all in the config)")
+    parser.add_argument("--set", nargs="*", default=[], metavar="KEY=VALUE", help="config overrides for every run")
     parser.add_argument("--gpu-parallel", type=int, default=2, help="concurrent runs that load the VLM (~20 GB each)")
     parser.add_argument("--cpu-parallel", type=int, default=4, help="concurrent runs that never touch the GPU")
     args = parser.parse_args()
-    cfg = load_config(args.config)
+    cfg = load_config(args.config, args.set)
     args.logs.mkdir(parents=True, exist_ok=True)
 
     def one(condition, seed):
@@ -34,13 +36,15 @@ def main():
         if out.exists():
             out.rename(out.with_name(f"{out.name}.incomplete-{int(time.time())}"))
         command = [sys.executable, "-m", "prefrl.train", "--config", args.config,
-                   "--condition", condition, "--seed", str(seed), "--out", str(out)]  # fmt: skip
+                   "--condition", condition, "--seed", str(seed), "--out", str(out), "--set", *args.set]  # fmt: skip
         with (args.logs / f"{condition}_seed{seed}.log").open("w") as log:
             return subprocess.run(command, stdout=log, stderr=subprocess.STDOUT).returncode
 
     with ThreadPoolExecutor(args.gpu_parallel) as gpu, ThreadPoolExecutor(args.cpu_parallel) as cpu:
         jobs = {}
         for condition, spec in cfg["conditions"].items():
+            if args.conditions and condition not in args.conditions:
+                continue
             pool = gpu if spec.get("oracle_fraction", 1) < 1 else cpu
             for seed in cfg["seeds"]:
                 jobs[condition, seed] = pool.submit(one, condition, seed)
