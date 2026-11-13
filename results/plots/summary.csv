@@ -1,3 +1,5 @@
 condition,seeds,final_return_mean,ci95_low,ci95_high,std_over_seeds,worst_seed,best_seed,landed_share,queries_asked,labels_obtained,vlm_oracle_agreement
 RL on true reward,5,273.3,265.8,280.8,6.1,263.6,279.0,0.97,0.0,0.0,
 Oracle preferences,5,102.7,-7.8,213.2,89.0,24.8,246.0,0.378,1400.0,1400.0,
+VLM preferences,5,52.7,-176.9,282.3,184.9,-128.3,259.3,0.366,1400.0,585.8,0.539
+Oracle + VLM preferences,5,173.3,53.6,292.9,96.4,6.0,247.8,0.556,1400.0,1140.8,0.413

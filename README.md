@@ -15,10 +15,11 @@ Four conditions, five seeds each:
 | `vlm` | learned predictor | Qwen2.5-VL |
 | `mixed` | learned predictor | each query: oracle with probability `oracle_fraction`, else Qwen2.5-VL |
 
-**Status (2026-11-12, evening): second attempt in progress.** The first attempt used a policy with one hidden layer
-of 64 units, which turned out to cap even true-reward PPO at about 166; with two hidden layers it reaches about 270.
-The first attempt's runs were deleted and everything is being rerun with the two-layer policy and a re-tuned VLM
-prompt. What the first attempt showed is kept in [docs/results.md](docs/results.md).
+**Status (2026-11-13): finished.** All 20 runs are complete. Final return on the true reward, mean over five seeds
+with a 95% confidence interval: PPO on the true reward 273 [266, 281]; oracle preferences 103 [-8, 213]; VLM
+preferences 53 [-177, 282], with two of five seeds solving the task; oracle + VLM 173 [54, 293]. Full results,
+figures and analysis: [docs/results.md](docs/results.md). An earlier attempt with a one-layer policy is recorded at
+the end of that document.
 
 ## How it follows the paper
 
@@ -89,8 +90,9 @@ slurm/launch.sh plot <run>                  # can be run while training is in pr
 
 `calibrate` scores each variant in `calibration.variants` against the oracle on clip pairs from a true-reward PPO
 run (early, mid and late training) and on pairs with a lander that has flown out of view. `agreement` near 0.5 in
-any of these groups means the VLM cannot judge those clips and the `vlm` condition should not be expected to learn. To adopt a variant, copy its settings into `vlm:` in `default.yaml`,
-commit, and `prepare` a new run.
+any of these groups means the VLM does not rank those clips the way the environment reward does (which, as the
+results show, does not by itself rule out learning). To adopt a variant, copy its settings into `vlm:` in
+`default.yaml`, commit, and `prepare` a new run.
 
 GPU stages run as `srun --overlap` steps in Slurm job `ALLOC` (default 26911, the 1-GPU / 16-CPU allocation on
 bodhanai-node040). Runs execute a read-only snapshot of the committed code under `<run>/code`, never this checkout.

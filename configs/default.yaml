@@ -46,11 +46,11 @@ pref:
 vlm:
   model: Qwen/Qwen2.5-VL-7B-Instruct
   revision: cc594898137f460bfe9f0759e9844b3ce807cfb5
-  prompt: direct          # a variant in prompts.yaml
+  prompt: progress        # a variant in prompts.yaml; chosen by calibration (docs/results.md)
   input_mode: video       # video: each clip as one Qwen video | images: each frame as a separate image
   frames_per_clip: 8      # must be even for video (Qwen merges frames in pairs)
   frame_scale: 1.0        # upscale the 600x400 frames before the model sees them (more vision tokens)
-  mark_out_of_view: false # write LANDER OUT OF VIEW on frames where the lander has left the picture
+  mark_out_of_view: true  # write LANDER OUT OF VIEW on frames where the lander has left the picture
   batch_size: 8           # conversations per generate() call; 16 and 32 were no faster per query (measured)
   max_new_tokens: 12      # enough for `ANSWER: UNSURE`
   swap_check: true        # ask every pair in both orders; contradictory answers give no label
@@ -75,7 +75,7 @@ calibration:
   n_pairs: 294            # 6 pairs per PPO update, tagged early / mid / late by thirds of the run
   n_away_pairs: 40        # an out-of-view clip against a clip from the PPO run
   variants:
-    direct: {}
-    direct_marked: {mark_out_of_view: true}
+    direct: {prompt: direct, mark_out_of_view: false}
+    direct_marked: {prompt: direct, mark_out_of_view: true}
     progress_marked: {prompt: progress, mark_out_of_view: true}
     reasoned_marked: {prompt: reasoned, max_new_tokens: 320, mark_out_of_view: true}
