@@ -7,3 +7,4 @@ results/calibration/*
 !results/calibration/calibration.csv
 results/ablation/
 results_live
+*.zip
