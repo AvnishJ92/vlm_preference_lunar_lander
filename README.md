@@ -56,7 +56,12 @@ Differences worth knowing:
 
 ## Layout
 
-Results copied from the runs live in `results/` (plots and tables in git; videos and per-run files on disk only).
+The complete saved experiment outputs are committed in [`results/`](results/):
+
+- [`results/plots/`](results/plots/): performance plots, learning curves, and the summary table.
+- [`results/runs/`](results/runs/): all four conditions and five seeds, including evaluation and query videos,
+  `policy.zip` policy checkpoints, `reward_model.pt` reward predictors, `preferences.npz`, and training logs.
+- [`results/calibration/`](results/calibration/): calibration scores, model answers, clip pairs, and the saved pool.
 
 ```
 configs/default.yaml     every hyperparameter, the four conditions, the calibration grid

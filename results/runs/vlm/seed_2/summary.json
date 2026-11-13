@@ -1,0 +1,24 @@
+{
+ "condition": "vlm",
+ "seed": 2,
+ "timesteps": 2015232,
+ "final_eval": {
+  "t": 2015232,
+  "mean": 259.30685772973027,
+  "std": 50.65712366331157,
+  "min": 24.186008693536266,
+  "max": 319.502077025376,
+  "landed": 0.91,
+  "length": 284.8,
+  "episodes": 100
+ },
+ "asked": 1400,
+ "labels": 677,
+ "vlm": {
+  "asked": 1400,
+  "labelled": 677,
+  "ties": 2,
+  "hard": 675,
+  "agree": 345
+ }
+}

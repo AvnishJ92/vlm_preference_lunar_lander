@@ -1,10 +1,7 @@
 __pycache__/
 .pytest_cache/
 .venv/
-# results/: a copy of the run outputs. Plots and tables are committed; videos, models and per-run files are not.
-results/runs/
-results/calibration/*
-!results/calibration/calibration.csv
-results/ablation/
+# Complete experiment outputs under results/ are versioned.
 results_live
-*.zip
+# Ignore top-level bundles; per-run policy.zip checkpoints are versioned.
+/*.zip

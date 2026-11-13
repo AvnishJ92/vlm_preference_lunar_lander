@@ -1,0 +1,197 @@
+total_timesteps: 2000000
+n_envs: 16
+hide_episode_ends: true
+threads: 2
+ppo:
+  n_steps: 1024
+  batch_size: 64
+  n_epochs: 4
+  learning_rate: 0.0003
+  gamma: 0.995
+  gae_lambda: 0.97
+  ent_coef: 0.01
+  policy_kwargs:
+    net_arch:
+    - 64
+    - 64
+eval:
+  every: 50000
+  episodes: 20
+  video_episodes: 1
+  final_episodes: 100
+  final_video_episodes: 5
+pref:
+  n_queries: 1400
+  segment_len: 75
+  pretrain_frac: 0.25
+  pretrain_steps: 16000
+  anneal_tau_frac: 0.1
+  candidate_factor: 10
+  ensemble: 3
+  hidden: 64
+  label_noise: 0.1
+  val_ratio:
+  - 1.1
+  - 1.5
+  l2_init: 0.0001
+  lr: 0.001
+  batch_size: 64
+  pretrain_epochs: 100
+  round_every: 16384
+  epochs_per_round: 10
+vlm:
+  model: Qwen/Qwen2.5-VL-7B-Instruct
+  revision: cc594898137f460bfe9f0759e9844b3ce807cfb5
+  prompt: progress
+  input_mode: video
+  frames_per_clip: 8
+  frame_scale: 1.0
+  mark_out_of_view: true
+  batch_size: 8
+  max_new_tokens: 12
+  swap_check: true
+  save_clip_every: 10
+conditions:
+  pure_rl: {}
+  oracle:
+    oracle_fraction: 1.0
+  vlm:
+    oracle_fraction: 0.0
+  mixed:
+    oracle_fraction: 0.5
+seeds:
+- 0
+- 1
+- 2
+- 3
+- 4
+calibration:
+  train_steps: 802816
+  away_steps: 1500
+  n_pairs: 294
+  n_away_pairs: 40
+  variants:
+    direct: {}
+    direct_marked:
+      mark_out_of_view: true
+    progress_marked:
+      prompt: progress
+      mark_out_of_view: true
+    reasoned_marked:
+      prompt: reasoned
+      max_new_tokens: 320
+      mark_out_of_view: true
+prompts:
+  system: 'You are a careful judge of a Lunar Lander simulation. You will see two
+    short video clips (about 1.5 seconds each) of an AI piloting a small spacecraft.
+    Your job is to decide in which clip better things happen.
+
+
+    What is on screen
+
+    - Black sky above a white moon surface.
+
+    - The lander is the small purple craft with two legs.
+
+    - The landing pad is the flat ground between the two yellow flags.
+
+    - Small red dots next to the lander are engine exhaust: below it when the main
+    engine fires, beside it when a side thruster fires.
+
+
+    The goal
+
+    The lander should fly to the landing pad, touch down gently on both legs, upright,
+    between the flags, and then stay still.
+
+
+    How to judge, most important first
+
+    1. A crash is the worst thing that can happen: the purple body (not just the legs)
+    hits the ground, the lander tips over, or it flies out of the picture. A clip
+    where you see this is worse than a clip where it does not happen.
+
+    2. A gentle touchdown on the pad that stays upright and still is the best thing
+    that can happen.
+
+    3. Otherwise judge how the situation changes during the clip. Good: the lander
+    gets closer to the pad (sideways toward the middle of the two flags, and steadily
+    lower), slows down, stays upright or straightens up, or sets its legs down gently.
+    Bad: it drifts sideways away from the flags, climbs away, speeds up, tilts further,
+    or spins.
+
+    4. Only if the clips are otherwise equal: firing the engines (visible exhaust)
+    more than needed is slightly bad.
+
+
+    Rules
+
+    - Judge only what happens inside each clip, not how the lander got into its situation.
+    A lander that starts far away and improves a lot is doing better than one that
+    starts close and gets worse.
+
+    - If the lander suddenly jumps back to the top of the picture, that attempt ended
+    and a new one began. If it was resting upright on its legs just before the jump,
+    it had landed successfully (best). If it was hitting the ground with its body,
+    tipping over, or leaving the picture, it crashed (worst).
+
+    - The two clips come from different attempts with different terrain. Compare the
+    behaviour, not the scenery.
+
+    '
+  out_of_view_rule: '- When the lander has left the picture, the frame says LANDER
+    OUT OF VIEW in red. That lander has flown away, which is as bad as a crash: a
+    clip that says LANDER OUT OF VIEW is worse than a clip in which the lander stays
+    in the picture.
+
+    '
+  clip_label:
+    video: 'Clip {n}:'
+    images: 'Clip {n} ({frames} frames in time order, {dt:.1f} s apart):'
+  variants:
+    reasoned: 'First describe each clip in one or two sentences: where the lander
+      is relative to the two flags, which way and how fast it moves, how much it is
+      tilted, whether its engines fire, and whether it touches the ground, crashes,
+      or the attempt ends. Then compare the two clips using the judging criteria.
+
+      Finish with exactly one line in this form: `ANSWER: 1` if better things happen
+      in Clip 1, `ANSWER: 2` if better things happen in Clip 2, `ANSWER: TIE` if they
+      are about equally good, or `ANSWER: UNSURE` if you cannot tell what is happening.
+      Avoid UNSURE unless you are truly confused.
+
+      '
+    brief: 'In at most 15 words each, say what the lander does in Clip 1 and in Clip
+      2: where it ends up relative to the flags, whether it is upright or tilted,
+      and whether it lands, crashes or is still flying. Then decide in which clip
+      better things happen by the judging criteria.
+
+      Reply with exactly three lines and nothing else. Line 1 starts with `Clip 1:`.
+      Line 2 starts with `Clip 2:`. Line 3 is `ANSWER: 1`, `ANSWER: 2`, `ANSWER: TIE`
+      (about equally good) or `ANSWER: UNSURE` (you cannot tell what is happening;
+      avoid this unless you are truly confused).
+
+      '
+    progress: 'For each clip, compare its first moment with its last moment. In which
+      clip does the lander''s situation improve more, or get worse less, between the
+      first and the last moment? Improving means ending closer to the landing pad,
+      slower, more upright, or resting on its legs. Getting worse means ending farther
+      from the pad, faster, more tilted, crashed, or out of the picture. Do not prefer
+      a clip merely because its lander starts in a better place; a lander that sits
+      still neither improves nor gets worse.
+
+      Reply with exactly one line and nothing else: `ANSWER: 1` if it is Clip 1, `ANSWER:
+      2` if it is Clip 2, `ANSWER: TIE` if they are about equally good, or `ANSWER:
+      UNSURE` if you cannot tell what is happening. Avoid UNSURE unless you are truly
+      confused.
+
+      '
+    direct: 'In which clip do better things happen, by the judging criteria?
+
+      Reply with exactly one line and nothing else: `ANSWER: 1` if it is Clip 1, `ANSWER:
+      2` if it is Clip 2, `ANSWER: TIE` if they are about equally good, or `ANSWER:
+      UNSURE` if you cannot tell what is happening. Avoid UNSURE unless you are truly
+      confused.
+
+      '
+condition: vlm
+seed: 4

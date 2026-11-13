@@ -1,0 +1,2 @@
+# Preserve generated experiment outputs byte-for-byte.
+results/** -text
