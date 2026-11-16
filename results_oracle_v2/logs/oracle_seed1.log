@@ -1,0 +1,2863 @@
+Logging to results_oracle_v2/runs/oracle/seed_1
+2026-11-16 17:58:06,969 t=0 asked 350 queries (0 by VLM) in 1s; 350 labels in D
+2026-11-16 17:58:22,923 t=0 predictor: {'asked': 350, 'labels': 350, 'train_loss': 0.1271, 'val_loss': 0.2082, 'l2': 0.0676, 'rhat_true_corr': np.float64(0.3072), 'pred_oracle_acc': 0.4569, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 17:58:23,812 t=0 eval: {'mean': -750.59, 'std': 412.57, 'min': -2382.83, 'max': -359.74, 'landed': 0.0, 'length': 110.45, 'episodes': 20.0}
+2026-11-16 17:58:24,838 t=16384 asked 34 queries (0 by VLM) in 0s; 384 labels in D
+2026-11-16 17:58:26,283 t=16384 predictor: {'asked': 384, 'labels': 384, 'train_loss': 0.1751, 'val_loss': 0.2298, 'l2': 0.0631, 'rhat_true_corr': np.float64(0.2864), 'pred_oracle_acc': 0.7971, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+---------------------------------
+| rollout/           |          |
+|    ep_len_mean     | 92.6     |
+|    ep_rew_mean     | -211     |
+| time/              |          |
+|    fps             | 6631     |
+|    iterations      | 1        |
+|    time_elapsed    | 2        |
+|    total_timesteps | 16384    |
+---------------------------------
+2026-11-16 17:58:28,544 t=32768 asked 32 queries (0 by VLM) in 0s; 416 labels in D
+2026-11-16 17:58:30,264 t=32768 predictor: {'asked': 416, 'labels': 416, 'train_loss': 0.1974, 'val_loss': 0.2576, 'l2': 0.0511, 'rhat_true_corr': np.float64(0.2346), 'pred_oracle_acc': 0.7531, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 88          |
+|    ep_rew_mean          | -145        |
+| time/                   |             |
+|    fps                  | 5078        |
+|    iterations           | 2           |
+|    time_elapsed         | 6           |
+|    total_timesteps      | 32768       |
+| train/                  |             |
+|    approx_kl            | 0.007210073 |
+|    clip_fraction        | 0.0306      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -1.38       |
+|    explained_variance   | 0.00264     |
+|    learning_rate        | 0.0003      |
+|    loss                 | 50.3        |
+|    n_updates            | 4           |
+|    policy_gradient_loss | -0.00407    |
+|    value_loss           | 206         |
+-----------------------------------------
+2026-11-16 17:58:32,861 t=49152 asked 30 queries (0 by VLM) in 0s; 446 labels in D
+2026-11-16 17:58:34,406 t=49152 predictor: {'asked': 446, 'labels': 446, 'train_loss': 0.2054, 'val_loss': 0.2591, 'l2': 0.043, 'rhat_true_corr': np.float64(0.2552), 'pred_oracle_acc': 0.76, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 91.5         |
+|    ep_rew_mean          | -153         |
+| time/                   |              |
+|    fps                  | 4639         |
+|    iterations           | 3            |
+|    time_elapsed         | 10           |
+|    total_timesteps      | 49152        |
+| train/                  |              |
+|    approx_kl            | 0.0070252637 |
+|    clip_fraction        | 0.0477       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -1.37        |
+|    explained_variance   | 0.374        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 29.9         |
+|    n_updates            | 8            |
+|    policy_gradient_loss | -0.00596     |
+|    value_loss           | 67.7         |
+------------------------------------------
+2026-11-16 17:58:36,756 t=65536 asked 28 queries (0 by VLM) in 0s; 474 labels in D
+2026-11-16 17:58:38,574 t=65536 predictor: {'asked': 474, 'labels': 474, 'train_loss': 0.219, 'val_loss': 0.2817, 'l2': 0.043, 'rhat_true_corr': np.float64(0.2637), 'pred_oracle_acc': 0.6964, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 17:58:39,088 t=65536 eval: {'mean': -148.71, 'std': 102.88, 'min': -294.69, 'max': 7.27, 'landed': 0.0, 'length': 88.65, 'episodes': 20.0}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 87.3        |
+|    ep_rew_mean          | -132        |
+| time/                   |             |
+|    fps                  | 4290        |
+|    iterations           | 4           |
+|    time_elapsed         | 15          |
+|    total_timesteps      | 65536       |
+| train/                  |             |
+|    approx_kl            | 0.010801374 |
+|    clip_fraction        | 0.111       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -1.34       |
+|    explained_variance   | 0.442       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 36.9        |
+|    n_updates            | 12          |
+|    policy_gradient_loss | -0.00903    |
+|    value_loss           | 90.1        |
+-----------------------------------------
+2026-11-16 17:58:41,216 t=81920 asked 26 queries (0 by VLM) in 0s; 500 labels in D
+2026-11-16 17:58:42,806 t=81920 predictor: {'asked': 500, 'labels': 500, 'train_loss': 0.2287, 'val_loss': 0.2996, 'l2': 0.043, 'rhat_true_corr': np.float64(0.2042), 'pred_oracle_acc': 0.7, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 89.5        |
+|    ep_rew_mean          | -123        |
+| time/                   |             |
+|    fps                  | 4312        |
+|    iterations           | 5           |
+|    time_elapsed         | 18          |
+|    total_timesteps      | 81920       |
+| train/                  |             |
+|    approx_kl            | 0.007477621 |
+|    clip_fraction        | 0.0428      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -1.33       |
+|    explained_variance   | 0.571       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 36.6        |
+|    n_updates            | 16          |
+|    policy_gradient_loss | -0.00457    |
+|    value_loss           | 100         |
+-----------------------------------------
+2026-11-16 17:58:45,110 t=98304 asked 25 queries (0 by VLM) in 0s; 525 labels in D
+2026-11-16 17:58:46,699 t=98304 predictor: {'asked': 525, 'labels': 525, 'train_loss': 0.2481, 'val_loss': 0.3079, 'l2': 0.043, 'rhat_true_corr': np.float64(0.2058), 'pred_oracle_acc': 0.708, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 89.4        |
+|    ep_rew_mean          | -93.3       |
+| time/                   |             |
+|    fps                  | 4295        |
+|    iterations           | 6           |
+|    time_elapsed         | 22          |
+|    total_timesteps      | 98304       |
+| train/                  |             |
+|    approx_kl            | 0.008683341 |
+|    clip_fraction        | 0.0706      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -1.31       |
+|    explained_variance   | 0.645       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 23          |
+|    n_updates            | 20          |
+|    policy_gradient_loss | -0.00738    |
+|    value_loss           | 77.9        |
+-----------------------------------------
+2026-11-16 17:58:49,051 t=114688 asked 23 queries (0 by VLM) in 0s; 548 labels in D
+2026-11-16 17:58:50,650 t=114688 predictor: {'asked': 548, 'labels': 548, 'train_loss': 0.2578, 'val_loss': 0.3239, 'l2': 0.043, 'rhat_true_corr': np.float64(0.2202), 'pred_oracle_acc': 0.7, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 17:58:51,799 t=114688 eval: {'mean': -186.5, 'std': 93.77, 'min': -361.67, 'max': -38.96, 'landed': 0.0, 'length': 168.45, 'episodes': 20.0}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 105         |
+|    ep_rew_mean          | -90         |
+| time/                   |             |
+|    fps                  | 4097        |
+|    iterations           | 7           |
+|    time_elapsed         | 27          |
+|    total_timesteps      | 114688      |
+| train/                  |             |
+|    approx_kl            | 0.013345042 |
+|    clip_fraction        | 0.138       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -1.25       |
+|    explained_variance   | 0.636       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 35.2        |
+|    n_updates            | 24          |
+|    policy_gradient_loss | -0.0115     |
+|    value_loss           | 64.1        |
+-----------------------------------------
+2026-11-16 17:58:54,281 t=131072 asked 22 queries (0 by VLM) in 0s; 570 labels in D
+2026-11-16 17:58:55,787 t=131072 predictor: {'asked': 570, 'labels': 570, 'train_loss': 0.2617, 'val_loss': 0.3504, 'l2': 0.0437, 'rhat_true_corr': np.float64(0.2453), 'pred_oracle_acc': 0.7409, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 103         |
+|    ep_rew_mean          | -94.2       |
+| time/                   |             |
+|    fps                  | 4099        |
+|    iterations           | 8           |
+|    time_elapsed         | 31          |
+|    total_timesteps      | 131072      |
+| train/                  |             |
+|    approx_kl            | 0.009828743 |
+|    clip_fraction        | 0.0868      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -1.2        |
+|    explained_variance   | 0.645       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 61.8        |
+|    n_updates            | 28          |
+|    policy_gradient_loss | -0.0107     |
+|    value_loss           | 117         |
+-----------------------------------------
+2026-11-16 17:58:57,948 t=147456 asked 21 queries (0 by VLM) in 0s; 591 labels in D
+2026-11-16 17:59:00,194 t=147456 predictor: {'asked': 591, 'labels': 591, 'train_loss': 0.2669, 'val_loss': 0.3613, 'l2': 0.0437, 'rhat_true_corr': np.float64(0.1908), 'pred_oracle_acc': 0.6714, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 113         |
+|    ep_rew_mean          | -90.4       |
+| time/                   |             |
+|    fps                  | 4052        |
+|    iterations           | 9           |
+|    time_elapsed         | 36          |
+|    total_timesteps      | 147456      |
+| train/                  |             |
+|    approx_kl            | 0.011781771 |
+|    clip_fraction        | 0.115       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -1.13       |
+|    explained_variance   | 0.559       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 35.2        |
+|    n_updates            | 32          |
+|    policy_gradient_loss | -0.0115     |
+|    value_loss           | 83.2        |
+-----------------------------------------
+2026-11-16 17:59:02,283 t=163840 asked 21 queries (0 by VLM) in 0s; 612 labels in D
+2026-11-16 17:59:04,387 t=163840 predictor: {'asked': 612, 'labels': 612, 'train_loss': 0.2754, 'val_loss': 0.3695, 'l2': 0.0437, 'rhat_true_corr': np.float64(0.1333), 'pred_oracle_acc': 0.6857, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 17:59:05,142 t=163840 eval: {'mean': -225.17, 'std': 56.13, 'min': -375.26, 'max': -138.22, 'landed': 0.0, 'length': 130.85, 'episodes': 20.0}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 138         |
+|    ep_rew_mean          | -94.3       |
+| time/                   |             |
+|    fps                  | 3964        |
+|    iterations           | 10          |
+|    time_elapsed         | 41          |
+|    total_timesteps      | 163840      |
+| train/                  |             |
+|    approx_kl            | 0.011684079 |
+|    clip_fraction        | 0.142       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -1.05       |
+|    explained_variance   | 0.574       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 65.2        |
+|    n_updates            | 36          |
+|    policy_gradient_loss | -0.011      |
+|    value_loss           | 75.2        |
+-----------------------------------------
+2026-11-16 17:59:07,412 t=180224 asked 19 queries (0 by VLM) in 0s; 631 labels in D
+2026-11-16 17:59:09,355 t=180224 predictor: {'asked': 631, 'labels': 631, 'train_loss': 0.2811, 'val_loss': 0.3843, 'l2': 0.0502, 'rhat_true_corr': np.float64(0.1597), 'pred_oracle_acc': 0.6421, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 171         |
+|    ep_rew_mean          | -120        |
+| time/                   |             |
+|    fps                  | 3957        |
+|    iterations           | 11          |
+|    time_elapsed         | 45          |
+|    total_timesteps      | 180224      |
+| train/                  |             |
+|    approx_kl            | 0.008857992 |
+|    clip_fraction        | 0.0992      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -1.05       |
+|    explained_variance   | 0.701       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 35.1        |
+|    n_updates            | 40          |
+|    policy_gradient_loss | -0.0119     |
+|    value_loss           | 67.1        |
+-----------------------------------------
+2026-11-16 17:59:11,513 t=196608 asked 18 queries (0 by VLM) in 0s; 649 labels in D
+2026-11-16 17:59:13,887 t=196608 predictor: {'asked': 649, 'labels': 649, 'train_loss': 0.3026, 'val_loss': 0.4058, 'l2': 0.0547, 'rhat_true_corr': np.float64(0.1811), 'pred_oracle_acc': 0.6889, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 258          |
+|    ep_rew_mean          | -198         |
+| time/                   |              |
+|    fps                  | 3926         |
+|    iterations           | 12           |
+|    time_elapsed         | 50           |
+|    total_timesteps      | 196608       |
+| train/                  |              |
+|    approx_kl            | 0.0093698185 |
+|    clip_fraction        | 0.0858       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -1.03        |
+|    explained_variance   | 0.668        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 40.1         |
+|    n_updates            | 44           |
+|    policy_gradient_loss | -0.00681     |
+|    value_loss           | 88.5         |
+------------------------------------------
+2026-11-16 17:59:16,215 t=212992 asked 18 queries (0 by VLM) in 0s; 667 labels in D
+2026-11-16 17:59:18,258 t=212992 predictor: {'asked': 667, 'labels': 667, 'train_loss': 0.3056, 'val_loss': 0.4137, 'l2': 0.0547, 'rhat_true_corr': np.float64(0.186), 'pred_oracle_acc': 0.7278, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 17:59:19,245 t=212992 eval: {'mean': -213.08, 'std': 72.13, 'min': -364.32, 'max': -121.6, 'landed': 0.0, 'length': 144.65, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 329          |
+|    ep_rew_mean          | -273         |
+| time/                   |              |
+|    fps                  | 3842         |
+|    iterations           | 13           |
+|    time_elapsed         | 55           |
+|    total_timesteps      | 212992       |
+| train/                  |              |
+|    approx_kl            | 0.0061457455 |
+|    clip_fraction        | 0.0428       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -1.08        |
+|    explained_variance   | 0.548        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 67.4         |
+|    n_updates            | 48           |
+|    policy_gradient_loss | -0.00357     |
+|    value_loss           | 117          |
+------------------------------------------
+2026-11-16 17:59:21,658 t=229376 asked 17 queries (0 by VLM) in 0s; 684 labels in D
+2026-11-16 17:59:23,967 t=229376 predictor: {'asked': 684, 'labels': 684, 'train_loss': 0.3042, 'val_loss': 0.4078, 'l2': 0.0547, 'rhat_true_corr': np.float64(0.1025), 'pred_oracle_acc': 0.8118, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 394         |
+|    ep_rew_mean          | -310        |
+| time/                   |             |
+|    fps                  | 3813        |
+|    iterations           | 14          |
+|    time_elapsed         | 60          |
+|    total_timesteps      | 229376      |
+| train/                  |             |
+|    approx_kl            | 0.008033816 |
+|    clip_fraction        | 0.0653      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -1.12       |
+|    explained_variance   | 0.559       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 34.2        |
+|    n_updates            | 52          |
+|    policy_gradient_loss | -0.00356    |
+|    value_loss           | 105         |
+-----------------------------------------
+2026-11-16 17:59:26,073 t=245760 asked 16 queries (0 by VLM) in 0s; 700 labels in D
+2026-11-16 17:59:27,693 t=245760 predictor: {'asked': 700, 'labels': 700, 'train_loss': 0.3178, 'val_loss': 0.4001, 'l2': 0.0547, 'rhat_true_corr': np.float64(0.072), 'pred_oracle_acc': 0.7688, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 458         |
+|    ep_rew_mean          | -321        |
+| time/                   |             |
+|    fps                  | 3847        |
+|    iterations           | 15          |
+|    time_elapsed         | 63          |
+|    total_timesteps      | 245760      |
+| train/                  |             |
+|    approx_kl            | 0.010699143 |
+|    clip_fraction        | 0.113       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -1.18       |
+|    explained_variance   | 0.695       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 16          |
+|    n_updates            | 56          |
+|    policy_gradient_loss | -0.00704    |
+|    value_loss           | 66.6        |
+-----------------------------------------
+2026-11-16 17:59:30,145 t=262144 asked 16 queries (0 by VLM) in 0s; 716 labels in D
+2026-11-16 17:59:31,876 t=262144 predictor: {'asked': 716, 'labels': 716, 'train_loss': 0.3163, 'val_loss': 0.4073, 'l2': 0.0531, 'rhat_true_corr': np.float64(0.0978), 'pred_oracle_acc': 0.7438, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 17:59:33,180 t=262144 eval: {'mean': -146.87, 'std': 141.56, 'min': -410.5, 'max': 199.3, 'landed': 0.1, 'length': 186.6, 'episodes': 20.0}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 390         |
+|    ep_rew_mean          | -222        |
+| time/                   |             |
+|    fps                  | 3779        |
+|    iterations           | 16          |
+|    time_elapsed         | 69          |
+|    total_timesteps      | 262144      |
+| train/                  |             |
+|    approx_kl            | 0.008272997 |
+|    clip_fraction        | 0.0765      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -1.12       |
+|    explained_variance   | 0.729       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 37.2        |
+|    n_updates            | 60          |
+|    policy_gradient_loss | -0.00508    |
+|    value_loss           | 87.2        |
+-----------------------------------------
+2026-11-16 17:59:35,818 t=278528 asked 16 queries (0 by VLM) in 0s; 732 labels in D
+2026-11-16 17:59:38,115 t=278528 predictor: {'asked': 732, 'labels': 732, 'train_loss': 0.317, 'val_loss': 0.4145, 'l2': 0.0531, 'rhat_true_corr': np.float64(0.0047), 'pred_oracle_acc': 0.6625, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 364         |
+|    ep_rew_mean          | -165        |
+| time/                   |             |
+|    fps                  | 3748        |
+|    iterations           | 17          |
+|    time_elapsed         | 74          |
+|    total_timesteps      | 278528      |
+| train/                  |             |
+|    approx_kl            | 0.008718187 |
+|    clip_fraction        | 0.0762      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -1.06       |
+|    explained_variance   | 0.796       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 24.9        |
+|    n_updates            | 64          |
+|    policy_gradient_loss | -0.00444    |
+|    value_loss           | 97.7        |
+-----------------------------------------
+2026-11-16 17:59:40,857 t=294912 asked 14 queries (0 by VLM) in 0s; 746 labels in D
+2026-11-16 17:59:42,683 t=294912 predictor: {'asked': 746, 'labels': 746, 'train_loss': 0.3204, 'val_loss': 0.4139, 'l2': 0.0531, 'rhat_true_corr': np.float64(-0.0102), 'pred_oracle_acc': 0.6929, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 377          |
+|    ep_rew_mean          | -154         |
+| time/                   |              |
+|    fps                  | 3739         |
+|    iterations           | 18           |
+|    time_elapsed         | 78           |
+|    total_timesteps      | 294912       |
+| train/                  |              |
+|    approx_kl            | 0.0062739067 |
+|    clip_fraction        | 0.0454       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -1.01        |
+|    explained_variance   | 0.837        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 26.1         |
+|    n_updates            | 68           |
+|    policy_gradient_loss | -0.00302     |
+|    value_loss           | 77.9         |
+------------------------------------------
+2026-11-16 17:59:44,886 t=311296 asked 15 queries (0 by VLM) in 0s; 761 labels in D
+2026-11-16 17:59:47,943 t=311296 predictor: {'asked': 761, 'labels': 761, 'train_loss': 0.3254, 'val_loss': 0.4115, 'l2': 0.0531, 'rhat_true_corr': np.float64(-0.0204), 'pred_oracle_acc': 0.6867, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 17:59:49,596 t=311296 eval: {'mean': -79.71, 'std': 172.25, 'min': -250.33, 'max': 260.1, 'landed': 0.25, 'length': 216.5, 'episodes': 20.0}
+----------------------------------------
+| rollout/                |            |
+|    ep_len_mean          | 420        |
+|    ep_rew_mean          | -143       |
+| time/                   |            |
+|    fps                  | 3628       |
+|    iterations           | 19         |
+|    time_elapsed         | 85         |
+|    total_timesteps      | 311296     |
+| train/                  |            |
+|    approx_kl            | 0.00598468 |
+|    clip_fraction        | 0.0456     |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -0.976     |
+|    explained_variance   | 0.823      |
+|    learning_rate        | 0.0003     |
+|    loss                 | 60.5       |
+|    n_updates            | 72         |
+|    policy_gradient_loss | -0.00265   |
+|    value_loss           | 90.5       |
+----------------------------------------
+2026-11-16 17:59:52,158 t=327680 asked 13 queries (0 by VLM) in 0s; 774 labels in D
+2026-11-16 17:59:54,020 t=327680 predictor: {'asked': 774, 'labels': 774, 'train_loss': 0.3595, 'val_loss': 0.4292, 'l2': 0.0531, 'rhat_true_corr': np.float64(-0.0371), 'pred_oracle_acc': 0.6077, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 450         |
+|    ep_rew_mean          | -156        |
+| time/                   |             |
+|    fps                  | 3632        |
+|    iterations           | 20          |
+|    time_elapsed         | 90          |
+|    total_timesteps      | 327680      |
+| train/                  |             |
+|    approx_kl            | 0.004429116 |
+|    clip_fraction        | 0.0431      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.937      |
+|    explained_variance   | 0.838       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 40.8        |
+|    n_updates            | 76          |
+|    policy_gradient_loss | -0.00148    |
+|    value_loss           | 91.3        |
+-----------------------------------------
+2026-11-16 17:59:56,600 t=344064 asked 14 queries (0 by VLM) in 0s; 788 labels in D
+2026-11-16 17:59:58,629 t=344064 predictor: {'asked': 788, 'labels': 788, 'train_loss': 0.3424, 'val_loss': 0.4082, 'l2': 0.0531, 'rhat_true_corr': np.float64(0.0167), 'pred_oracle_acc': 0.7429, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 485         |
+|    ep_rew_mean          | -149        |
+| time/                   |             |
+|    fps                  | 3628        |
+|    iterations           | 21          |
+|    time_elapsed         | 94          |
+|    total_timesteps      | 344064      |
+| train/                  |             |
+|    approx_kl            | 0.006165045 |
+|    clip_fraction        | 0.0471      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.861      |
+|    explained_variance   | 0.838       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 36.2        |
+|    n_updates            | 80          |
+|    policy_gradient_loss | -0.0022     |
+|    value_loss           | 109         |
+-----------------------------------------
+2026-11-16 18:00:00,792 t=360448 asked 13 queries (0 by VLM) in 0s; 801 labels in D
+2026-11-16 18:00:02,698 t=360448 predictor: {'asked': 801, 'labels': 801, 'train_loss': 0.3427, 'val_loss': 0.4286, 'l2': 0.0531, 'rhat_true_corr': np.float64(0.0838), 'pred_oracle_acc': 0.5308, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:00:05,364 t=360448 eval: {'mean': 5.16, 'std': 182.78, 'min': -234.08, 'max': 288.66, 'landed': 0.3, 'length': 306.55, 'episodes': 20.0}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 402         |
+|    ep_rew_mean          | -128        |
+| time/                   |             |
+|    fps                  | 3549        |
+|    iterations           | 22          |
+|    time_elapsed         | 101         |
+|    total_timesteps      | 360448      |
+| train/                  |             |
+|    approx_kl            | 0.004549102 |
+|    clip_fraction        | 0.0437      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.788      |
+|    explained_variance   | 0.843       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 78.5        |
+|    n_updates            | 84          |
+|    policy_gradient_loss | -0.00212    |
+|    value_loss           | 122         |
+-----------------------------------------
+2026-11-16 18:00:07,643 t=376832 asked 12 queries (0 by VLM) in 0s; 813 labels in D
+2026-11-16 18:00:10,408 t=376832 predictor: {'asked': 813, 'labels': 813, 'train_loss': 0.348, 'val_loss': 0.4237, 'l2': 0.0531, 'rhat_true_corr': np.float64(0.0624), 'pred_oracle_acc': 0.7083, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 348          |
+|    ep_rew_mean          | -99.7        |
+| time/                   |              |
+|    fps                  | 3535         |
+|    iterations           | 23           |
+|    time_elapsed         | 106          |
+|    total_timesteps      | 376832       |
+| train/                  |              |
+|    approx_kl            | 0.0041908748 |
+|    clip_fraction        | 0.0387       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.81        |
+|    explained_variance   | 0.836        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 59.3         |
+|    n_updates            | 88           |
+|    policy_gradient_loss | -0.000721    |
+|    value_loss           | 135          |
+------------------------------------------
+2026-11-16 18:00:12,727 t=393216 asked 13 queries (0 by VLM) in 0s; 826 labels in D
+2026-11-16 18:00:15,333 t=393216 predictor: {'asked': 826, 'labels': 826, 'train_loss': 0.3426, 'val_loss': 0.4361, 'l2': 0.0531, 'rhat_true_corr': np.float64(0.1017), 'pred_oracle_acc': 0.7385, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 335          |
+|    ep_rew_mean          | -97.4        |
+| time/                   |              |
+|    fps                  | 3525         |
+|    iterations           | 24           |
+|    time_elapsed         | 111          |
+|    total_timesteps      | 393216       |
+| train/                  |              |
+|    approx_kl            | 0.0035933126 |
+|    clip_fraction        | 0.0387       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.735       |
+|    explained_variance   | 0.861        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 36.7         |
+|    n_updates            | 92           |
+|    policy_gradient_loss | -0.00178     |
+|    value_loss           | 90           |
+------------------------------------------
+2026-11-16 18:00:17,694 t=409600 asked 12 queries (0 by VLM) in 0s; 838 labels in D
+2026-11-16 18:00:20,209 t=409600 predictor: {'asked': 838, 'labels': 838, 'train_loss': 0.3545, 'val_loss': 0.4417, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.1604), 'pred_oracle_acc': 0.7083, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:00:21,906 t=409600 eval: {'mean': 14.26, 'std': 191.22, 'min': -243.01, 'max': 272.76, 'landed': 0.4, 'length': 225.2, 'episodes': 20.0}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 337         |
+|    ep_rew_mean          | -98.7       |
+| time/                   |             |
+|    fps                  | 3468        |
+|    iterations           | 25          |
+|    time_elapsed         | 118         |
+|    total_timesteps      | 409600      |
+| train/                  |             |
+|    approx_kl            | 0.002912247 |
+|    clip_fraction        | 0.037       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.659      |
+|    explained_variance   | 0.867       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 30.2        |
+|    n_updates            | 96          |
+|    policy_gradient_loss | -0.00137    |
+|    value_loss           | 95.1        |
+-----------------------------------------
+2026-11-16 18:00:24,390 t=425984 asked 11 queries (0 by VLM) in 0s; 849 labels in D
+2026-11-16 18:00:27,096 t=425984 predictor: {'asked': 849, 'labels': 849, 'train_loss': 0.3533, 'val_loss': 0.4435, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.1354), 'pred_oracle_acc': 0.6364, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 324          |
+|    ep_rew_mean          | -120         |
+| time/                   |              |
+|    fps                  | 3455         |
+|    iterations           | 26           |
+|    time_elapsed         | 123          |
+|    total_timesteps      | 425984       |
+| train/                  |              |
+|    approx_kl            | 0.0028585924 |
+|    clip_fraction        | 0.0301       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.707       |
+|    explained_variance   | 0.881        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 77.2         |
+|    n_updates            | 100          |
+|    policy_gradient_loss | -0.000508    |
+|    value_loss           | 125          |
+------------------------------------------
+2026-11-16 18:00:29,391 t=442368 asked 11 queries (0 by VLM) in 0s; 860 labels in D
+2026-11-16 18:00:31,838 t=442368 predictor: {'asked': 860, 'labels': 860, 'train_loss': 0.3501, 'val_loss': 0.4329, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.1286), 'pred_oracle_acc': 0.6818, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 324          |
+|    ep_rew_mean          | -122         |
+| time/                   |              |
+|    fps                  | 3455         |
+|    iterations           | 27           |
+|    time_elapsed         | 128          |
+|    total_timesteps      | 442368       |
+| train/                  |              |
+|    approx_kl            | 0.0033493247 |
+|    clip_fraction        | 0.0352       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.701       |
+|    explained_variance   | 0.837        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 42.1         |
+|    n_updates            | 104          |
+|    policy_gradient_loss | -0.000969    |
+|    value_loss           | 102          |
+------------------------------------------
+2026-11-16 18:00:34,051 t=458752 asked 11 queries (0 by VLM) in 0s; 871 labels in D
+2026-11-16 18:00:37,587 t=458752 predictor: {'asked': 871, 'labels': 871, 'train_loss': 0.3525, 'val_loss': 0.4345, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.1642), 'pred_oracle_acc': 0.7, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:00:39,111 t=458752 eval: {'mean': -13.01, 'std': 189.64, 'min': -245.19, 'max': 279.34, 'landed': 0.35, 'length': 193.7, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 338          |
+|    ep_rew_mean          | -122         |
+| time/                   |              |
+|    fps                  | 3390         |
+|    iterations           | 28           |
+|    time_elapsed         | 135          |
+|    total_timesteps      | 458752       |
+| train/                  |              |
+|    approx_kl            | 0.0036703355 |
+|    clip_fraction        | 0.039        |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.683       |
+|    explained_variance   | 0.851        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 63.3         |
+|    n_updates            | 108          |
+|    policy_gradient_loss | -0.00155     |
+|    value_loss           | 120          |
+------------------------------------------
+2026-11-16 18:00:41,597 t=475136 asked 11 queries (0 by VLM) in 0s; 882 labels in D
+2026-11-16 18:00:44,453 t=475136 predictor: {'asked': 882, 'labels': 882, 'train_loss': 0.3514, 'val_loss': 0.4383, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.1631), 'pred_oracle_acc': 0.7455, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 314         |
+|    ep_rew_mean          | -109        |
+| time/                   |             |
+|    fps                  | 3378        |
+|    iterations           | 29          |
+|    time_elapsed         | 140         |
+|    total_timesteps      | 475136      |
+| train/                  |             |
+|    approx_kl            | 0.003631791 |
+|    clip_fraction        | 0.0283      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.656      |
+|    explained_variance   | 0.838       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 60.6        |
+|    n_updates            | 112         |
+|    policy_gradient_loss | -0.000629   |
+|    value_loss           | 142         |
+-----------------------------------------
+2026-11-16 18:00:46,994 t=491520 asked 11 queries (0 by VLM) in 0s; 893 labels in D
+2026-11-16 18:00:50,156 t=491520 predictor: {'asked': 893, 'labels': 893, 'train_loss': 0.355, 'val_loss': 0.4355, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.1396), 'pred_oracle_acc': 0.7273, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 266          |
+|    ep_rew_mean          | -63.2        |
+| time/                   |              |
+|    fps                  | 3358         |
+|    iterations           | 30           |
+|    time_elapsed         | 146          |
+|    total_timesteps      | 491520       |
+| train/                  |              |
+|    approx_kl            | 0.0035063257 |
+|    clip_fraction        | 0.0304       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.688       |
+|    explained_variance   | 0.782        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 64.8         |
+|    n_updates            | 116          |
+|    policy_gradient_loss | -0.0012      |
+|    value_loss           | 162          |
+------------------------------------------
+2026-11-16 18:00:52,269 t=507904 asked 10 queries (0 by VLM) in 0s; 903 labels in D
+2026-11-16 18:00:55,192 t=507904 predictor: {'asked': 903, 'labels': 903, 'train_loss': 0.3621, 'val_loss': 0.4337, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.1849), 'pred_oracle_acc': 0.7, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:00:56,405 t=507904 eval: {'mean': -80.57, 'std': 132.6, 'min': -255.1, 'max': 232.9, 'landed': 0.1, 'length': 148.8, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 308          |
+|    ep_rew_mean          | -68.6        |
+| time/                   |              |
+|    fps                  | 3328         |
+|    iterations           | 31           |
+|    time_elapsed         | 152          |
+|    total_timesteps      | 507904       |
+| train/                  |              |
+|    approx_kl            | 0.0032117767 |
+|    clip_fraction        | 0.0369       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.716       |
+|    explained_variance   | 0.882        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 64.9         |
+|    n_updates            | 120          |
+|    policy_gradient_loss | -0.000641    |
+|    value_loss           | 104          |
+------------------------------------------
+2026-11-16 18:00:58,711 t=524288 asked 10 queries (0 by VLM) in 0s; 913 labels in D
+2026-11-16 18:01:01,762 t=524288 predictor: {'asked': 913, 'labels': 913, 'train_loss': 0.3615, 'val_loss': 0.4327, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.165), 'pred_oracle_acc': 0.75, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 338         |
+|    ep_rew_mean          | -86.6       |
+| time/                   |             |
+|    fps                  | 3319        |
+|    iterations           | 32          |
+|    time_elapsed         | 157         |
+|    total_timesteps      | 524288      |
+| train/                  |             |
+|    approx_kl            | 0.004487468 |
+|    clip_fraction        | 0.0336      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.682      |
+|    explained_variance   | 0.857       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 30.4        |
+|    n_updates            | 124         |
+|    policy_gradient_loss | -0.000849   |
+|    value_loss           | 103         |
+-----------------------------------------
+2026-11-16 18:01:04,354 t=540672 asked 10 queries (0 by VLM) in 0s; 923 labels in D
+2026-11-16 18:01:07,481 t=540672 predictor: {'asked': 923, 'labels': 923, 'train_loss': 0.3626, 'val_loss': 0.4494, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.2118), 'pred_oracle_acc': 0.76, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 305         |
+|    ep_rew_mean          | -52         |
+| time/                   |             |
+|    fps                  | 3303        |
+|    iterations           | 33          |
+|    time_elapsed         | 163         |
+|    total_timesteps      | 540672      |
+| train/                  |             |
+|    approx_kl            | 0.002841315 |
+|    clip_fraction        | 0.03        |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.639      |
+|    explained_variance   | 0.814       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 67.5        |
+|    n_updates            | 128         |
+|    policy_gradient_loss | -0.00102    |
+|    value_loss           | 141         |
+-----------------------------------------
+2026-11-16 18:01:10,229 t=557056 asked 9 queries (0 by VLM) in 0s; 932 labels in D
+2026-11-16 18:01:13,690 t=557056 predictor: {'asked': 932, 'labels': 932, 'train_loss': 0.3561, 'val_loss': 0.4371, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.1888), 'pred_oracle_acc': 0.8, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:01:14,847 t=557056 eval: {'mean': -100.38, 'std': 120.32, 'min': -273.07, 'max': 212.02, 'landed': 0.05, 'length': 163.8, 'episodes': 20.0}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 241         |
+|    ep_rew_mean          | -33.5       |
+| time/                   |             |
+|    fps                  | 3256        |
+|    iterations           | 34          |
+|    time_elapsed         | 171         |
+|    total_timesteps      | 557056      |
+| train/                  |             |
+|    approx_kl            | 0.003079996 |
+|    clip_fraction        | 0.0275      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.592      |
+|    explained_variance   | 0.774       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 73          |
+|    n_updates            | 132         |
+|    policy_gradient_loss | -0.000636   |
+|    value_loss           | 144         |
+-----------------------------------------
+2026-11-16 18:01:17,419 t=573440 asked 10 queries (0 by VLM) in 0s; 942 labels in D
+2026-11-16 18:01:20,713 t=573440 predictor: {'asked': 942, 'labels': 942, 'train_loss': 0.3587, 'val_loss': 0.4432, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.2024), 'pred_oracle_acc': 0.86, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 259         |
+|    ep_rew_mean          | -72.2       |
+| time/                   |             |
+|    fps                  | 3241        |
+|    iterations           | 35          |
+|    time_elapsed         | 176         |
+|    total_timesteps      | 573440      |
+| train/                  |             |
+|    approx_kl            | 0.003654462 |
+|    clip_fraction        | 0.0371      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.662      |
+|    explained_variance   | 0.832       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 39.9        |
+|    n_updates            | 136         |
+|    policy_gradient_loss | -0.000257   |
+|    value_loss           | 117         |
+-----------------------------------------
+2026-11-16 18:01:22,901 t=589824 asked 9 queries (0 by VLM) in 0s; 951 labels in D
+2026-11-16 18:01:26,223 t=589824 predictor: {'asked': 951, 'labels': 951, 'train_loss': 0.3582, 'val_loss': 0.4366, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.2089), 'pred_oracle_acc': 0.7556, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 270         |
+|    ep_rew_mean          | -98.9       |
+| time/                   |             |
+|    fps                  | 3233        |
+|    iterations           | 36          |
+|    time_elapsed         | 182         |
+|    total_timesteps      | 589824      |
+| train/                  |             |
+|    approx_kl            | 0.003026186 |
+|    clip_fraction        | 0.0291      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.619      |
+|    explained_variance   | 0.831       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 49.3        |
+|    n_updates            | 140         |
+|    policy_gradient_loss | -0.000715   |
+|    value_loss           | 118         |
+-----------------------------------------
+2026-11-16 18:01:28,409 t=606208 asked 9 queries (0 by VLM) in 0s; 960 labels in D
+2026-11-16 18:01:32,251 t=606208 predictor: {'asked': 960, 'labels': 960, 'train_loss': 0.3555, 'val_loss': 0.4327, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.2059), 'pred_oracle_acc': 0.7889, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:01:33,315 t=606208 eval: {'mean': -60.46, 'std': 138.65, 'min': -234.48, 'max': 218.25, 'landed': 0.15, 'length': 153.35, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 286          |
+|    ep_rew_mean          | -72.4        |
+| time/                   |              |
+|    fps                  | 3198         |
+|    iterations           | 37           |
+|    time_elapsed         | 189          |
+|    total_timesteps      | 606208       |
+| train/                  |              |
+|    approx_kl            | 0.0028250706 |
+|    clip_fraction        | 0.0253       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.63        |
+|    explained_variance   | 0.872        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 35.2         |
+|    n_updates            | 144          |
+|    policy_gradient_loss | -7.66e-05    |
+|    value_loss           | 90.1         |
+------------------------------------------
+2026-11-16 18:01:36,225 t=622592 asked 9 queries (0 by VLM) in 0s; 969 labels in D
+2026-11-16 18:01:39,904 t=622592 predictor: {'asked': 969, 'labels': 969, 'train_loss': 0.3674, 'val_loss': 0.4457, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.1862), 'pred_oracle_acc': 0.7333, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 313          |
+|    ep_rew_mean          | -59.3        |
+| time/                   |              |
+|    fps                  | 3174         |
+|    iterations           | 38           |
+|    time_elapsed         | 196          |
+|    total_timesteps      | 622592       |
+| train/                  |              |
+|    approx_kl            | 0.0036622533 |
+|    clip_fraction        | 0.0411       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.554       |
+|    explained_variance   | 0.872        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 30.3         |
+|    n_updates            | 148          |
+|    policy_gradient_loss | -0.00133     |
+|    value_loss           | 74.4         |
+------------------------------------------
+2026-11-16 18:01:42,391 t=638976 asked 8 queries (0 by VLM) in 0s; 977 labels in D
+2026-11-16 18:01:46,316 t=638976 predictor: {'asked': 977, 'labels': 977, 'train_loss': 0.366, 'val_loss': 0.4373, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.2161), 'pred_oracle_acc': 0.8125, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 309          |
+|    ep_rew_mean          | -93.3        |
+| time/                   |              |
+|    fps                  | 3155         |
+|    iterations           | 39           |
+|    time_elapsed         | 202          |
+|    total_timesteps      | 638976       |
+| train/                  |              |
+|    approx_kl            | 0.0036560544 |
+|    clip_fraction        | 0.0335       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.637       |
+|    explained_variance   | 0.833        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 28.1         |
+|    n_updates            | 152          |
+|    policy_gradient_loss | -0.000968    |
+|    value_loss           | 116          |
+------------------------------------------
+2026-11-16 18:01:48,341 t=655360 asked 9 queries (0 by VLM) in 0s; 986 labels in D
+2026-11-16 18:01:51,266 t=655360 predictor: {'asked': 986, 'labels': 986, 'train_loss': 0.3609, 'val_loss': 0.4326, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.1737), 'pred_oracle_acc': 0.8556, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:01:54,114 t=655360 eval: {'mean': -48.59, 'std': 147.35, 'min': -189.61, 'max': 259.73, 'landed': 0.2, 'length': 280.3, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 334          |
+|    ep_rew_mean          | -125         |
+| time/                   |              |
+|    fps                  | 3116         |
+|    iterations           | 40           |
+|    time_elapsed         | 210          |
+|    total_timesteps      | 655360       |
+| train/                  |              |
+|    approx_kl            | 0.0039406754 |
+|    clip_fraction        | 0.0389       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.575       |
+|    explained_variance   | 0.831        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 25.5         |
+|    n_updates            | 156          |
+|    policy_gradient_loss | -0.00143     |
+|    value_loss           | 101          |
+------------------------------------------
+2026-11-16 18:01:56,928 t=671744 asked 8 queries (0 by VLM) in 0s; 994 labels in D
+2026-11-16 18:02:00,521 t=671744 predictor: {'asked': 994, 'labels': 994, 'train_loss': 0.3593, 'val_loss': 0.4302, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.2115), 'pred_oracle_acc': 0.8, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 377          |
+|    ep_rew_mean          | -145         |
+| time/                   |              |
+|    fps                  | 3099         |
+|    iterations           | 41           |
+|    time_elapsed         | 216          |
+|    total_timesteps      | 671744       |
+| train/                  |              |
+|    approx_kl            | 0.0032855407 |
+|    clip_fraction        | 0.0352       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.608       |
+|    explained_variance   | 0.849        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 51.4         |
+|    n_updates            | 160          |
+|    policy_gradient_loss | -0.000955    |
+|    value_loss           | 91.8         |
+------------------------------------------
+2026-11-16 18:02:02,850 t=688128 asked 8 queries (0 by VLM) in 0s; 1002 labels in D
+2026-11-16 18:02:06,643 t=688128 predictor: {'asked': 1002, 'labels': 1002, 'train_loss': 0.3613, 'val_loss': 0.4354, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.1653), 'pred_oracle_acc': 0.75, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 410          |
+|    ep_rew_mean          | -161         |
+| time/                   |              |
+|    fps                  | 3088         |
+|    iterations           | 42           |
+|    time_elapsed         | 222          |
+|    total_timesteps      | 688128       |
+| train/                  |              |
+|    approx_kl            | 0.0035252639 |
+|    clip_fraction        | 0.0347       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.611       |
+|    explained_variance   | 0.794        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 49           |
+|    n_updates            | 164          |
+|    policy_gradient_loss | -0.00243     |
+|    value_loss           | 163          |
+------------------------------------------
+2026-11-16 18:02:08,796 t=704512 asked 8 queries (0 by VLM) in 0s; 1010 labels in D
+2026-11-16 18:02:12,188 t=704512 predictor: {'asked': 1010, 'labels': 1010, 'train_loss': 0.3711, 'val_loss': 0.4511, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.1989), 'pred_oracle_acc': 0.8875, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:02:14,910 t=704512 eval: {'mean': -11.39, 'std': 182.64, 'min': -237.87, 'max': 263.71, 'landed': 0.35, 'length': 240.3, 'episodes': 20.0}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 408         |
+|    ep_rew_mean          | -160        |
+| time/                   |             |
+|    fps                  | 3048        |
+|    iterations           | 43          |
+|    time_elapsed         | 231         |
+|    total_timesteps      | 704512      |
+| train/                  |             |
+|    approx_kl            | 0.003999825 |
+|    clip_fraction        | 0.0456      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.586      |
+|    explained_variance   | 0.874       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 44.9        |
+|    n_updates            | 168         |
+|    policy_gradient_loss | -7.19e-05   |
+|    value_loss           | 80.8        |
+-----------------------------------------
+2026-11-16 18:02:17,651 t=720896 asked 8 queries (0 by VLM) in 0s; 1018 labels in D
+2026-11-16 18:02:21,144 t=720896 predictor: {'asked': 1018, 'labels': 1018, 'train_loss': 0.3661, 'val_loss': 0.4301, 'l2': 0.0508, 'rhat_true_corr': np.float64(0.2031), 'pred_oracle_acc': 0.85, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 409          |
+|    ep_rew_mean          | -151         |
+| time/                   |              |
+|    fps                  | 3037         |
+|    iterations           | 44           |
+|    time_elapsed         | 237          |
+|    total_timesteps      | 720896       |
+| train/                  |              |
+|    approx_kl            | 0.0034978965 |
+|    clip_fraction        | 0.0379       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.566       |
+|    explained_variance   | 0.857        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 28.9         |
+|    n_updates            | 172          |
+|    policy_gradient_loss | -6.45e-05    |
+|    value_loss           | 66.8         |
+------------------------------------------
+2026-11-16 18:02:23,367 t=737280 asked 8 queries (0 by VLM) in 0s; 1026 labels in D
+2026-11-16 18:02:27,296 t=737280 predictor: {'asked': 1026, 'labels': 1026, 'train_loss': 0.3875, 'val_loss': 0.4479, 'l2': 0.0493, 'rhat_true_corr': np.float64(0.1586), 'pred_oracle_acc': 0.7875, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 436          |
+|    ep_rew_mean          | -204         |
+| time/                   |              |
+|    fps                  | 3028         |
+|    iterations           | 45           |
+|    time_elapsed         | 243          |
+|    total_timesteps      | 737280       |
+| train/                  |              |
+|    approx_kl            | 0.0047217077 |
+|    clip_fraction        | 0.0466       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.623       |
+|    explained_variance   | 0.826        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 35           |
+|    n_updates            | 176          |
+|    policy_gradient_loss | -0.00111     |
+|    value_loss           | 117          |
+------------------------------------------
+2026-11-16 18:02:29,572 t=753664 asked 7 queries (0 by VLM) in 0s; 1033 labels in D
+2026-11-16 18:02:33,269 t=753664 predictor: {'asked': 1033, 'labels': 1033, 'train_loss': 0.3731, 'val_loss': 0.4352, 'l2': 0.0482, 'rhat_true_corr': np.float64(0.2129), 'pred_oracle_acc': 0.7571, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:02:36,424 t=753664 eval: {'mean': -33.92, 'std': 167.64, 'min': -194.85, 'max': 233.48, 'landed': 0.25, 'length': 288.85, 'episodes': 20.0}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 411         |
+|    ep_rew_mean          | -188        |
+| time/                   |             |
+|    fps                  | 2983        |
+|    iterations           | 46          |
+|    time_elapsed         | 252         |
+|    total_timesteps      | 753664      |
+| train/                  |             |
+|    approx_kl            | 0.005718229 |
+|    clip_fraction        | 0.0612      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.639      |
+|    explained_variance   | 0.876       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 18.2        |
+|    n_updates            | 180         |
+|    policy_gradient_loss | -0.0013     |
+|    value_loss           | 89.7        |
+-----------------------------------------
+2026-11-16 18:02:39,478 t=770048 asked 8 queries (0 by VLM) in 0s; 1041 labels in D
+2026-11-16 18:02:43,493 t=770048 predictor: {'asked': 1041, 'labels': 1041, 'train_loss': 0.3736, 'val_loss': 0.4397, 'l2': 0.0482, 'rhat_true_corr': np.float64(0.1739), 'pred_oracle_acc': 0.7, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 380          |
+|    ep_rew_mean          | -145         |
+| time/                   |              |
+|    fps                  | 2965         |
+|    iterations           | 47           |
+|    time_elapsed         | 259          |
+|    total_timesteps      | 770048       |
+| train/                  |              |
+|    approx_kl            | 0.0033503585 |
+|    clip_fraction        | 0.0341       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.597       |
+|    explained_variance   | 0.86         |
+|    learning_rate        | 0.0003       |
+|    loss                 | 46.5         |
+|    n_updates            | 184          |
+|    policy_gradient_loss | -0.000674    |
+|    value_loss           | 138          |
+------------------------------------------
+2026-11-16 18:02:45,742 t=786432 asked 7 queries (0 by VLM) in 0s; 1048 labels in D
+2026-11-16 18:02:49,000 t=786432 predictor: {'asked': 1048, 'labels': 1048, 'train_loss': 0.369, 'val_loss': 0.4344, 'l2': 0.0473, 'rhat_true_corr': np.float64(0.1053), 'pred_oracle_acc': 0.7714, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 394          |
+|    ep_rew_mean          | -151         |
+| time/                   |              |
+|    fps                  | 2965         |
+|    iterations           | 48           |
+|    time_elapsed         | 265          |
+|    total_timesteps      | 786432       |
+| train/                  |              |
+|    approx_kl            | 0.0046586227 |
+|    clip_fraction        | 0.0522       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.572       |
+|    explained_variance   | 0.852        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 24.5         |
+|    n_updates            | 188          |
+|    policy_gradient_loss | -0.0011      |
+|    value_loss           | 106          |
+------------------------------------------
+2026-11-16 18:02:51,235 t=802816 asked 7 queries (0 by VLM) in 0s; 1055 labels in D
+2026-11-16 18:02:54,858 t=802816 predictor: {'asked': 1055, 'labels': 1055, 'train_loss': 0.3634, 'val_loss': 0.4349, 'l2': 0.0456, 'rhat_true_corr': np.float64(0.1445), 'pred_oracle_acc': 0.8571, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:02:56,964 t=802816 eval: {'mean': -36.16, 'std': 152.24, 'min': -197.14, 'max': 249.65, 'landed': 0.25, 'length': 218.65, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 383          |
+|    ep_rew_mean          | -77          |
+| time/                   |              |
+|    fps                  | 2939         |
+|    iterations           | 49           |
+|    time_elapsed         | 273          |
+|    total_timesteps      | 802816       |
+| train/                  |              |
+|    approx_kl            | 0.0033973653 |
+|    clip_fraction        | 0.0325       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.572       |
+|    explained_variance   | 0.879        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 32.2         |
+|    n_updates            | 192          |
+|    policy_gradient_loss | 0.000159     |
+|    value_loss           | 76.7         |
+------------------------------------------
+2026-11-16 18:02:59,800 t=819200 asked 8 queries (0 by VLM) in 0s; 1063 labels in D
+2026-11-16 18:03:04,345 t=819200 predictor: {'asked': 1063, 'labels': 1063, 'train_loss': 0.3635, 'val_loss': 0.4384, 'l2': 0.0456, 'rhat_true_corr': np.float64(0.1452), 'pred_oracle_acc': 0.8, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 328         |
+|    ep_rew_mean          | -46.6       |
+| time/                   |             |
+|    fps                  | 2920        |
+|    iterations           | 50          |
+|    time_elapsed         | 280         |
+|    total_timesteps      | 819200      |
+| train/                  |             |
+|    approx_kl            | 0.003277047 |
+|    clip_fraction        | 0.0346      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.521      |
+|    explained_variance   | 0.854       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 31.6        |
+|    n_updates            | 196         |
+|    policy_gradient_loss | -0.000447   |
+|    value_loss           | 110         |
+-----------------------------------------
+2026-11-16 18:03:06,674 t=835584 asked 7 queries (0 by VLM) in 0s; 1070 labels in D
+2026-11-16 18:03:10,876 t=835584 predictor: {'asked': 1070, 'labels': 1070, 'train_loss': 0.3607, 'val_loss': 0.4359, 'l2': 0.0456, 'rhat_true_corr': np.float64(0.1584), 'pred_oracle_acc': 0.8571, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 352          |
+|    ep_rew_mean          | -59.6        |
+| time/                   |              |
+|    fps                  | 2910         |
+|    iterations           | 51           |
+|    time_elapsed         | 287          |
+|    total_timesteps      | 835584       |
+| train/                  |              |
+|    approx_kl            | 0.0038553576 |
+|    clip_fraction        | 0.0456       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.534       |
+|    explained_variance   | 0.851        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 21.6         |
+|    n_updates            | 200          |
+|    policy_gradient_loss | -0.000797    |
+|    value_loss           | 106          |
+------------------------------------------
+2026-11-16 18:03:13,312 t=851968 asked 6 queries (0 by VLM) in 0s; 1076 labels in D
+2026-11-16 18:03:16,622 t=851968 predictor: {'asked': 1076, 'labels': 1076, 'train_loss': 0.3621, 'val_loss': 0.4455, 'l2': 0.0449, 'rhat_true_corr': np.float64(0.1603), 'pred_oracle_acc': 0.7833, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:03:18,364 t=851968 eval: {'mean': -56.88, 'std': 131.82, 'min': -200.67, 'max': 238.84, 'landed': 0.15, 'length': 193.8, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 401          |
+|    ep_rew_mean          | -60.7        |
+| time/                   |              |
+|    fps                  | 2892         |
+|    iterations           | 52           |
+|    time_elapsed         | 294          |
+|    total_timesteps      | 851968       |
+| train/                  |              |
+|    approx_kl            | 0.0047373124 |
+|    clip_fraction        | 0.0533       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.55        |
+|    explained_variance   | 0.879        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 43.7         |
+|    n_updates            | 204          |
+|    policy_gradient_loss | -0.000469    |
+|    value_loss           | 78.3         |
+------------------------------------------
+2026-11-16 18:03:21,014 t=868352 asked 7 queries (0 by VLM) in 0s; 1083 labels in D
+2026-11-16 18:03:25,181 t=868352 predictor: {'asked': 1083, 'labels': 1083, 'train_loss': 0.3592, 'val_loss': 0.4373, 'l2': 0.0449, 'rhat_true_corr': np.float64(0.0727), 'pred_oracle_acc': 0.7286, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 447          |
+|    ep_rew_mean          | -73.7        |
+| time/                   |              |
+|    fps                  | 2881         |
+|    iterations           | 53           |
+|    time_elapsed         | 301          |
+|    total_timesteps      | 868352       |
+| train/                  |              |
+|    approx_kl            | 0.0016893074 |
+|    clip_fraction        | 0.0254       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.549       |
+|    explained_variance   | 0.855        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 41           |
+|    n_updates            | 208          |
+|    policy_gradient_loss | 0.000576     |
+|    value_loss           | 119          |
+------------------------------------------
+2026-11-16 18:03:27,474 t=884736 asked 7 queries (0 by VLM) in 0s; 1090 labels in D
+2026-11-16 18:03:31,598 t=884736 predictor: {'asked': 1090, 'labels': 1090, 'train_loss': 0.3713, 'val_loss': 0.4395, 'l2': 0.0442, 'rhat_true_corr': np.float64(0.1119), 'pred_oracle_acc': 0.7429, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 484          |
+|    ep_rew_mean          | -61.4        |
+| time/                   |              |
+|    fps                  | 2874         |
+|    iterations           | 54           |
+|    time_elapsed         | 307          |
+|    total_timesteps      | 884736       |
+| train/                  |              |
+|    approx_kl            | 0.0052440576 |
+|    clip_fraction        | 0.0627       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.576       |
+|    explained_variance   | 0.857        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 53.6         |
+|    n_updates            | 212          |
+|    policy_gradient_loss | -0.0018      |
+|    value_loss           | 95.8         |
+------------------------------------------
+2026-11-16 18:03:34,130 t=901120 asked 6 queries (0 by VLM) in 0s; 1096 labels in D
+2026-11-16 18:03:37,818 t=901120 predictor: {'asked': 1096, 'labels': 1096, 'train_loss': 0.3723, 'val_loss': 0.4485, 'l2': 0.0436, 'rhat_true_corr': np.float64(0.0719), 'pred_oracle_acc': 0.6833, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:03:40,989 t=901120 eval: {'mean': -41.33, 'std': 143.89, 'min': -213.9, 'max': 241.57, 'landed': 0.15, 'length': 253.4, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 522          |
+|    ep_rew_mean          | -31.6        |
+| time/                   |              |
+|    fps                  | 2841         |
+|    iterations           | 55           |
+|    time_elapsed         | 317          |
+|    total_timesteps      | 901120       |
+| train/                  |              |
+|    approx_kl            | 0.0031569793 |
+|    clip_fraction        | 0.0408       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.514       |
+|    explained_variance   | 0.869        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 48.1         |
+|    n_updates            | 216          |
+|    policy_gradient_loss | -0.000478    |
+|    value_loss           | 115          |
+------------------------------------------
+2026-11-16 18:03:43,371 t=917504 asked 7 queries (0 by VLM) in 0s; 1103 labels in D
+2026-11-16 18:03:47,407 t=917504 predictor: {'asked': 1103, 'labels': 1103, 'train_loss': 0.3645, 'val_loss': 0.4459, 'l2': 0.0436, 'rhat_true_corr': np.float64(0.0979), 'pred_oracle_acc': 0.7429, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 453         |
+|    ep_rew_mean          | -17.3       |
+| time/                   |             |
+|    fps                  | 2835        |
+|    iterations           | 56          |
+|    time_elapsed         | 323         |
+|    total_timesteps      | 917504      |
+| train/                  |             |
+|    approx_kl            | 0.004180018 |
+|    clip_fraction        | 0.0499      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.549      |
+|    explained_variance   | 0.828       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 61.3        |
+|    n_updates            | 220         |
+|    policy_gradient_loss | -0.000382   |
+|    value_loss           | 101         |
+-----------------------------------------
+2026-11-16 18:03:49,472 t=933888 asked 6 queries (0 by VLM) in 0s; 1109 labels in D
+2026-11-16 18:03:53,485 t=933888 predictor: {'asked': 1109, 'labels': 1109, 'train_loss': 0.366, 'val_loss': 0.4413, 'l2': 0.0436, 'rhat_true_corr': np.float64(0.1374), 'pred_oracle_acc': 0.6167, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 359          |
+|    ep_rew_mean          | -11.8        |
+| time/                   |              |
+|    fps                  | 2832         |
+|    iterations           | 57           |
+|    time_elapsed         | 329          |
+|    total_timesteps      | 933888       |
+| train/                  |              |
+|    approx_kl            | 0.0030200225 |
+|    clip_fraction        | 0.0386       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.561       |
+|    explained_variance   | 0.888        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 26.5         |
+|    n_updates            | 224          |
+|    policy_gradient_loss | -0.000244    |
+|    value_loss           | 91.8         |
+------------------------------------------
+2026-11-16 18:03:55,613 t=950272 asked 7 queries (0 by VLM) in 0s; 1116 labels in D
+2026-11-16 18:04:00,022 t=950272 predictor: {'asked': 1116, 'labels': 1116, 'train_loss': 0.3658, 'val_loss': 0.4442, 'l2': 0.0436, 'rhat_true_corr': np.float64(0.04), 'pred_oracle_acc': 0.6286, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:04:02,544 t=950272 eval: {'mean': -48.35, 'std': 143.16, 'min': -219.44, 'max': 233.11, 'landed': 0.15, 'length': 222.0, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 363          |
+|    ep_rew_mean          | 15.5         |
+| time/                   |              |
+|    fps                  | 2805         |
+|    iterations           | 58           |
+|    time_elapsed         | 338          |
+|    total_timesteps      | 950272       |
+| train/                  |              |
+|    approx_kl            | 0.0043064314 |
+|    clip_fraction        | 0.0447       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.528       |
+|    explained_variance   | 0.863        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 52.9         |
+|    n_updates            | 228          |
+|    policy_gradient_loss | -0.00077     |
+|    value_loss           | 116          |
+------------------------------------------
+2026-11-16 18:04:04,892 t=966656 asked 6 queries (0 by VLM) in 0s; 1122 labels in D
+2026-11-16 18:04:09,489 t=966656 predictor: {'asked': 1122, 'labels': 1122, 'train_loss': 0.3629, 'val_loss': 0.4412, 'l2': 0.0436, 'rhat_true_corr': np.float64(0.0664), 'pred_oracle_acc': 0.7, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 386         |
+|    ep_rew_mean          | -0.409      |
+| time/                   |             |
+|    fps                  | 2796        |
+|    iterations           | 59          |
+|    time_elapsed         | 345         |
+|    total_timesteps      | 966656      |
+| train/                  |             |
+|    approx_kl            | 0.003922799 |
+|    clip_fraction        | 0.0458      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.514      |
+|    explained_variance   | 0.874       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 19.9        |
+|    n_updates            | 232         |
+|    policy_gradient_loss | -0.000227   |
+|    value_loss           | 73.5        |
+-----------------------------------------
+2026-11-16 18:04:11,721 t=983040 asked 6 queries (0 by VLM) in 0s; 1128 labels in D
+2026-11-16 18:04:16,738 t=983040 predictor: {'asked': 1128, 'labels': 1128, 'train_loss': 0.3577, 'val_loss': 0.4349, 'l2': 0.0436, 'rhat_true_corr': np.float64(0.0531), 'pred_oracle_acc': 0.6167, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 452          |
+|    ep_rew_mean          | 3.3          |
+| time/                   |              |
+|    fps                  | 2785         |
+|    iterations           | 60           |
+|    time_elapsed         | 352          |
+|    total_timesteps      | 983040       |
+| train/                  |              |
+|    approx_kl            | 0.0029759218 |
+|    clip_fraction        | 0.0358       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.508       |
+|    explained_variance   | 0.897        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 19.9         |
+|    n_updates            | 236          |
+|    policy_gradient_loss | 0.000234     |
+|    value_loss           | 64.5         |
+------------------------------------------
+2026-11-16 18:04:18,845 t=999424 asked 6 queries (0 by VLM) in 0s; 1134 labels in D
+2026-11-16 18:04:23,065 t=999424 predictor: {'asked': 1134, 'labels': 1134, 'train_loss': 0.3564, 'val_loss': 0.4309, 'l2': 0.0436, 'rhat_true_corr': np.float64(0.0725), 'pred_oracle_acc': 0.7, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 437         |
+|    ep_rew_mean          | -4.97       |
+| time/                   |             |
+|    fps                  | 2781        |
+|    iterations           | 61          |
+|    time_elapsed         | 359         |
+|    total_timesteps      | 999424      |
+| train/                  |             |
+|    approx_kl            | 0.002864433 |
+|    clip_fraction        | 0.0369      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.501      |
+|    explained_variance   | 0.891       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 26.2        |
+|    n_updates            | 240         |
+|    policy_gradient_loss | 1.75e-05    |
+|    value_loss           | 65.5        |
+-----------------------------------------
+2026-11-16 18:04:25,272 t=1015808 asked 6 queries (0 by VLM) in 0s; 1140 labels in D
+2026-11-16 18:04:29,218 t=1015808 predictor: {'asked': 1140, 'labels': 1140, 'train_loss': 0.3557, 'val_loss': 0.433, 'l2': 0.0436, 'rhat_true_corr': np.float64(0.1145), 'pred_oracle_acc': 0.8, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:04:31,568 t=1015808 eval: {'mean': -84.98, 'std': 136.8, 'min': -279.83, 'max': 232.19, 'landed': 0.1, 'length': 241.3, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 366          |
+|    ep_rew_mean          | 10.4         |
+| time/                   |              |
+|    fps                  | 2762         |
+|    iterations           | 62           |
+|    time_elapsed         | 367          |
+|    total_timesteps      | 1015808      |
+| train/                  |              |
+|    approx_kl            | 0.0026004552 |
+|    clip_fraction        | 0.0323       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.51        |
+|    explained_variance   | 0.904        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 28           |
+|    n_updates            | 244          |
+|    policy_gradient_loss | 0.000253     |
+|    value_loss           | 62.5         |
+------------------------------------------
+2026-11-16 18:04:34,396 t=1032192 asked 6 queries (0 by VLM) in 0s; 1146 labels in D
+2026-11-16 18:04:38,421 t=1032192 predictor: {'asked': 1146, 'labels': 1146, 'train_loss': 0.3594, 'val_loss': 0.4454, 'l2': 0.0416, 'rhat_true_corr': np.float64(0.0573), 'pred_oracle_acc': 0.6333, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 402          |
+|    ep_rew_mean          | -11          |
+| time/                   |              |
+|    fps                  | 2755         |
+|    iterations           | 63           |
+|    time_elapsed         | 374          |
+|    total_timesteps      | 1032192      |
+| train/                  |              |
+|    approx_kl            | 0.0032234413 |
+|    clip_fraction        | 0.0343       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.498       |
+|    explained_variance   | 0.868        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 40.7         |
+|    n_updates            | 248          |
+|    policy_gradient_loss | -0.000134    |
+|    value_loss           | 102          |
+------------------------------------------
+2026-11-16 18:04:40,952 t=1048576 asked 5 queries (0 by VLM) in 0s; 1151 labels in D
+2026-11-16 18:04:46,624 t=1048576 predictor: {'asked': 1151, 'labels': 1151, 'train_loss': 0.3527, 'val_loss': 0.4418, 'l2': 0.0416, 'rhat_true_corr': np.float64(0.0578), 'pred_oracle_acc': 0.76, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 416          |
+|    ep_rew_mean          | -11.2        |
+| time/                   |              |
+|    fps                  | 2739         |
+|    iterations           | 64           |
+|    time_elapsed         | 382          |
+|    total_timesteps      | 1048576      |
+| train/                  |              |
+|    approx_kl            | 0.0034947498 |
+|    clip_fraction        | 0.0415       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.493       |
+|    explained_variance   | 0.887        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 34.3         |
+|    n_updates            | 252          |
+|    policy_gradient_loss | -0.000209    |
+|    value_loss           | 82.2         |
+------------------------------------------
+2026-11-16 18:04:49,447 t=1064960 asked 6 queries (0 by VLM) in 0s; 1157 labels in D
+2026-11-16 18:04:53,939 t=1064960 predictor: {'asked': 1157, 'labels': 1157, 'train_loss': 0.363, 'val_loss': 0.4399, 'l2': 0.0397, 'rhat_true_corr': np.float64(0.0931), 'pred_oracle_acc': 0.7667, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:04:56,032 t=1064960 eval: {'mean': -57.5, 'std': 143.49, 'min': -258.31, 'max': 269.31, 'landed': 0.1, 'length': 233.25, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 389          |
+|    ep_rew_mean          | -20.8        |
+| time/                   |              |
+|    fps                  | 2715         |
+|    iterations           | 65           |
+|    time_elapsed         | 392          |
+|    total_timesteps      | 1064960      |
+| train/                  |              |
+|    approx_kl            | 0.0023691703 |
+|    clip_fraction        | 0.0324       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.461       |
+|    explained_variance   | 0.868        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 43.1         |
+|    n_updates            | 256          |
+|    policy_gradient_loss | 0.000602     |
+|    value_loss           | 71.7         |
+------------------------------------------
+2026-11-16 18:04:58,675 t=1081344 asked 6 queries (0 by VLM) in 0s; 1163 labels in D
+2026-11-16 18:05:02,614 t=1081344 predictor: {'asked': 1163, 'labels': 1163, 'train_loss': 0.3546, 'val_loss': 0.4466, 'l2': 0.038, 'rhat_true_corr': np.float64(0.0962), 'pred_oracle_acc': 0.7667, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 419          |
+|    ep_rew_mean          | 1.16         |
+| time/                   |              |
+|    fps                  | 2711         |
+|    iterations           | 66           |
+|    time_elapsed         | 398          |
+|    total_timesteps      | 1081344      |
+| train/                  |              |
+|    approx_kl            | 0.0030947397 |
+|    clip_fraction        | 0.0286       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.469       |
+|    explained_variance   | 0.857        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 24.9         |
+|    n_updates            | 260          |
+|    policy_gradient_loss | 3.31e-05     |
+|    value_loss           | 96.7         |
+------------------------------------------
+2026-11-16 18:05:05,851 t=1097728 asked 5 queries (0 by VLM) in 0s; 1168 labels in D
+2026-11-16 18:05:10,862 t=1097728 predictor: {'asked': 1168, 'labels': 1168, 'train_loss': 0.3485, 'val_loss': 0.4346, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0215), 'pred_oracle_acc': 0.66, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 452          |
+|    ep_rew_mean          | 3.68         |
+| time/                   |              |
+|    fps                  | 2696         |
+|    iterations           | 67           |
+|    time_elapsed         | 407          |
+|    total_timesteps      | 1097728      |
+| train/                  |              |
+|    approx_kl            | 0.0033556568 |
+|    clip_fraction        | 0.0357       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.419       |
+|    explained_variance   | 0.829        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 50.3         |
+|    n_updates            | 264          |
+|    policy_gradient_loss | -0.000423    |
+|    value_loss           | 99.2         |
+------------------------------------------
+2026-11-16 18:05:13,418 t=1114112 asked 6 queries (0 by VLM) in 0s; 1174 labels in D
+2026-11-16 18:05:18,236 t=1114112 predictor: {'asked': 1174, 'labels': 1174, 'train_loss': 0.349, 'val_loss': 0.4385, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0346), 'pred_oracle_acc': 0.7833, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:05:19,887 t=1114112 eval: {'mean': -10.78, 'std': 155.56, 'min': -207.59, 'max': 270.65, 'landed': 0.2, 'length': 203.55, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 438          |
+|    ep_rew_mean          | 16.1         |
+| time/                   |              |
+|    fps                  | 2677         |
+|    iterations           | 68           |
+|    time_elapsed         | 416          |
+|    total_timesteps      | 1114112      |
+| train/                  |              |
+|    approx_kl            | 0.0040238462 |
+|    clip_fraction        | 0.0493       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.486       |
+|    explained_variance   | 0.876        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 15.8         |
+|    n_updates            | 268          |
+|    policy_gradient_loss | -0.000397    |
+|    value_loss           | 51.6         |
+------------------------------------------
+2026-11-16 18:05:22,581 t=1130496 asked 5 queries (0 by VLM) in 0s; 1179 labels in D
+2026-11-16 18:05:26,442 t=1130496 predictor: {'asked': 1179, 'labels': 1179, 'train_loss': 0.3473, 'val_loss': 0.4308, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0632), 'pred_oracle_acc': 0.76, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 457          |
+|    ep_rew_mean          | 31.8         |
+| time/                   |              |
+|    fps                  | 2674         |
+|    iterations           | 69           |
+|    time_elapsed         | 422          |
+|    total_timesteps      | 1130496      |
+| train/                  |              |
+|    approx_kl            | 0.0032293925 |
+|    clip_fraction        | 0.0351       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.438       |
+|    explained_variance   | 0.858        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 33.4         |
+|    n_updates            | 272          |
+|    policy_gradient_loss | -0.000952    |
+|    value_loss           | 76.7         |
+------------------------------------------
+2026-11-16 18:05:29,004 t=1146880 asked 6 queries (0 by VLM) in 0s; 1185 labels in D
+2026-11-16 18:05:33,114 t=1146880 predictor: {'asked': 1185, 'labels': 1185, 'train_loss': 0.3458, 'val_loss': 0.4361, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.1191), 'pred_oracle_acc': 0.75, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 426          |
+|    ep_rew_mean          | 30           |
+| time/                   |              |
+|    fps                  | 2671         |
+|    iterations           | 70           |
+|    time_elapsed         | 429          |
+|    total_timesteps      | 1146880      |
+| train/                  |              |
+|    approx_kl            | 0.0030946499 |
+|    clip_fraction        | 0.0353       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.425       |
+|    explained_variance   | 0.884        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 21           |
+|    n_updates            | 276          |
+|    policy_gradient_loss | -0.000451    |
+|    value_loss           | 87.6         |
+------------------------------------------
+2026-11-16 18:05:35,801 t=1163264 asked 5 queries (0 by VLM) in 0s; 1190 labels in D
+2026-11-16 18:05:40,534 t=1163264 predictor: {'asked': 1190, 'labels': 1190, 'train_loss': 0.3481, 'val_loss': 0.4378, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0019), 'pred_oracle_acc': 0.72, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:05:44,203 t=1163264 eval: {'mean': -21.31, 'std': 168.96, 'min': -245.95, 'max': 264.48, 'landed': 0.25, 'length': 216.55, 'episodes': 20.0}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 428         |
+|    ep_rew_mean          | 29.2        |
+| time/                   |             |
+|    fps                  | 2641        |
+|    iterations           | 71          |
+|    time_elapsed         | 440         |
+|    total_timesteps      | 1163264     |
+| train/                  |             |
+|    approx_kl            | 0.002807301 |
+|    clip_fraction        | 0.0296      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.404      |
+|    explained_variance   | 0.861       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 21.3        |
+|    n_updates            | 280         |
+|    policy_gradient_loss | -0.000709   |
+|    value_loss           | 105         |
+-----------------------------------------
+2026-11-16 18:05:47,129 t=1179648 asked 5 queries (0 by VLM) in 0s; 1195 labels in D
+2026-11-16 18:05:52,094 t=1179648 predictor: {'asked': 1195, 'labels': 1195, 'train_loss': 0.3508, 'val_loss': 0.4415, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.1474), 'pred_oracle_acc': 0.8, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+----------------------------------------
+| rollout/                |            |
+|    ep_len_mean          | 428        |
+|    ep_rew_mean          | 21.5       |
+| time/                   |            |
+|    fps                  | 2631       |
+|    iterations           | 72         |
+|    time_elapsed         | 448        |
+|    total_timesteps      | 1179648    |
+| train/                  |            |
+|    approx_kl            | 0.00423053 |
+|    clip_fraction        | 0.0454     |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -0.441     |
+|    explained_variance   | 0.89       |
+|    learning_rate        | 0.0003     |
+|    loss                 | 24.5       |
+|    n_updates            | 284        |
+|    policy_gradient_loss | -0.000241  |
+|    value_loss           | 63.9       |
+----------------------------------------
+2026-11-16 18:05:54,959 t=1196032 asked 5 queries (0 by VLM) in 0s; 1200 labels in D
+2026-11-16 18:05:58,646 t=1196032 predictor: {'asked': 1200, 'labels': 1200, 'train_loss': 0.3501, 'val_loss': 0.432, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.1028), 'pred_oracle_acc': 0.72, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 452          |
+|    ep_rew_mean          | -1.46        |
+| time/                   |              |
+|    fps                  | 2629         |
+|    iterations           | 73           |
+|    time_elapsed         | 454          |
+|    total_timesteps      | 1196032      |
+| train/                  |              |
+|    approx_kl            | 0.0033016144 |
+|    clip_fraction        | 0.0325       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.457       |
+|    explained_variance   | 0.864        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 34.8         |
+|    n_updates            | 288          |
+|    policy_gradient_loss | -0.000686    |
+|    value_loss           | 108          |
+------------------------------------------
+2026-11-16 18:06:01,228 t=1212416 asked 5 queries (0 by VLM) in 0s; 1205 labels in D
+2026-11-16 18:06:05,336 t=1212416 predictor: {'asked': 1205, 'labels': 1205, 'train_loss': 0.3577, 'val_loss': 0.4546, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.1137), 'pred_oracle_acc': 0.82, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:06:08,445 t=1212416 eval: {'mean': -35.79, 'std': 140.45, 'min': -223.47, 'max': 289.93, 'landed': 0.1, 'length': 239.5, 'episodes': 20.0}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 430         |
+|    ep_rew_mean          | 3.75        |
+| time/                   |             |
+|    fps                  | 2609        |
+|    iterations           | 74          |
+|    time_elapsed         | 464         |
+|    total_timesteps      | 1212416     |
+| train/                  |             |
+|    approx_kl            | 0.002606934 |
+|    clip_fraction        | 0.0327      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.438      |
+|    explained_variance   | 0.888       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 42.5        |
+|    n_updates            | 292         |
+|    policy_gradient_loss | -0.00068    |
+|    value_loss           | 77          |
+-----------------------------------------
+2026-11-16 18:06:10,959 t=1228800 asked 5 queries (0 by VLM) in 0s; 1210 labels in D
+2026-11-16 18:06:16,156 t=1228800 predictor: {'asked': 1210, 'labels': 1210, 'train_loss': 0.3548, 'val_loss': 0.4349, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0427), 'pred_oracle_acc': 0.68, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 446          |
+|    ep_rew_mean          | 23.9         |
+| time/                   |              |
+|    fps                  | 2601         |
+|    iterations           | 75           |
+|    time_elapsed         | 472          |
+|    total_timesteps      | 1228800      |
+| train/                  |              |
+|    approx_kl            | 0.0029404662 |
+|    clip_fraction        | 0.033        |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.414       |
+|    explained_variance   | 0.839        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 24.6         |
+|    n_updates            | 296          |
+|    policy_gradient_loss | -0.000229    |
+|    value_loss           | 139          |
+------------------------------------------
+2026-11-16 18:06:18,734 t=1245184 asked 5 queries (0 by VLM) in 0s; 1215 labels in D
+2026-11-16 18:06:23,447 t=1245184 predictor: {'asked': 1215, 'labels': 1215, 'train_loss': 0.3547, 'val_loss': 0.4421, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0681), 'pred_oracle_acc': 0.74, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 445          |
+|    ep_rew_mean          | 25.5         |
+| time/                   |              |
+|    fps                  | 2596         |
+|    iterations           | 76           |
+|    time_elapsed         | 479          |
+|    total_timesteps      | 1245184      |
+| train/                  |              |
+|    approx_kl            | 0.0036442939 |
+|    clip_fraction        | 0.0401       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.452       |
+|    explained_variance   | 0.907        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 30.8         |
+|    n_updates            | 300          |
+|    policy_gradient_loss | -0.000597    |
+|    value_loss           | 67.4         |
+------------------------------------------
+2026-11-16 18:06:26,375 t=1261568 asked 5 queries (0 by VLM) in 0s; 1220 labels in D
+2026-11-16 18:06:30,812 t=1261568 predictor: {'asked': 1220, 'labels': 1220, 'train_loss': 0.3645, 'val_loss': 0.4388, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0629), 'pred_oracle_acc': 0.72, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:06:32,459 t=1261568 eval: {'mean': -57.0, 'std': 164.39, 'min': -343.37, 'max': 247.32, 'landed': 0.15, 'length': 193.1, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 467          |
+|    ep_rew_mean          | 52.4         |
+| time/                   |              |
+|    fps                  | 2581         |
+|    iterations           | 77           |
+|    time_elapsed         | 488          |
+|    total_timesteps      | 1261568      |
+| train/                  |              |
+|    approx_kl            | 0.0024782594 |
+|    clip_fraction        | 0.0315       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.392       |
+|    explained_variance   | 0.859        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 25.8         |
+|    n_updates            | 304          |
+|    policy_gradient_loss | -0.000477    |
+|    value_loss           | 85.3         |
+------------------------------------------
+2026-11-16 18:06:34,856 t=1277952 asked 5 queries (0 by VLM) in 0s; 1225 labels in D
+2026-11-16 18:06:39,115 t=1277952 predictor: {'asked': 1225, 'labels': 1225, 'train_loss': 0.3545, 'val_loss': 0.4397, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0287), 'pred_oracle_acc': 0.86, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 499          |
+|    ep_rew_mean          | 65.1         |
+| time/                   |              |
+|    fps                  | 2580         |
+|    iterations           | 78           |
+|    time_elapsed         | 495          |
+|    total_timesteps      | 1277952      |
+| train/                  |              |
+|    approx_kl            | 0.0022121412 |
+|    clip_fraction        | 0.0247       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.374       |
+|    explained_variance   | 0.876        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 53.5         |
+|    n_updates            | 308          |
+|    policy_gradient_loss | -0.000277    |
+|    value_loss           | 100          |
+------------------------------------------
+2026-11-16 18:06:41,649 t=1294336 asked 5 queries (0 by VLM) in 0s; 1230 labels in D
+2026-11-16 18:06:46,417 t=1294336 predictor: {'asked': 1230, 'labels': 1230, 'train_loss': 0.3519, 'val_loss': 0.4339, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0268), 'pred_oracle_acc': 0.9, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 542         |
+|    ep_rew_mean          | 78.8        |
+| time/                   |             |
+|    fps                  | 2575        |
+|    iterations           | 79          |
+|    time_elapsed         | 502         |
+|    total_timesteps      | 1294336     |
+| train/                  |             |
+|    approx_kl            | 0.002291738 |
+|    clip_fraction        | 0.0299      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.377      |
+|    explained_variance   | 0.888       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 27.5        |
+|    n_updates            | 312         |
+|    policy_gradient_loss | 0.000708    |
+|    value_loss           | 79.2        |
+-----------------------------------------
+2026-11-16 18:06:49,516 t=1310720 asked 5 queries (0 by VLM) in 0s; 1235 labels in D
+2026-11-16 18:06:54,697 t=1310720 predictor: {'asked': 1235, 'labels': 1235, 'train_loss': 0.3517, 'val_loss': 0.4378, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0236), 'pred_oracle_acc': 0.78, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:06:58,297 t=1310720 eval: {'mean': -36.59, 'std': 148.58, 'min': -246.11, 'max': 233.6, 'landed': 0.15, 'length': 272.05, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 540          |
+|    ep_rew_mean          | 70.3         |
+| time/                   |              |
+|    fps                  | 2547         |
+|    iterations           | 80           |
+|    time_elapsed         | 514          |
+|    total_timesteps      | 1310720      |
+| train/                  |              |
+|    approx_kl            | 0.0027103901 |
+|    clip_fraction        | 0.0286       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.38        |
+|    explained_variance   | 0.867        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 47.2         |
+|    n_updates            | 316          |
+|    policy_gradient_loss | 2.23e-05     |
+|    value_loss           | 126          |
+------------------------------------------
+2026-11-16 18:07:00,581 t=1327104 asked 5 queries (0 by VLM) in 0s; 1240 labels in D
+2026-11-16 18:07:06,129 t=1327104 predictor: {'asked': 1240, 'labels': 1240, 'train_loss': 0.3511, 'val_loss': 0.4393, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0143), 'pred_oracle_acc': 0.8, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 571          |
+|    ep_rew_mean          | 99.3         |
+| time/                   |              |
+|    fps                  | 2540         |
+|    iterations           | 81           |
+|    time_elapsed         | 522          |
+|    total_timesteps      | 1327104      |
+| train/                  |              |
+|    approx_kl            | 0.0029208828 |
+|    clip_fraction        | 0.03         |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.358       |
+|    explained_variance   | 0.915        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 60.7         |
+|    n_updates            | 320          |
+|    policy_gradient_loss | -0.000222    |
+|    value_loss           | 79.5         |
+------------------------------------------
+2026-11-16 18:07:08,652 t=1343488 asked 4 queries (0 by VLM) in 0s; 1244 labels in D
+2026-11-16 18:07:13,999 t=1343488 predictor: {'asked': 1244, 'labels': 1244, 'train_loss': 0.3628, 'val_loss': 0.4368, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0724), 'pred_oracle_acc': 0.775, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 573          |
+|    ep_rew_mean          | 74.9         |
+| time/                   |              |
+|    fps                  | 2533         |
+|    iterations           | 82           |
+|    time_elapsed         | 530          |
+|    total_timesteps      | 1343488      |
+| train/                  |              |
+|    approx_kl            | 0.0027593125 |
+|    clip_fraction        | 0.0251       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.318       |
+|    explained_variance   | 0.847        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 20.4         |
+|    n_updates            | 324          |
+|    policy_gradient_loss | -0.000196    |
+|    value_loss           | 94.2         |
+------------------------------------------
+2026-11-16 18:07:16,290 t=1359872 asked 5 queries (0 by VLM) in 0s; 1249 labels in D
+2026-11-16 18:07:21,139 t=1359872 predictor: {'asked': 1249, 'labels': 1249, 'train_loss': 0.3551, 'val_loss': 0.45, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0316), 'pred_oracle_acc': 0.78, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:07:26,606 t=1359872 eval: {'mean': 14.24, 'std': 145.68, 'min': -216.42, 'max': 269.91, 'landed': 0.25, 'length': 370.15, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 595          |
+|    ep_rew_mean          | 83.7         |
+| time/                   |              |
+|    fps                  | 2505         |
+|    iterations           | 83           |
+|    time_elapsed         | 542          |
+|    total_timesteps      | 1359872      |
+| train/                  |              |
+|    approx_kl            | 0.0024303144 |
+|    clip_fraction        | 0.0308       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.395       |
+|    explained_variance   | 0.854        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 57.3         |
+|    n_updates            | 328          |
+|    policy_gradient_loss | -4.58e-05    |
+|    value_loss           | 109          |
+------------------------------------------
+2026-11-16 18:07:29,777 t=1376256 asked 5 queries (0 by VLM) in 0s; 1254 labels in D
+2026-11-16 18:07:34,314 t=1376256 predictor: {'asked': 1254, 'labels': 1254, 'train_loss': 0.3598, 'val_loss': 0.4391, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0434), 'pred_oracle_acc': 0.8, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 592          |
+|    ep_rew_mean          | 91.5         |
+| time/                   |              |
+|    fps                  | 2500         |
+|    iterations           | 84           |
+|    time_elapsed         | 550          |
+|    total_timesteps      | 1376256      |
+| train/                  |              |
+|    approx_kl            | 0.0025963061 |
+|    clip_fraction        | 0.027        |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.339       |
+|    explained_variance   | 0.893        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 51.3         |
+|    n_updates            | 332          |
+|    policy_gradient_loss | -0.00047     |
+|    value_loss           | 101          |
+------------------------------------------
+2026-11-16 18:07:37,378 t=1392640 asked 4 queries (0 by VLM) in 0s; 1258 labels in D
+2026-11-16 18:07:42,263 t=1392640 predictor: {'asked': 1258, 'labels': 1258, 'train_loss': 0.3578, 'val_loss': 0.4419, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0063), 'pred_oracle_acc': 0.8, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 596          |
+|    ep_rew_mean          | 46.6         |
+| time/                   |              |
+|    fps                  | 2493         |
+|    iterations           | 85           |
+|    time_elapsed         | 558          |
+|    total_timesteps      | 1392640      |
+| train/                  |              |
+|    approx_kl            | 0.0025633133 |
+|    clip_fraction        | 0.0285       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.365       |
+|    explained_variance   | 0.9          |
+|    learning_rate        | 0.0003       |
+|    loss                 | 34.9         |
+|    n_updates            | 336          |
+|    policy_gradient_loss | -0.000496    |
+|    value_loss           | 99.8         |
+------------------------------------------
+2026-11-16 18:07:45,331 t=1409024 asked 5 queries (0 by VLM) in 0s; 1263 labels in D
+2026-11-16 18:07:49,913 t=1409024 predictor: {'asked': 1263, 'labels': 1263, 'train_loss': 0.3568, 'val_loss': 0.4448, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0021), 'pred_oracle_acc': 0.7, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:07:56,108 t=1409024 eval: {'mean': 64.25, 'std': 155.63, 'min': -261.47, 'max': 269.18, 'landed': 0.4, 'length': 452.95, 'episodes': 20.0}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 619         |
+|    ep_rew_mean          | 73.4        |
+| time/                   |             |
+|    fps                  | 2462        |
+|    iterations           | 86          |
+|    time_elapsed         | 572         |
+|    total_timesteps      | 1409024     |
+| train/                  |             |
+|    approx_kl            | 0.002281236 |
+|    clip_fraction        | 0.0269      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.385      |
+|    explained_variance   | 0.933       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 47.9        |
+|    n_updates            | 340         |
+|    policy_gradient_loss | -6.92e-05   |
+|    value_loss           | 90          |
+-----------------------------------------
+2026-11-16 18:07:58,231 t=1425408 asked 4 queries (0 by VLM) in 0s; 1267 labels in D
+2026-11-16 18:08:03,059 t=1425408 predictor: {'asked': 1267, 'labels': 1267, 'train_loss': 0.3561, 'val_loss': 0.4457, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0006), 'pred_oracle_acc': 0.725, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+----------------------------------------
+| rollout/                |            |
+|    ep_len_mean          | 658        |
+|    ep_rew_mean          | 72.3       |
+| time/                   |            |
+|    fps                  | 2460       |
+|    iterations           | 87         |
+|    time_elapsed         | 579        |
+|    total_timesteps      | 1425408    |
+| train/                  |            |
+|    approx_kl            | 0.00257738 |
+|    clip_fraction        | 0.0322     |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -0.373     |
+|    explained_variance   | 0.915      |
+|    learning_rate        | 0.0003     |
+|    loss                 | 43.5       |
+|    n_updates            | 344        |
+|    policy_gradient_loss | -0.000291  |
+|    value_loss           | 78.3       |
+----------------------------------------
+2026-11-16 18:08:05,784 t=1441792 asked 4 queries (0 by VLM) in 0s; 1271 labels in D
+2026-11-16 18:08:11,692 t=1441792 predictor: {'asked': 1271, 'labels': 1271, 'train_loss': 0.3567, 'val_loss': 0.4498, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0293), 'pred_oracle_acc': 0.75, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 668          |
+|    ep_rew_mean          | 124          |
+| time/                   |              |
+|    fps                  | 2452         |
+|    iterations           | 88           |
+|    time_elapsed         | 587          |
+|    total_timesteps      | 1441792      |
+| train/                  |              |
+|    approx_kl            | 0.0033609755 |
+|    clip_fraction        | 0.0324       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.366       |
+|    explained_variance   | 0.904        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 23.3         |
+|    n_updates            | 348          |
+|    policy_gradient_loss | -0.000316    |
+|    value_loss           | 91           |
+------------------------------------------
+2026-11-16 18:08:14,672 t=1458176 asked 5 queries (0 by VLM) in 0s; 1276 labels in D
+2026-11-16 18:08:20,124 t=1458176 predictor: {'asked': 1276, 'labels': 1276, 'train_loss': 0.3615, 'val_loss': 0.4448, 'l2': 0.0364, 'rhat_true_corr': np.float64(-0.0758), 'pred_oracle_acc': 0.68, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:08:28,797 t=1458176 eval: {'mean': 52.63, 'std': 116.68, 'min': -157.67, 'max': 241.7, 'landed': 0.25, 'length': 555.6, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 701          |
+|    ep_rew_mean          | 127          |
+| time/                   |              |
+|    fps                  | 2410         |
+|    iterations           | 89           |
+|    time_elapsed         | 604          |
+|    total_timesteps      | 1458176      |
+| train/                  |              |
+|    approx_kl            | 0.0024857358 |
+|    clip_fraction        | 0.028        |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.33        |
+|    explained_variance   | 0.895        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 36           |
+|    n_updates            | 352          |
+|    policy_gradient_loss | -0.000565    |
+|    value_loss           | 104          |
+------------------------------------------
+2026-11-16 18:08:30,976 t=1474560 asked 4 queries (0 by VLM) in 0s; 1280 labels in D
+2026-11-16 18:08:35,891 t=1474560 predictor: {'asked': 1280, 'labels': 1280, 'train_loss': 0.3618, 'val_loss': 0.4521, 'l2': 0.0364, 'rhat_true_corr': np.float64(-0.0504), 'pred_oracle_acc': 0.775, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 710          |
+|    ep_rew_mean          | 159          |
+| time/                   |              |
+|    fps                  | 2409         |
+|    iterations           | 90           |
+|    time_elapsed         | 612          |
+|    total_timesteps      | 1474560      |
+| train/                  |              |
+|    approx_kl            | 0.0028899587 |
+|    clip_fraction        | 0.0358       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.364       |
+|    explained_variance   | 0.912        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 88.6         |
+|    n_updates            | 356          |
+|    policy_gradient_loss | -2.72e-05    |
+|    value_loss           | 80.9         |
+------------------------------------------
+2026-11-16 18:08:38,133 t=1490944 asked 4 queries (0 by VLM) in 0s; 1284 labels in D
+2026-11-16 18:08:43,755 t=1490944 predictor: {'asked': 1284, 'labels': 1284, 'train_loss': 0.3697, 'val_loss': 0.4615, 'l2': 0.0364, 'rhat_true_corr': np.float64(-0.0518), 'pred_oracle_acc': 0.775, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 724          |
+|    ep_rew_mean          | 177          |
+| time/                   |              |
+|    fps                  | 2404         |
+|    iterations           | 91           |
+|    time_elapsed         | 619          |
+|    total_timesteps      | 1490944      |
+| train/                  |              |
+|    approx_kl            | 0.0028748044 |
+|    clip_fraction        | 0.0328       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.361       |
+|    explained_variance   | 0.92         |
+|    learning_rate        | 0.0003       |
+|    loss                 | 48.2         |
+|    n_updates            | 360          |
+|    policy_gradient_loss | -0.00045     |
+|    value_loss           | 91           |
+------------------------------------------
+2026-11-16 18:08:46,114 t=1507328 asked 4 queries (0 by VLM) in 0s; 1288 labels in D
+2026-11-16 18:08:51,267 t=1507328 predictor: {'asked': 1288, 'labels': 1288, 'train_loss': 0.3659, 'val_loss': 0.445, 'l2': 0.0364, 'rhat_true_corr': np.float64(-0.0297), 'pred_oracle_acc': 0.725, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:08:55,876 t=1507328 eval: {'mean': 62.26, 'std': 156.74, 'min': -168.81, 'max': 257.11, 'landed': 0.45, 'length': 401.3, 'episodes': 20.0}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 717         |
+|    ep_rew_mean          | 209         |
+| time/                   |             |
+|    fps                  | 2384        |
+|    iterations           | 92          |
+|    time_elapsed         | 632         |
+|    total_timesteps      | 1507328     |
+| train/                  |             |
+|    approx_kl            | 0.003411597 |
+|    clip_fraction        | 0.0408      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.346      |
+|    explained_variance   | 0.931       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 22.8        |
+|    n_updates            | 364         |
+|    policy_gradient_loss | 0.000242    |
+|    value_loss           | 78.2        |
+-----------------------------------------
+2026-11-16 18:08:58,705 t=1523712 asked 5 queries (0 by VLM) in 0s; 1293 labels in D
+2026-11-16 18:09:02,655 t=1523712 predictor: {'asked': 1293, 'labels': 1293, 'train_loss': 0.3689, 'val_loss': 0.4462, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0173), 'pred_oracle_acc': 0.72, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 687          |
+|    ep_rew_mean          | 224          |
+| time/                   |              |
+|    fps                  | 2385         |
+|    iterations           | 93           |
+|    time_elapsed         | 638          |
+|    total_timesteps      | 1523712      |
+| train/                  |              |
+|    approx_kl            | 0.0037341316 |
+|    clip_fraction        | 0.0405       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.369       |
+|    explained_variance   | 0.906        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 22.1         |
+|    n_updates            | 368          |
+|    policy_gradient_loss | 8.7e-05      |
+|    value_loss           | 67.4         |
+------------------------------------------
+2026-11-16 18:09:05,280 t=1540096 asked 4 queries (0 by VLM) in 0s; 1297 labels in D
+2026-11-16 18:09:10,044 t=1540096 predictor: {'asked': 1297, 'labels': 1297, 'train_loss': 0.3693, 'val_loss': 0.4479, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0126), 'pred_oracle_acc': 0.725, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 625         |
+|    ep_rew_mean          | 225         |
+| time/                   |             |
+|    fps                  | 2383        |
+|    iterations           | 94          |
+|    time_elapsed         | 646         |
+|    total_timesteps      | 1540096     |
+| train/                  |             |
+|    approx_kl            | 0.003280464 |
+|    clip_fraction        | 0.0309      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.367      |
+|    explained_variance   | 0.913       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 81.3        |
+|    n_updates            | 372         |
+|    policy_gradient_loss | -0.000488   |
+|    value_loss           | 107         |
+-----------------------------------------
+2026-11-16 18:09:12,830 t=1556480 asked 4 queries (0 by VLM) in 0s; 1301 labels in D
+2026-11-16 18:09:18,089 t=1556480 predictor: {'asked': 1301, 'labels': 1301, 'train_loss': 0.3664, 'val_loss': 0.4469, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0023), 'pred_oracle_acc': 0.65, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:09:23,662 t=1556480 eval: {'mean': 92.19, 'std': 142.67, 'min': -188.64, 'max': 256.49, 'landed': 0.5, 'length': 444.45, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 628          |
+|    ep_rew_mean          | 256          |
+| time/                   |              |
+|    fps                  | 2358         |
+|    iterations           | 95           |
+|    time_elapsed         | 659          |
+|    total_timesteps      | 1556480      |
+| train/                  |              |
+|    approx_kl            | 0.0024254497 |
+|    clip_fraction        | 0.0322       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.346       |
+|    explained_variance   | 0.925        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 30.4         |
+|    n_updates            | 376          |
+|    policy_gradient_loss | 5.11e-05     |
+|    value_loss           | 91.9         |
+------------------------------------------
+2026-11-16 18:09:26,077 t=1572864 asked 4 queries (0 by VLM) in 0s; 1305 labels in D
+2026-11-16 18:09:31,462 t=1572864 predictor: {'asked': 1305, 'labels': 1305, 'train_loss': 0.3646, 'val_loss': 0.4458, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.025), 'pred_oracle_acc': 0.875, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 591          |
+|    ep_rew_mean          | 212          |
+| time/                   |              |
+|    fps                  | 2355         |
+|    iterations           | 96           |
+|    time_elapsed         | 667          |
+|    total_timesteps      | 1572864      |
+| train/                  |              |
+|    approx_kl            | 0.0029414713 |
+|    clip_fraction        | 0.0323       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.354       |
+|    explained_variance   | 0.938        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 17.9         |
+|    n_updates            | 380          |
+|    policy_gradient_loss | 0.000317     |
+|    value_loss           | 92.8         |
+------------------------------------------
+2026-11-16 18:09:33,777 t=1589248 asked 4 queries (0 by VLM) in 0s; 1309 labels in D
+2026-11-16 18:09:38,551 t=1589248 predictor: {'asked': 1309, 'labels': 1309, 'train_loss': 0.3705, 'val_loss': 0.453, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0181), 'pred_oracle_acc': 0.525, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 570          |
+|    ep_rew_mean          | 268          |
+| time/                   |              |
+|    fps                  | 2355         |
+|    iterations           | 97           |
+|    time_elapsed         | 674          |
+|    total_timesteps      | 1589248      |
+| train/                  |              |
+|    approx_kl            | 0.0033821445 |
+|    clip_fraction        | 0.0382       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.418       |
+|    explained_variance   | 0.934        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 18.9         |
+|    n_updates            | 384          |
+|    policy_gradient_loss | 8.63e-05     |
+|    value_loss           | 95.4         |
+------------------------------------------
+2026-11-16 18:09:41,016 t=1605632 asked 4 queries (0 by VLM) in 0s; 1313 labels in D
+2026-11-16 18:09:46,083 t=1605632 predictor: {'asked': 1313, 'labels': 1313, 'train_loss': 0.3709, 'val_loss': 0.4593, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0389), 'pred_oracle_acc': 0.55, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:09:49,791 t=1605632 eval: {'mean': 128.53, 'std': 167.33, 'min': -180.27, 'max': 294.97, 'landed': 0.6, 'length': 340.35, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 562          |
+|    ep_rew_mean          | 332          |
+| time/                   |              |
+|    fps                  | 2340         |
+|    iterations           | 98           |
+|    time_elapsed         | 685          |
+|    total_timesteps      | 1605632      |
+| train/                  |              |
+|    approx_kl            | 0.0038663992 |
+|    clip_fraction        | 0.046        |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.413       |
+|    explained_variance   | 0.901        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 55.5         |
+|    n_updates            | 388          |
+|    policy_gradient_loss | -0.000873    |
+|    value_loss           | 87.3         |
+------------------------------------------
+2026-11-16 18:09:52,125 t=1622016 asked 4 queries (0 by VLM) in 0s; 1317 labels in D
+2026-11-16 18:09:59,214 t=1622016 predictor: {'asked': 1317, 'labels': 1317, 'train_loss': 0.3663, 'val_loss': 0.4456, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0121), 'pred_oracle_acc': 0.775, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 539         |
+|    ep_rew_mean          | 394         |
+| time/                   |             |
+|    fps                  | 2332        |
+|    iterations           | 99          |
+|    time_elapsed         | 695         |
+|    total_timesteps      | 1622016     |
+| train/                  |             |
+|    approx_kl            | 0.003558802 |
+|    clip_fraction        | 0.0437      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.414      |
+|    explained_variance   | 0.93        |
+|    learning_rate        | 0.0003      |
+|    loss                 | 24.8        |
+|    n_updates            | 392         |
+|    policy_gradient_loss | -0.000137   |
+|    value_loss           | 88.2        |
+-----------------------------------------
+2026-11-16 18:10:01,429 t=1638400 asked 4 queries (0 by VLM) in 0s; 1321 labels in D
+2026-11-16 18:10:07,663 t=1638400 predictor: {'asked': 1321, 'labels': 1321, 'train_loss': 0.3673, 'val_loss': 0.4519, 'l2': 0.0364, 'rhat_true_corr': np.float64(-0.0101), 'pred_oracle_acc': 0.75, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 586         |
+|    ep_rew_mean          | 477         |
+| time/                   |             |
+|    fps                  | 2327        |
+|    iterations           | 100         |
+|    time_elapsed         | 703         |
+|    total_timesteps      | 1638400     |
+| train/                  |             |
+|    approx_kl            | 0.003486603 |
+|    clip_fraction        | 0.0396      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.384      |
+|    explained_variance   | 0.868       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 9.01        |
+|    n_updates            | 396         |
+|    policy_gradient_loss | 1.6e-05     |
+|    value_loss           | 61.2        |
+-----------------------------------------
+2026-11-16 18:10:10,227 t=1654784 asked 4 queries (0 by VLM) in 0s; 1325 labels in D
+2026-11-16 18:10:15,408 t=1654784 predictor: {'asked': 1325, 'labels': 1325, 'train_loss': 0.3659, 'val_loss': 0.4517, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0094), 'pred_oracle_acc': 0.6, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:10:21,679 t=1654784 eval: {'mean': 103.15, 'std': 141.46, 'min': -188.81, 'max': 284.0, 'landed': 0.45, 'length': 483.35, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 613          |
+|    ep_rew_mean          | 495          |
+| time/                   |              |
+|    fps                  | 2305         |
+|    iterations           | 101          |
+|    time_elapsed         | 717          |
+|    total_timesteps      | 1654784      |
+| train/                  |              |
+|    approx_kl            | 0.0043215896 |
+|    clip_fraction        | 0.0445       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.396       |
+|    explained_variance   | 0.859        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 17.6         |
+|    n_updates            | 400          |
+|    policy_gradient_loss | -0.000687    |
+|    value_loss           | 77.9         |
+------------------------------------------
+2026-11-16 18:10:24,290 t=1671168 asked 4 queries (0 by VLM) in 0s; 1329 labels in D
+2026-11-16 18:10:30,036 t=1671168 predictor: {'asked': 1329, 'labels': 1329, 'train_loss': 0.3679, 'val_loss': 0.4551, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0168), 'pred_oracle_acc': 0.55, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 663          |
+|    ep_rew_mean          | 566          |
+| time/                   |              |
+|    fps                  | 2301         |
+|    iterations           | 102          |
+|    time_elapsed         | 726          |
+|    total_timesteps      | 1671168      |
+| train/                  |              |
+|    approx_kl            | 0.0037702913 |
+|    clip_fraction        | 0.0451       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.389       |
+|    explained_variance   | 0.918        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 60.2         |
+|    n_updates            | 404          |
+|    policy_gradient_loss | -0.000412    |
+|    value_loss           | 120          |
+------------------------------------------
+2026-11-16 18:10:32,723 t=1687552 asked 3 queries (0 by VLM) in 0s; 1332 labels in D
+2026-11-16 18:10:38,457 t=1687552 predictor: {'asked': 1332, 'labels': 1332, 'train_loss': 0.3709, 'val_loss': 0.4512, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0163), 'pred_oracle_acc': 0.7667, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 671          |
+|    ep_rew_mean          | 547          |
+| time/                   |              |
+|    fps                  | 2297         |
+|    iterations           | 103          |
+|    time_elapsed         | 734          |
+|    total_timesteps      | 1687552      |
+| train/                  |              |
+|    approx_kl            | 0.0030138497 |
+|    clip_fraction        | 0.0309       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.371       |
+|    explained_variance   | 0.873        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 30.5         |
+|    n_updates            | 408          |
+|    policy_gradient_loss | -0.000738    |
+|    value_loss           | 95.8         |
+------------------------------------------
+2026-11-16 18:10:41,723 t=1703936 asked 4 queries (0 by VLM) in 0s; 1336 labels in D
+2026-11-16 18:10:47,257 t=1703936 predictor: {'asked': 1336, 'labels': 1336, 'train_loss': 0.3696, 'val_loss': 0.4603, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0525), 'pred_oracle_acc': 0.625, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:10:52,828 t=1703936 eval: {'mean': 138.7, 'std': 135.22, 'min': -178.89, 'max': 288.5, 'landed': 0.6, 'length': 505.2, 'episodes': 20.0}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 666         |
+|    ep_rew_mean          | 534         |
+| time/                   |             |
+|    fps                  | 2274        |
+|    iterations           | 104         |
+|    time_elapsed         | 749         |
+|    total_timesteps      | 1703936     |
+| train/                  |             |
+|    approx_kl            | 0.003481779 |
+|    clip_fraction        | 0.0439      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.434      |
+|    explained_variance   | 0.932       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 62.5        |
+|    n_updates            | 412         |
+|    policy_gradient_loss | -0.000279   |
+|    value_loss           | 117         |
+-----------------------------------------
+2026-11-16 18:10:55,409 t=1720320 asked 4 queries (0 by VLM) in 0s; 1340 labels in D
+2026-11-16 18:11:00,356 t=1720320 predictor: {'asked': 1340, 'labels': 1340, 'train_loss': 0.3681, 'val_loss': 0.4499, 'l2': 0.0364, 'rhat_true_corr': np.float64(-0.0046), 'pred_oracle_acc': 0.625, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 661          |
+|    ep_rew_mean          | 571          |
+| time/                   |              |
+|    fps                  | 2273         |
+|    iterations           | 105          |
+|    time_elapsed         | 756          |
+|    total_timesteps      | 1720320      |
+| train/                  |              |
+|    approx_kl            | 0.0040058484 |
+|    clip_fraction        | 0.0552       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.395       |
+|    explained_variance   | 0.914        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 66.6         |
+|    n_updates            | 416          |
+|    policy_gradient_loss | -0.000637    |
+|    value_loss           | 102          |
+------------------------------------------
+2026-11-16 18:11:03,301 t=1736704 asked 4 queries (0 by VLM) in 0s; 1344 labels in D
+2026-11-16 18:11:09,266 t=1736704 predictor: {'asked': 1344, 'labels': 1344, 'train_loss': 0.3762, 'val_loss': 0.4544, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0062), 'pred_oracle_acc': 0.775, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 654          |
+|    ep_rew_mean          | 552          |
+| time/                   |              |
+|    fps                  | 2268         |
+|    iterations           | 106          |
+|    time_elapsed         | 765          |
+|    total_timesteps      | 1736704      |
+| train/                  |              |
+|    approx_kl            | 0.0036726124 |
+|    clip_fraction        | 0.043        |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.402       |
+|    explained_variance   | 0.93         |
+|    learning_rate        | 0.0003       |
+|    loss                 | 54.2         |
+|    n_updates            | 420          |
+|    policy_gradient_loss | 0.000344     |
+|    value_loss           | 81.2         |
+------------------------------------------
+2026-11-16 18:11:11,673 t=1753088 asked 3 queries (0 by VLM) in 0s; 1347 labels in D
+2026-11-16 18:11:18,339 t=1753088 predictor: {'asked': 1347, 'labels': 1347, 'train_loss': 0.3882, 'val_loss': 0.4578, 'l2': 0.0364, 'rhat_true_corr': np.float64(-0.0413), 'pred_oracle_acc': 0.7, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:11:27,520 t=1753088 eval: {'mean': 127.45, 'std': 132.47, 'min': -166.0, 'max': 298.61, 'landed': 0.5, 'length': 570.95, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 697          |
+|    ep_rew_mean          | 623          |
+| time/                   |              |
+|    fps                  | 2236         |
+|    iterations           | 107          |
+|    time_elapsed         | 783          |
+|    total_timesteps      | 1753088      |
+| train/                  |              |
+|    approx_kl            | 0.0039407946 |
+|    clip_fraction        | 0.0443       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.397       |
+|    explained_variance   | 0.938        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 52.9         |
+|    n_updates            | 424          |
+|    policy_gradient_loss | -0.000817    |
+|    value_loss           | 149          |
+------------------------------------------
+2026-11-16 18:11:30,512 t=1769472 asked 4 queries (0 by VLM) in 0s; 1351 labels in D
+2026-11-16 18:11:35,866 t=1769472 predictor: {'asked': 1351, 'labels': 1351, 'train_loss': 0.3748, 'val_loss': 0.4605, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0226), 'pred_oracle_acc': 0.8, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 734         |
+|    ep_rew_mean          | 693         |
+| time/                   |             |
+|    fps                  | 2234        |
+|    iterations           | 108         |
+|    time_elapsed         | 792         |
+|    total_timesteps      | 1769472     |
+| train/                  |             |
+|    approx_kl            | 0.004932279 |
+|    clip_fraction        | 0.0687      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.408      |
+|    explained_variance   | 0.923       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 11.4        |
+|    n_updates            | 428         |
+|    policy_gradient_loss | -0.000603   |
+|    value_loss           | 72.3        |
+-----------------------------------------
+2026-11-16 18:11:38,127 t=1785856 asked 4 queries (0 by VLM) in 0s; 1355 labels in D
+2026-11-16 18:11:44,132 t=1785856 predictor: {'asked': 1355, 'labels': 1355, 'train_loss': 0.3719, 'val_loss': 0.4514, 'l2': 0.0364, 'rhat_true_corr': np.float64(-0.0018), 'pred_oracle_acc': 0.75, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 778          |
+|    ep_rew_mean          | 752          |
+| time/                   |              |
+|    fps                  | 2231         |
+|    iterations           | 109          |
+|    time_elapsed         | 800          |
+|    total_timesteps      | 1785856      |
+| train/                  |              |
+|    approx_kl            | 0.0044961516 |
+|    clip_fraction        | 0.0603       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.399       |
+|    explained_variance   | 0.905        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 27.3         |
+|    n_updates            | 432          |
+|    policy_gradient_loss | -0.000913    |
+|    value_loss           | 137          |
+------------------------------------------
+2026-11-16 18:11:46,558 t=1802240 asked 3 queries (0 by VLM) in 0s; 1358 labels in D
+2026-11-16 18:11:53,046 t=1802240 predictor: {'asked': 1358, 'labels': 1358, 'train_loss': 0.374, 'val_loss': 0.4521, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.031), 'pred_oracle_acc': 0.7333, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:12:00,001 t=1802240 eval: {'mean': 161.48, 'std': 111.67, 'min': -127.71, 'max': 300.41, 'landed': 0.65, 'length': 564.05, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 768          |
+|    ep_rew_mean          | 699          |
+| time/                   |              |
+|    fps                  | 2208         |
+|    iterations           | 110          |
+|    time_elapsed         | 816          |
+|    total_timesteps      | 1802240      |
+| train/                  |              |
+|    approx_kl            | 0.0049396195 |
+|    clip_fraction        | 0.0625       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.379       |
+|    explained_variance   | 0.915        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 23.6         |
+|    n_updates            | 436          |
+|    policy_gradient_loss | -0.00103     |
+|    value_loss           | 74.5         |
+------------------------------------------
+2026-11-16 18:12:02,978 t=1818624 asked 4 queries (0 by VLM) in 0s; 1362 labels in D
+2026-11-16 18:12:09,035 t=1818624 predictor: {'asked': 1362, 'labels': 1362, 'train_loss': 0.3745, 'val_loss': 0.4618, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0336), 'pred_oracle_acc': 0.8, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 769         |
+|    ep_rew_mean          | 770         |
+| time/                   |             |
+|    fps                  | 2203        |
+|    iterations           | 111         |
+|    time_elapsed         | 825         |
+|    total_timesteps      | 1818624     |
+| train/                  |             |
+|    approx_kl            | 0.004760212 |
+|    clip_fraction        | 0.052       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.408      |
+|    explained_variance   | 0.894       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 42.8        |
+|    n_updates            | 440         |
+|    policy_gradient_loss | -0.000888   |
+|    value_loss           | 157         |
+-----------------------------------------
+2026-11-16 18:12:11,629 t=1835008 asked 3 queries (0 by VLM) in 0s; 1365 labels in D
+2026-11-16 18:12:16,202 t=1835008 predictor: {'asked': 1365, 'labels': 1365, 'train_loss': 0.3751, 'val_loss': 0.4538, 'l2': 0.0364, 'rhat_true_corr': np.float64(-0.0379), 'pred_oracle_acc': 0.5667, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 750          |
+|    ep_rew_mean          | 741          |
+| time/                   |              |
+|    fps                  | 2204         |
+|    iterations           | 112          |
+|    time_elapsed         | 832          |
+|    total_timesteps      | 1835008      |
+| train/                  |              |
+|    approx_kl            | 0.0043838033 |
+|    clip_fraction        | 0.0514       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.441       |
+|    explained_variance   | 0.907        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 96.4         |
+|    n_updates            | 444          |
+|    policy_gradient_loss | -0.000138    |
+|    value_loss           | 167          |
+------------------------------------------
+2026-11-16 18:12:18,918 t=1851392 asked 4 queries (0 by VLM) in 0s; 1369 labels in D
+2026-11-16 18:12:24,695 t=1851392 predictor: {'asked': 1369, 'labels': 1369, 'train_loss': 0.3747, 'val_loss': 0.4541, 'l2': 0.0364, 'rhat_true_corr': np.float64(-0.0547), 'pred_oracle_acc': 0.65, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:12:26,929 t=1851392 eval: {'mean': 231.03, 'std': 82.08, 'min': -7.55, 'max': 299.75, 'landed': 0.9, 'length': 237.1, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 761          |
+|    ep_rew_mean          | 808          |
+| time/                   |              |
+|    fps                  | 2195         |
+|    iterations           | 113          |
+|    time_elapsed         | 843          |
+|    total_timesteps      | 1851392      |
+| train/                  |              |
+|    approx_kl            | 0.0064116186 |
+|    clip_fraction        | 0.078        |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.446       |
+|    explained_variance   | 0.938        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 28.7         |
+|    n_updates            | 448          |
+|    policy_gradient_loss | -0.000879    |
+|    value_loss           | 67.1         |
+------------------------------------------
+2026-11-16 18:12:29,310 t=1867776 asked 3 queries (0 by VLM) in 0s; 1372 labels in D
+2026-11-16 18:12:36,165 t=1867776 predictor: {'asked': 1372, 'labels': 1372, 'train_loss': 0.3714, 'val_loss': 0.458, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0303), 'pred_oracle_acc': 0.8333, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 758         |
+|    ep_rew_mean          | 869         |
+| time/                   |             |
+|    fps                  | 2191        |
+|    iterations           | 114         |
+|    time_elapsed         | 852         |
+|    total_timesteps      | 1867776     |
+| train/                  |             |
+|    approx_kl            | 0.008228799 |
+|    clip_fraction        | 0.0982      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.424      |
+|    explained_variance   | 0.811       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 65.4        |
+|    n_updates            | 452         |
+|    policy_gradient_loss | -0.00372    |
+|    value_loss           | 105         |
+-----------------------------------------
+2026-11-16 18:12:38,625 t=1884160 asked 4 queries (0 by VLM) in 0s; 1376 labels in D
+2026-11-16 18:12:44,545 t=1884160 predictor: {'asked': 1376, 'labels': 1376, 'train_loss': 0.3747, 'val_loss': 0.454, 'l2': 0.0364, 'rhat_true_corr': np.float64(-0.0842), 'pred_oracle_acc': 0.75, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+-----------------------------------------
+| rollout/                |             |
+|    ep_len_mean          | 795         |
+|    ep_rew_mean          | 1.03e+03    |
+| time/                   |             |
+|    fps                  | 2189        |
+|    iterations           | 115         |
+|    time_elapsed         | 860         |
+|    total_timesteps      | 1884160     |
+| train/                  |             |
+|    approx_kl            | 0.005651762 |
+|    clip_fraction        | 0.0797      |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -0.431      |
+|    explained_variance   | 0.923       |
+|    learning_rate        | 0.0003      |
+|    loss                 | 73.5        |
+|    n_updates            | 456         |
+|    policy_gradient_loss | -0.00158    |
+|    value_loss           | 147         |
+-----------------------------------------
+2026-11-16 18:12:47,946 t=1900544 asked 3 queries (0 by VLM) in 0s; 1379 labels in D
+2026-11-16 18:12:52,894 t=1900544 predictor: {'asked': 1379, 'labels': 1379, 'train_loss': 0.3732, 'val_loss': 0.4556, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0524), 'pred_oracle_acc': 0.6, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:12:54,760 t=1900544 eval: {'mean': 241.42, 'std': 97.86, 'min': -166.16, 'max': 299.76, 'landed': 0.95, 'length': 253.55, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 815          |
+|    ep_rew_mean          | 1.08e+03     |
+| time/                   |              |
+|    fps                  | 2182         |
+|    iterations           | 116          |
+|    time_elapsed         | 870          |
+|    total_timesteps      | 1900544      |
+| train/                  |              |
+|    approx_kl            | 0.0074178916 |
+|    clip_fraction        | 0.0828       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.389       |
+|    explained_variance   | 0.775        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 12.5         |
+|    n_updates            | 460          |
+|    policy_gradient_loss | -0.000765    |
+|    value_loss           | 92.9         |
+------------------------------------------
+2026-11-16 18:12:56,956 t=1916928 asked 4 queries (0 by VLM) in 0s; 1383 labels in D
+2026-11-16 18:13:03,216 t=1916928 predictor: {'asked': 1383, 'labels': 1383, 'train_loss': 0.376, 'val_loss': 0.4521, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0316), 'pred_oracle_acc': 0.825, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 810          |
+|    ep_rew_mean          | 1.15e+03     |
+| time/                   |              |
+|    fps                  | 2179         |
+|    iterations           | 117          |
+|    time_elapsed         | 879          |
+|    total_timesteps      | 1916928      |
+| train/                  |              |
+|    approx_kl            | 0.0069369017 |
+|    clip_fraction        | 0.0691       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.379       |
+|    explained_variance   | 0.88         |
+|    learning_rate        | 0.0003       |
+|    loss                 | 38.6         |
+|    n_updates            | 464          |
+|    policy_gradient_loss | -0.0012      |
+|    value_loss           | 210          |
+------------------------------------------
+2026-11-16 18:13:05,774 t=1933312 asked 3 queries (0 by VLM) in 0s; 1386 labels in D
+2026-11-16 18:13:11,378 t=1933312 predictor: {'asked': 1386, 'labels': 1386, 'train_loss': 0.3773, 'val_loss': 0.4624, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.0515), 'pred_oracle_acc': 0.7333, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 808          |
+|    ep_rew_mean          | 1.17e+03     |
+| time/                   |              |
+|    fps                  | 2178         |
+|    iterations           | 118          |
+|    time_elapsed         | 887          |
+|    total_timesteps      | 1933312      |
+| train/                  |              |
+|    approx_kl            | 0.0049823523 |
+|    clip_fraction        | 0.0642       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.4         |
+|    explained_variance   | 0.945        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 35.8         |
+|    n_updates            | 468          |
+|    policy_gradient_loss | -0.000985    |
+|    value_loss           | 146          |
+------------------------------------------
+2026-11-16 18:13:14,053 t=1949696 asked 3 queries (0 by VLM) in 0s; 1389 labels in D
+2026-11-16 18:13:18,856 t=1949696 predictor: {'asked': 1389, 'labels': 1389, 'train_loss': 0.3752, 'val_loss': 0.4526, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.1797), 'pred_oracle_acc': 0.9, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 683          |
+|    ep_rew_mean          | 976          |
+| time/                   |              |
+|    fps                  | 2178         |
+|    iterations           | 119          |
+|    time_elapsed         | 895          |
+|    total_timesteps      | 1949696      |
+| train/                  |              |
+|    approx_kl            | 0.0029592067 |
+|    clip_fraction        | 0.0416       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.294       |
+|    explained_variance   | 0.891        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 60.8         |
+|    n_updates            | 472          |
+|    policy_gradient_loss | 0.000103     |
+|    value_loss           | 152          |
+------------------------------------------
+2026-11-16 18:13:21,531 t=1966080 asked 4 queries (0 by VLM) in 0s; 1393 labels in D
+2026-11-16 18:13:26,078 t=1966080 predictor: {'asked': 1393, 'labels': 1393, 'train_loss': 0.3895, 'val_loss': 0.4813, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.1377), 'pred_oracle_acc': 0.75, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:13:27,593 t=1966080 eval: {'mean': 220.1, 'std': 92.52, 'min': 4.48, 'max': 299.51, 'landed': 0.85, 'length': 217.55, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 594          |
+|    ep_rew_mean          | 836          |
+| time/                   |              |
+|    fps                  | 2175         |
+|    iterations           | 120          |
+|    time_elapsed         | 903          |
+|    total_timesteps      | 1966080      |
+| train/                  |              |
+|    approx_kl            | 0.0037977933 |
+|    clip_fraction        | 0.0419       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.388       |
+|    explained_variance   | 0.867        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 166          |
+|    n_updates            | 476          |
+|    policy_gradient_loss | -0.000706    |
+|    value_loss           | 312          |
+------------------------------------------
+2026-11-16 18:13:30,190 t=1982464 asked 3 queries (0 by VLM) in 0s; 1396 labels in D
+2026-11-16 18:13:34,794 t=1982464 predictor: {'asked': 1396, 'labels': 1396, 'train_loss': 0.3782, 'val_loss': 0.4583, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.1466), 'pred_oracle_acc': 0.9333, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 513          |
+|    ep_rew_mean          | 690          |
+| time/                   |              |
+|    fps                  | 2176         |
+|    iterations           | 121          |
+|    time_elapsed         | 910          |
+|    total_timesteps      | 1982464      |
+| train/                  |              |
+|    approx_kl            | 0.0021859766 |
+|    clip_fraction        | 0.0269       |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.333       |
+|    explained_variance   | 0.793        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 51.4         |
+|    n_updates            | 480          |
+|    policy_gradient_loss | 7.05e-05     |
+|    value_loss           | 237          |
+------------------------------------------
+2026-11-16 18:13:37,020 t=1998848 asked 3 queries (0 by VLM) in 0s; 1399 labels in D
+2026-11-16 18:13:42,240 t=1998848 predictor: {'asked': 1399, 'labels': 1399, 'train_loss': 0.3755, 'val_loss': 0.4544, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.2032), 'pred_oracle_acc': 0.8333, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+----------------------------------------
+| rollout/                |            |
+|    ep_len_mean          | 517        |
+|    ep_rew_mean          | 695        |
+| time/                   |            |
+|    fps                  | 2176       |
+|    iterations           | 122        |
+|    time_elapsed         | 918        |
+|    total_timesteps      | 1998848    |
+| train/                  |            |
+|    approx_kl            | 0.00323513 |
+|    clip_fraction        | 0.037      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -0.335     |
+|    explained_variance   | 0.886      |
+|    learning_rate        | 0.0003     |
+|    loss                 | 51         |
+|    n_updates            | 484        |
+|    policy_gradient_loss | -0.00102   |
+|    value_loss           | 283        |
+----------------------------------------
+2026-11-16 18:13:44,538 t=2015232 asked 1 queries (0 by VLM) in 0s; 1400 labels in D
+2026-11-16 18:13:49,930 t=2015232 predictor: {'asked': 1400, 'labels': 1400, 'train_loss': 0.3763, 'val_loss': 0.4542, 'l2': 0.0364, 'rhat_true_corr': np.float64(0.2078), 'pred_oracle_acc': 0.7, 'vlm_asked': 0, 'vlm_labelled': 0, 'vlm_ties': 0, 'vlm_oracle_agree': nan}
+2026-11-16 18:13:51,567 t=2015232 eval: {'mean': 254.16, 'std': 66.41, 'min': 3.08, 'max': 306.05, 'landed': 0.95, 'length': 235.6, 'episodes': 20.0}
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 540          |
+|    ep_rew_mean          | 727          |
+| time/                   |              |
+|    fps                  | 2172         |
+|    iterations           | 123          |
+|    time_elapsed         | 927          |
+|    total_timesteps      | 2015232      |
+| train/                  |              |
+|    approx_kl            | 0.0026710038 |
+|    clip_fraction        | 0.03         |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -0.306       |
+|    explained_variance   | 0.791        |
+|    learning_rate        | 0.0003       |
+|    loss                 | 247          |
+|    n_updates            | 488          |
+|    policy_gradient_loss | 0.000234     |
+|    value_loss           | 297          |
+------------------------------------------
+2026-11-16 18:14:00,969 t=2015232 eval: {'mean': 245.42, 'std': 89.0, 'min': -221.81, 'max': 308.6, 'landed': 0.92, 'length': 227.14, 'episodes': 100.0}

@@ -8,30 +8,83 @@ from stable_baselines3.common.vec_env import DummyVecEnv, VecEnvWrapper
 
 ENV_ID = "LunarLander-v3"
 FPS = 50
+HOLD_STEPS = 75  # steps to hold on the pad after landing (one 1.5s clip at 50 FPS)
+PAD_NOOP_REWARD = 2.0  # step reward when stably on the pad with action == 0
+PAD_FIRE_PENALTY = -3.0  # step reward when stably on the pad with action != 0
+HOVER_COAST_PENALTY = 1.0  # subtracted per mid-air step when vy >= -0.05 and action == 0
+HOVER_FIRE_PENALTY = 2.0  # subtracted per mid-air step when vy >= -0.05 and action != 0
+
+
+def stable_on_pad(obs):
+    """True when the lander is resting upright and stationary on both legs between the pad flags."""
+    return bool(
+        obs[6] > 0.5
+        and obs[7] > 0.5
+        and abs(obs[0]) <= 0.25
+        and abs(obs[4]) < 0.2
+        and abs(obs[2]) < 0.2
+        and abs(obs[3]) < 0.2
+        and abs(obs[5]) < 0.2
+    )
 
 
 class HiddenReset(gym.Wrapper):
     """Never reports done: on a real episode end we reset silently and hand back the next episode's first observation.
 
-    Paper App. A: termination conditions leak the task, so the agent gets one continuous episode. The true reward keeps
-    LunarLander's own -100 (crash) / +100 (landed) on the final step: the "penalty the agent must learn".
-    Each real episode is reset with an explicit seed so that it can be replayed, and therefore rendered, later.
+    Paper App. A: termination conditions leak the task, so the agent gets one continuous episode. Each real episode is
+    reset with an explicit seed so that it can be replayed, and therefore rendered, later.
+
+    Oracle reward shaping for training trajectories and preference clips:
+      1. Stably on the pad with action == 0 pays `PAD_NOOP_REWARD` (+2.0) per step.
+      2. Stably on the pad with action != 0 pays `PAD_FIRE_PENALTY` (-3.0) per step.
+      3. Mid-air hovering/climbing (both legs off ground and vy >= -0.05) incurs a hover penalty.
+      4. Instead of resetting immediately on Box2D sleep with a single +100 spike, hold on the pad for `hold_steps`
+         (75 steps = 1 clip) before terminating/resetting so clips capture pure landed trajectories.
 
     With hide=False the episode ends are passed through as usual (the standard, easier task; used to measure what
     hiding them costs) and the caller resets.
     """
 
-    def __init__(self, env, seed, hide=True):
+    def __init__(self, env, seed, hide=True, hold_steps=HOLD_STEPS):
         super().__init__(env)
-        self._seeds, self.hide = np.random.default_rng(seed), hide
+        self._seeds, self.hide, self.hold_steps = np.random.default_rng(seed), hide, hold_steps
 
     def reset(self, **_):
         self.ep_seed = int(self._seeds.integers(2**31))
-        self.ep_step, self.ep_return = 0, 0.0
-        return self.env.reset(seed=self.ep_seed)
+        self.ep_step, self.ep_return, self.pad_steps = 0, 0.0, 0
+        obs, info = self.env.reset(seed=self.ep_seed)
+        self._prev_obs = obs
+        return obs, info
 
     def step(self, action):
+        prev_obs = self._prev_obs
         obs, reward, terminated, truncated, _ = self.env.step(action)
+        self._prev_obs = obs
+
+        unwrapped = self.env.unwrapped
+        crashed = bool(unwrapped.game_over or abs(obs[0]) >= 1.0)
+        asleep = bool(not unwrapped.lander.awake and not crashed)
+        on_pad = stable_on_pad(prev_obs) or (asleep and abs(obs[0]) <= 0.25)
+
+        if crashed:
+            reward = -100.0
+            terminated = True
+        elif on_pad:
+            reward = PAD_NOOP_REWARD if int(action) == 0 else PAD_FIRE_PENALTY
+            if stable_on_pad(obs) or (asleep and abs(obs[0]) <= 0.25):
+                self.pad_steps += 1
+            else:
+                self.pad_steps = 0
+            terminated = self.pad_steps >= self.hold_steps
+        else:
+            self.pad_steps = 1 if stable_on_pad(obs) else 0
+            if asleep:
+                # Settled outside the pad: terminate without awarding the +100 landing bonus.
+                reward = 0.0
+                terminated = True
+            elif prev_obs[6] < 0.5 and prev_obs[7] < 0.5 and prev_obs[3] >= -0.05:
+                reward -= HOVER_FIRE_PENALTY if int(action) != 0 else HOVER_COAST_PENALTY
+
         info = {"ep_seed": self.ep_seed, "ep_step": self.ep_step}
         self.ep_step += 1
         self.ep_return += reward
@@ -41,7 +94,7 @@ class HiddenReset(gym.Wrapper):
             if self.hide:
                 obs, _ = self.reset()
                 terminated = truncated = False
-        return obs, reward, terminated, truncated, info
+        return obs, float(reward), terminated, truncated, info
 
 
 class Experience(VecEnvWrapper):

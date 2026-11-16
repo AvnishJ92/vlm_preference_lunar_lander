@@ -4,6 +4,7 @@ import json
 import sys
 from pathlib import Path
 
+import gymnasium as gym
 import numpy as np
 import pandas as pd
 import pytest
@@ -40,6 +41,75 @@ def test_episode_ends_can_be_left_visible():
     dones = np.array([xp.step(rng.integers(4, size=2))[2] for _ in range(300)])
     assert dones.sum() >= 2 and ((xp.ep_step[:, 1:] == 0) == dones[:-1].T).all()  # a done is followed by a new episode
     E.Renderer().frames(xp, 0, 100, 75)  # and the log still replays exactly
+
+
+def _heuristic_action(obs):
+    """Simple PD controller from Gymnasium LunarLander to reach the pad cleanly in tests."""
+    angle_targ = np.clip(obs[0] * 0.5 + obs[2] * 1.0, -0.4, 0.4)
+    hover_targ = 0.55 * abs(obs[0])
+    angle_todo = (angle_targ - obs[4]) * 0.5 - obs[5] * 1.0
+    hover_todo = (hover_targ - obs[1]) * 0.5 - obs[3] * 0.5
+    if obs[6] > 0.5 or obs[7] > 0.5:
+        angle_todo = 0.0
+        hover_todo = -obs[3] * 0.5
+    if hover_todo > abs(angle_todo) and hover_todo > 0.05:
+        return 2
+    if angle_todo < -0.05:
+        return 3
+    if angle_todo > 0.05:
+        return 1
+    return 0
+
+
+def test_pad_hold_and_oracle_shaping_rewards():
+    # 1) Mid-air hovering incurs HOVER_COAST_PENALTY (action=0) and HOVER_FIRE_PENALTY (action!=0).
+    for test_action, expected_penalty in ((0, E.HOVER_COAST_PENALTY), (2, E.HOVER_FIRE_PENALTY)):
+        hr = E.HiddenReset(gym.make(E.ENV_ID), seed=0, hide=False)
+        raw = gym.make(E.ENV_ID)
+        obs, _ = hr.reset()
+        raw.reset(seed=hr.ep_seed)
+        while not (obs[6] < 0.5 and obs[7] < 0.5 and obs[3] >= -0.05 and abs(obs[0]) < 0.8):
+            obs, *_ = hr.step(2)
+            raw.step(2)
+        _, r_hr, *_ = hr.step(test_action)
+        _, r_raw, *_ = raw.step(test_action)
+        assert r_raw - r_hr == pytest.approx(expected_penalty)
+
+    # 2) Landing holds on the pad for HOLD_STEPS (beyond Box2D sleep), paying PAD_NOOP_REWARD for action=0.
+    xp = E.make_venv(1, 0, 6000, hide_episode_ends=True)
+    hr = xp.venv.envs[0]
+    obs = xp.reset()
+    for _ in range(2500):
+        if E.stable_on_pad(obs[0]) and hr.ep_step < 850:
+            break
+        obs = xp.step(np.array([_heuristic_action(obs[0])]))[0]
+    assert E.stable_on_pad(obs[0]) and hr.ep_step < 850
+
+    saw_asleep_hold = False
+    for _ in range(E.HOLD_STEPS + 10):
+        obs = xp.step(np.array([0]))[0]
+        if hr.ep_step == 0:
+            break
+        if not hr.env.unwrapped.lander.awake:
+            saw_asleep_hold = True
+    assert saw_asleep_hold and hr.ep_step == 0
+    land_end_t = xp.t
+    hold_slice = slice(land_end_t - (E.HOLD_STEPS - 1), land_end_t)
+    assert np.allclose(xp.rew[0, hold_slice], E.PAD_NOOP_REWARD)
+    assert (np.diff(xp.ep_step[0, land_end_t - E.HOLD_STEPS : land_end_t]) == 1).all()
+
+    # 3) Firing a thruster while stably on the pad pays PAD_FIRE_PENALTY.
+    for _ in range(2500):
+        if E.stable_on_pad(obs[0]):
+            break
+        obs = xp.step(np.array([_heuristic_action(obs[0])]))[0]
+    assert E.stable_on_pad(obs[0])
+    xp.step(np.array([2]))
+    assert xp.rew[0, xp.t - 1] == pytest.approx(E.PAD_FIRE_PENALTY)
+
+    # 4) Replay renders a window spanning the 75-step pad hold and post-hold reset without diverging.
+    frames = E.Renderer().frames(xp, 0, land_end_t - E.HOLD_STEPS + 5, E.HOLD_STEPS)
+    assert frames.shape == (E.HOLD_STEPS, 400, 600, 3)
 
 
 def test_replay_renders_exactly_what_was_logged():

@@ -1,0 +1,24 @@
+{
+ "condition": "oracle",
+ "seed": 4,
+ "timesteps": 2015232,
+ "final_eval": {
+  "t": 2015232,
+  "mean": 217.02276173272747,
+  "std": 105.59122343242983,
+  "min": -178.2506164599318,
+  "max": 317.6498580016971,
+  "landed": 0.85,
+  "length": 275.1,
+  "episodes": 100
+ },
+ "asked": 1400,
+ "labels": 1400,
+ "vlm": {
+  "asked": 0,
+  "labelled": 0,
+  "ties": 0,
+  "hard": 0,
+  "agree": 0
+ }
+}
