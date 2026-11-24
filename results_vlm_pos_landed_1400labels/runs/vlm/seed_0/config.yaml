@@ -1,0 +1,131 @@
+total_timesteps: 2000000
+n_envs: 16
+hide_episode_ends: true
+threads: 2
+ppo:
+  n_steps: 1024
+  batch_size: 64
+  n_epochs: 4
+  learning_rate: 0.0003
+  gamma: 0.995
+  gae_lambda: 0.97
+  ent_coef: 0.01
+  policy_kwargs:
+    net_arch:
+    - 64
+    - 64
+eval:
+  every: 50000
+  episodes: 20
+  video_episodes: 1
+  final_episodes: 100
+  final_video_episodes: 5
+pref:
+  n_queries: 1400
+  budget_by_labels: true
+  max_retry_factor: 4
+  segment_len: 75
+  pretrain_frac: 0.25
+  pretrain_steps: 16000
+  anneal_tau_frac: 0.1
+  candidate_factor: 10
+  ensemble: 3
+  hidden: 64
+  label_noise: 0.1
+  val_ratio:
+  - 1.1
+  - 1.5
+  l2_init: 0.0001
+  lr: 0.001
+  batch_size: 64
+  pretrain_epochs: 100
+  round_every: 16384
+  epochs_per_round: 10
+vlm:
+  api_urls:
+  - http://localhost:8001/v1
+  - http://localhost:8002/v1
+  api_key: EMPTY
+  model: Qwen/Qwen2.5-VL-7B-Instruct
+  prompt: simple_binary
+  input_mode: video_mp4
+  frames_per_clip: 24
+  frame_scale: 0.5
+  mark_out_of_view: true
+  mark_landed: true
+  concurrency: 32
+  timeout: 240
+  jpeg_quality: 85
+  max_new_tokens: 1024
+  swap_check: true
+  swap_fail_as_tie: false
+  logprob_debias: false
+  video_fps: 16
+  save_clip_every: 10
+conditions:
+  pure_rl: {}
+  oracle:
+    oracle_fraction: 1.0
+  vlm:
+    oracle_fraction: 0.0
+  mixed:
+    oracle_fraction: 0.5
+seeds:
+- 0
+- 1
+- 2
+- 3
+- 4
+calibration:
+  train_steps: 802816
+  away_steps: 1500
+  n_pairs: 294
+  n_away_pairs: 40
+  variants:
+    direct:
+      prompt: direct
+      mark_out_of_view: false
+    direct_marked:
+      prompt: direct
+      mark_out_of_view: true
+    progress_marked:
+      prompt: progress
+      mark_out_of_view: true
+    reasoned_marked:
+      prompt: reasoned
+      max_new_tokens: 320
+      mark_out_of_view: true
+prompts:
+  system: ''
+  out_of_view_rule: ''
+  clip_label:
+    video: ''
+    images: 'Clip {n}:'
+  variants:
+    simple_tie: 'You are given two lunar lander clips: CLIP 1 (left) and CLIP 2 (right).
+      Non-crashed landings are better than crashing onto the ground. A clip showing
+      the green `LANDED` banner (stably landed between the two yellow flags with engines
+      off) is best; if both show `LANDED`, prefer the one that reaches `LANDED` quicker.
+      If neither clip shows `LANDED`, prefer the one descending closer and more stably
+      toward the area between the two yellow flags without crashing over landers that
+      crash, fly away, or land outside the two yellow flags.
+
+      Think step by step comparing CLIP 1 and CLIP 2, then finish on the very last
+      line with `ANSWER: 1` if CLIP 1 is better, `ANSWER: 2` if CLIP 2 is better,
+      or `ANSWER: TIE` if both clips are about equally good.
+
+      '
+    simple_binary: 'You are given two lunar lander clips: CLIP 1 (left) and CLIP 2
+      (right). Non-crashed landings are better than crashing onto the ground. A clip
+      showing the green `LANDED` banner (stably landed between the two yellow flags
+      with engines off) is best; if both show `LANDED`, prefer the one that reaches
+      `LANDED` quicker. If neither clip shows `LANDED`, prefer the one descending
+      closer and more stably toward the area between the two yellow flags without
+      crashing over landers that crash, fly away, or land outside the two yellow flags.
+
+      Think step by step comparing CLIP 1 and CLIP 2, then finish on the very last
+      line with exactly `ANSWER: 1` or `ANSWER: 2` (you must choose 1 or 2).
+
+      '
+condition: vlm
+seed: 0

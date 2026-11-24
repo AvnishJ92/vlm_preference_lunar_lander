@@ -8,9 +8,11 @@ from stable_baselines3.common.vec_env import DummyVecEnv, VecEnvWrapper
 
 ENV_ID = "LunarLander-v3"
 FPS = 50
-HOLD_STEPS = 75  # steps to hold on the pad after landing (one 1.5s clip at 50 FPS)
+HOLD_STEPS = 50  # 1.0s hold after landing or crashing (50 steps * +-2.0 = +-100.0 total)
+MIN_FLIGHT_STEPS = 25  # 0.5s minimum active flight at the start of every 1.5s (75-step) clip
 PAD_NOOP_REWARD = 2.0  # step reward when stably on the pad with action == 0
 PAD_FIRE_PENALTY = -3.0  # step reward when stably on the pad with action != 0
+CRASH_HOLD_PENALTY = -2.0  # step reward during the 50-step crash hold (total -100.0)
 HOVER_COAST_PENALTY = 1.0  # subtracted per mid-air step when vy >= -0.05 and action == 0
 HOVER_FIRE_PENALTY = 2.0  # subtracted per mid-air step when vy >= -0.05 and action != 0
 
@@ -38,8 +40,8 @@ class HiddenReset(gym.Wrapper):
       1. Stably on the pad with action == 0 pays `PAD_NOOP_REWARD` (+2.0) per step.
       2. Stably on the pad with action != 0 pays `PAD_FIRE_PENALTY` (-3.0) per step.
       3. Mid-air hovering/climbing (both legs off ground and vy >= -0.05) incurs a hover penalty.
-      4. Instead of resetting immediately on Box2D sleep with a single +100 spike, hold on the pad for `hold_steps`
-         (75 steps = 1 clip) before terminating/resetting so clips capture pure landed trajectories.
+      4. Instead of resetting immediately on Box2D sleep (+100 spike) or crash (-100 spike), hold on the pad or at
+         the frozen crash state for `hold_steps` (75 steps = 1 clip, +150 or -150 total) before terminating/resetting.
 
     With hide=False the episode ends are passed through as usual (the standard, easier task; used to measure what
     hiding them costs) and the caller resets.
@@ -52,40 +54,59 @@ class HiddenReset(gym.Wrapper):
     def reset(self, **_):
         self.ep_seed = int(self._seeds.integers(2**31))
         self.ep_step, self.ep_return, self.pad_steps = 0, 0.0, 0
+        self.crash_steps, self._crash_obs = 0, None
         obs, info = self.env.reset(seed=self.ep_seed)
         self._prev_obs = obs
         return obs, info
 
     def step(self, action):
-        prev_obs = self._prev_obs
-        obs, reward, terminated, truncated, _ = self.env.step(action)
-        self._prev_obs = obs
-
-        unwrapped = self.env.unwrapped
-        crashed = bool(unwrapped.game_over or abs(obs[0]) >= 1.0)
-        asleep = bool(not unwrapped.lander.awake and not crashed)
-        on_pad = stable_on_pad(prev_obs) or (asleep and abs(obs[0]) <= 0.25)
-
-        if crashed:
-            reward = -100.0
-            terminated = True
-        elif on_pad:
-            reward = PAD_NOOP_REWARD if int(action) == 0 else PAD_FIRE_PENALTY
-            if stable_on_pad(obs) or (asleep and abs(obs[0]) <= 0.25):
-                self.pad_steps += 1
-            else:
-                self.pad_steps = 0
-            terminated = self.pad_steps >= self.hold_steps
+        if self._crash_obs is not None:
+            obs = self._crash_obs.copy()
+            self._prev_obs = obs
+            reward = CRASH_HOLD_PENALTY
+            self.crash_steps += 1
+            terminated = self.crash_steps >= self.hold_steps
+            truncated = False
         else:
-            self.pad_steps = 1 if stable_on_pad(obs) else 0
-            if asleep:
-                # Settled outside the pad: terminate without awarding the +100 landing bonus.
-                reward = 0.0
-                terminated = True
-            elif prev_obs[6] < 0.5 and prev_obs[7] < 0.5 and prev_obs[3] >= -0.05:
-                reward -= HOVER_FIRE_PENALTY if int(action) != 0 else HOVER_COAST_PENALTY
+            prev_obs = self._prev_obs
+            obs, reward, terminated, truncated, _ = self.env.step(action)
+            unwrapped = self.env.unwrapped
+            crashed = bool(unwrapped.game_over or abs(obs[0]) >= 1.0)
+            asleep = bool(not unwrapped.lander.awake and not crashed)
+            on_pad = stable_on_pad(prev_obs) or (asleep and abs(obs[0]) <= 0.25)
 
-        info = {"ep_seed": self.ep_seed, "ep_step": self.ep_step}
+            if crashed:
+                obs = obs.copy()
+                # Clear leg contact flags so a hard vertical crash onto the pad cannot look like a landed state.
+                obs[6:8] = 0.0
+                self._crash_obs = obs.copy()
+                self._prev_obs = obs
+                self.crash_steps = 1
+                reward = CRASH_HOLD_PENALTY
+                terminated = self.crash_steps >= self.hold_steps
+            elif on_pad:
+                self._prev_obs = obs
+                reward = PAD_NOOP_REWARD if int(action) == 0 else PAD_FIRE_PENALTY
+                if stable_on_pad(obs) or (asleep and abs(obs[0]) <= 0.25):
+                    self.pad_steps += 1
+                else:
+                    self.pad_steps = 0
+                terminated = self.pad_steps >= self.hold_steps
+            else:
+                self._prev_obs = obs
+                self.pad_steps = 1 if stable_on_pad(obs) else 0
+                if asleep:
+                    # Settled outside the pad: terminate without awarding the +100 landing bonus.
+                    reward = 0.0
+                    terminated = True
+                elif prev_obs[6] < 0.5 and prev_obs[7] < 0.5 and prev_obs[3] >= -0.05:
+                    reward -= HOVER_FIRE_PENALTY if int(action) != 0 else HOVER_COAST_PENALTY
+
+        info = {
+            "ep_seed": self.ep_seed,
+            "ep_step": self.ep_step,
+            "hold": bool(self.crash_steps > 0 or self.pad_steps > 0),
+        }
         self.ep_step += 1
         self.ep_return += reward
         if terminated or truncated:
@@ -111,6 +132,7 @@ class Experience(VecEnvWrapper):
         self.rew = np.zeros((n, capacity), np.float32)
         self.ep_seed = np.zeros((n, capacity), np.int64)
         self.ep_step = np.zeros((n, capacity), np.int64)
+        self.hold = np.zeros((n, capacity), bool)
         self.t = 0  # steps logged per env
         self.reward_fn = reward_fn
 
@@ -128,6 +150,7 @@ class Experience(VecEnvWrapper):
         self.obs[:, t], self.act[:, t], self.rew[:, t] = self._obs, self._act, rew
         self.ep_seed[:, t] = [i["ep_seed"] for i in infos]
         self.ep_step[:, t] = [i["ep_step"] for i in infos]
+        self.hold[:, t] = [i.get("hold", False) for i in infos]
         self.t += 1
         if self.reward_fn is not None:
             rew = self.reward_fn(self._obs, self._act)
@@ -135,14 +158,37 @@ class Experience(VecEnvWrapper):
         return obs, rew, done, infos
 
     def sample_pairs(self, rng, n, k, since=0):
-        """n random pairs of k-step windows from steps >= since. Returns (n, 2, 2) of [env, start].
+        """n random pairs of k-step windows. Returns (n, 2, 2) of [env, start].
 
-        Windows are cut from the continuous stream, so they may span a hidden reset (as in the paper's Atari setup);
-        that is what puts crashes and landings inside clips often enough to learn their reward.
+        Every sampled window stays within a single episode (no mid-clip reset) and begins with at least
+        `MIN_FLIGHT_STEPS` (0.5s) of active mid-air flight before any crash or landing hold. When `since > 0`, pairs
+        combine one clip from the recent rollout (`>= since`) with 50% recent clips and 50% historical clips from
+        `[0, t - k + 1)` in randomized slot order.
         """
-        env = rng.integers(self.num_envs, size=(n, 2))
-        start = rng.integers(max(since, 0), self.t - k + 1, size=(n, 2))
-        return np.stack([env, start], -1)
+        hi = self.t - k + 1
+        mf = min(MIN_FLIGHT_STEPS, max(1, k // 2))
+        no_reset = (self.ep_step[:, :hi] + (k - 1)) == self.ep_step[:, k - 1 : self.t]
+        in_air = (self.obs[:, :hi, 6] < 0.5) & (self.obs[:, :hi, 7] < 0.5)
+        active_start = (~self.hold[:, :hi]) & (~self.hold[:, mf - 1 : hi + mf - 1]) & in_air
+        valid = no_reset & active_start
+
+        def _draw(lo, count):
+            sub = valid[:, lo:]
+            if not sub.any():
+                sub = no_reset[:, lo:] if no_reset[:, lo:].any() else np.ones((self.num_envs, hi - lo), bool)
+            coords = np.argwhere(sub)
+            coords[:, 1] += lo
+            return coords[rng.integers(len(coords), size=count)]
+
+        if since <= 0:
+            return _draw(0, 2 * n).reshape(n, 2, 2)
+        c0 = _draw(since, n)
+        n_recent = n // 2
+        c1 = rng.permutation(np.concatenate([_draw(since, n_recent), _draw(0, n - n_recent)], axis=0))
+        pairs = np.stack([c0, c1], axis=1)
+        swap = rng.random(n) < 0.5
+        pairs[swap] = pairs[swap, ::-1]
+        return pairs
 
     def segments(self, where, k):
         """where (..., 2) of [env, start] -> obs (..., k, d), act (..., k), true return (...)."""
@@ -167,16 +213,16 @@ def make_venv(n_envs, seed, capacity, reward_fn=None, hide_episode_ends=True):
 
 
 def out_of_view(obs):
-    """True where the lander is outside the rendered picture. obs[..., 0] spans the picture width as -1..1; the top
-    edge is at obs[..., 1] = 1.41 (viewport height 13.33 world units, pad at 3.33, legs 0.6 long, scaled by 6.67)."""
-    return (np.abs(obs[..., 0]) > 1) | (obs[..., 1] > 1.41)
+    """True where the lander has left the rendered picture. obs[..., 0] spans the picture width as -1..1; the lander
+    spawns at obs[..., 1] ~= 1.40 and its legs clear the top edge of the 400px viewport above obs[..., 1] = 1.50."""
+    return (np.abs(obs[..., 0]) > 1) | (obs[..., 1] > 1.5)
 
 
-def _stamp_out_of_view(frame):
-    """Write on a frame what someone watching the whole video sees for themselves: the lander has left the picture."""
+def _stamp_banner(frame, text, color=(255, 60, 60), size=40):
+    """Write a status banner at top center so a frame carries out-of-view, crash, or landed state visually."""
     image = Image.fromarray(frame)
-    ImageDraw.Draw(image).text((frame.shape[1] // 2, 60), "LANDER OUT OF VIEW", fill=(255, 60, 60), anchor="mm",
-                               font=ImageFont.load_default(size=40))  # fmt: skip
+    ImageDraw.Draw(image).text((frame.shape[1] // 2, 65), text, fill=color, anchor="mm",
+                               font=ImageFont.load_default(size=size))  # fmt: skip
     return np.asarray(image)
 
 
@@ -197,28 +243,53 @@ class Renderer:
     def __init__(self):
         self.env = gym.make(ENV_ID, render_mode="rgb_array")
 
-    def frames(self, xp, env, start, k, offsets=None, mark_out_of_view=False):
+    def frames(self, xp, env, start, k, offsets=None, mark_out_of_view=False, mark_landed=False, mark_firing_on_pad=False):
         """uint8 (len(offsets), 400, 600, 3) for the window's steps `offsets` (default: all k).
 
-        Frame j shows the world right after action j (its engine flames included). With mark_out_of_view, frames in
-        which the lander is outside the picture carry the words LANDER OUT OF VIEW.
+        Frame j shows the world right after action j (its engine flames included), freezing physics during any crash
+        hold. With mark_out_of_view, frames outside the picture carry CRASHED and crash-hold frames
+        carry CRASHED. With mark_landed, frames stably landed on the pad with engines off (or asleep on pad)
+        carry LANDED in green. With mark_firing_on_pad, frames stably on the pad while firing thrusters
+        (action != 0) carry FIRING ON PAD in orange-red.
         """
         wanted = set(range(k) if offsets is None else np.asarray(offsets).tolist())
-        lander, out = self.env.unwrapped, []
+        lander, out, crashed = self.env.unwrapped, [], False
+
+        def _advance(action):
+            nonlocal obs, crashed
+            if crashed:
+                return
+            obs = self.env.step(int(action))[0]
+            crashed = bool(lander.game_over or abs(obs[0]) >= 1.0)
+            if crashed:
+                obs = obs.copy()
+                obs[6:8] = 0.0
+
         for j in range(k):
             g = start + j
             s = xp.ep_step[env, g]
             if j == 0 or s == 0:  # (re)enter an episode: replay it up to this step
                 obs, _ = self.env.reset(seed=int(xp.ep_seed[env, g]))
+                crashed = False
                 for a in xp.act[env, g - s : g]:
-                    obs = self.env.step(int(a))[0]
+                    _advance(a)
                     _tick_particles(lander)
             if not np.allclose(obs, xp.obs[env, g], atol=1e-5):
                 raise RuntimeError(f"replay diverged from the log at env {env} step {g}")
-            obs = self.env.step(int(xp.act[env, g]))[0]
+            act = int(xp.act[env, g])
+            _advance(act)
             if j in wanted:
                 frame = self.env.render()
-                out.append(_stamp_out_of_view(frame) if mark_out_of_view and out_of_view(obs) else frame)
+                if mark_out_of_view:
+                    if out_of_view(obs) or crashed:
+                        frame = _stamp_banner(frame, "CRASHED")
+                if not crashed and not out_of_view(obs):
+                    asleep = not lander.lander.awake
+                    if mark_landed and ((stable_on_pad(obs) and act == 0) or (asleep and abs(obs[0]) <= 0.25)):
+                        frame = _stamp_banner(frame, "LANDED", color=(60, 235, 90), size=64)
+                    elif mark_firing_on_pad and stable_on_pad(obs) and act != 0:
+                        frame = _stamp_banner(frame, "FIRING ON PAD", color=(255, 110, 30), size=52)
+                out.append(frame)
             else:
                 _tick_particles(lander)
         return np.stack(out)

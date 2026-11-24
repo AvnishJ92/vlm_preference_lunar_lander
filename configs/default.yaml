@@ -27,6 +27,8 @@ eval:                 # deterministic policy, true reward, standard episodic Lun
 
 pref:
   n_queries: 1400         # (paper) [3.1.1] used 350 / 700 / 1400 synthetic and 700 human labels per task
+  budget_by_labels: true  # keep querying candidate pairs until `n_queries` valid non-None labels are in PrefDB
+  max_retry_factor: 4     # cap queries per round at 4x needed labels so an uncertain rater cannot loop forever
   segment_len: 75         # (paper) [A.1] 1.5 s clips; LunarLander runs at 50 steps per second
   pretrain_frac: 0.25     # (paper) [A.1] share of the comparisons made on the untrained policy before RL starts
   pretrain_steps: 16000   # timesteps of the untrained policy those first comparisons are drawn from
@@ -44,16 +46,23 @@ pref:
   epochs_per_round: 10    # passes over all comparisons in every feedback round
 
 vlm:
+  api_urls: ["http://localhost:8001/v1", "http://localhost:8002/v1"]  # OpenAI-compatible vLLM endpoints (1 per GPU)
+  api_key: "EMPTY"
   model: Qwen/Qwen2.5-VL-7B-Instruct
-  revision: cc594898137f460bfe9f0759e9844b3ce807cfb5
-  prompt: progress        # a variant in prompts.yaml; chosen by calibration (docs/results.md)
-  input_mode: video       # video: each clip as one Qwen video | images: each frame as a separate image
-  frames_per_clip: 8      # must be even for video (Qwen merges frames in pairs)
-  frame_scale: 1.0        # upscale the 600x400 frames before the model sees them (more vision tokens)
-  mark_out_of_view: true  # write LANDER OUT OF VIEW on frames where the lander has left the picture
-  batch_size: 8           # conversations per generate() call; 16 and 32 were no faster per query (measured)
-  max_new_tokens: 12      # enough for `ANSWER: UNSURE`
-  swap_check: true        # ask every pair in both orders; contradictory answers give no label
+  prompt: simple_binary   # binary reasoned prompt (must pick 1 or 2; failed swaps return None and retry)
+  input_mode: video_mp4   # video_mp4: side-by-side MP4 video_url | video: image_url frames | images: sequential
+  frames_per_clip: 24     # 1.5s @ 16 FPS (even for Qwen temporal patch merge -> 12 temporal slices)
+  frame_scale: 0.5        # 600x400 -> 300x200 each, so side-by-side is 600x200
+  mark_out_of_view: true  # write CRASHED in red for crashes and out-of-view
+  mark_landed: true       # write LANDED in green on frames when stably landed on pad with engines off
+  concurrency: 32         # concurrent HTTP requests across api_urls (16 per GPU)
+  timeout: 240            # seconds per HTTP request
+  jpeg_quality: 85        # JPEG quality for base64 image_url payloads
+  max_new_tokens: 1024    # reasoning CoT + `ANSWER: 1` or `ANSWER: 2`
+  swap_check: true        # ask every pair in both orders
+  swap_fail_as_tie: false # false: swap contradictions return None and budget_by_labels draws more pairs
+  logprob_debias: false   # false: rely on hard swap-consistent CoT answers
+  video_fps: 16           # FPS for video_mp4 mode (passed via media_io_kwargs.video.fps)
   save_clip_every: 10     # save an mp4 + the frames shown for every Nth VLM query
 
 # What supplies the reward. No oracle_fraction: PPO on the true reward. Otherwise each query is answered by the

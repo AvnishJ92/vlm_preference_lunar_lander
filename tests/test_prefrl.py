@@ -15,7 +15,7 @@ from prefrl import env as E
 from prefrl import plot, run_all
 from prefrl.reward_model import PrefDB, RewardEnsemble
 from prefrl.train import labels_due, load_config, run
-from prefrl.vlm import QwenJudge, clip_offsets, combine, parse
+from prefrl.vlm import QwenJudge, _side_by_side_video, clip_offsets, combine, parse
 
 CONFIG = Path(__file__).parent.parent / "configs/default.yaml"
 
@@ -31,8 +31,8 @@ def test_episode_ends_are_hidden_but_logged():
     xp, _, dones = rollout()
     assert not dones.any()  # the agent never sees an episode end ...
     assert (xp.ep_step[:, 1:] == 0).sum() >= 3  # ... although random landers crashed and were reset
-    crash = np.argwhere(xp.ep_step[:, 1:] == 0)[0]  # the step before a reset carries the crash penalty
-    assert xp.rew[crash[0], crash[1]] == -100
+    crash = np.argwhere(xp.ep_step[:, 1:] == 0)[0]  # the 75-step crash hold carries CRASH_HOLD_PENALTY up to reset
+    assert xp.rew[crash[0], crash[1]] == E.CRASH_HOLD_PENALTY
 
 
 def test_episode_ends_can_be_left_visible():
@@ -111,20 +111,84 @@ def test_pad_hold_and_oracle_shaping_rewards():
     frames = E.Renderer().frames(xp, 0, land_end_t - E.HOLD_STEPS + 5, E.HOLD_STEPS)
     assert frames.shape == (E.HOLD_STEPS, 400, 600, 3)
 
+    # 5) Crashing holds for HOLD_STEPS (50) steps at CRASH_HOLD_PENALTY (-2.0/step = -100 total) with frozen obs,
+    #    marks CRASHED when mark_out_of_view=True, and replays cleanly both across the crash and inside the hold.
+    xp_crash = E.make_venv(1, 0, 500, hide_episode_ends=True)
+    hr_crash = xp_crash.venv.envs[0]
+    xp_crash.reset()
+    for _ in range(400):
+        xp_crash.step(np.array([0]))
+        if xp_crash.t > 10 and hr_crash.ep_step == 0:
+            break
+    assert hr_crash.ep_step == 0
+    crash_end = xp_crash.t
+    assert np.allclose(xp_crash.rew[0, crash_end - E.HOLD_STEPS : crash_end], E.CRASH_HOLD_PENALTY)
+    assert xp_crash.rew[0, crash_end - E.HOLD_STEPS : crash_end].sum() == pytest.approx(E.HOLD_STEPS * E.CRASH_HOLD_PENALTY)
+    assert not np.isclose(xp_crash.rew[0, crash_end - E.HOLD_STEPS - 1], E.CRASH_HOLD_PENALTY)
+    assert np.all(xp_crash.obs[0, crash_end - E.HOLD_STEPS + 1 : crash_end, 6:8] == 0.0)
+    r = E.Renderer()
+    span_start = crash_end - E.HOLD_STEPS - 5
+    full_crash = r.frames(xp_crash, 0, span_start, E.HOLD_STEPS)
+    offsets = clip_offsets(E.HOLD_STEPS, 16, xp_crash.ends(0, span_start, E.HOLD_STEPS))
+    assert np.array_equal(full_crash[offsets], r.frames(xp_crash, 0, span_start, E.HOLD_STEPS, offsets))
+    marked_crash = r.frames(xp_crash, 0, span_start, E.HOLD_STEPS, mark_out_of_view=True)
+    changed_crash = (full_crash != marked_crash).any((1, 2, 3))
+    assert not changed_crash[:5].any() and changed_crash[5:].all()
+    in_hold_start = crash_end - E.HOLD_STEPS + 10
+    assert r.frames(xp_crash, 0, in_hold_start, E.HOLD_STEPS - 15).shape == (E.HOLD_STEPS - 15, 400, 600, 3)
+
+
+def test_sample_pairs_mixes_recent_and_history():
+    xp, rng, _ = rollout(n_envs=2, steps=400, seed=1)
+    pairs = xp.sample_pairs(rng, 200, k=75, since=200)
+    starts = pairs[..., 1]
+    assert ((starts >= 200).any(axis=1)).all()  # every pair includes a clip from the recent rollout
+    has_hist = (starts < 200).any(axis=1)
+    assert 0.15 < has_hist.mean() < 0.55  # half of clip-2 samples draw from full history [0, hi)
+    assert (starts[:, 0] < 200).any() and (starts[:, 1] < 200).any()  # slot order is randomized
+    for env, start in pairs.reshape(-1, 2):
+        assert len(xp.ends(env, start, 75)) == 0  # no sampled clip crosses a reset
+        assert not xp.hold[env, start : start + E.MIN_FLIGHT_STEPS].any()  # >= 0.5s active flight at start
+        assert xp.obs[env, start, 6] < 0.5 and xp.obs[env, start, 7] < 0.5
+
+
+def test_vlm_side_by_side_video_and_prompts():
+    cfg = load_config(CONFIG)
+    assert cfg["vlm"]["frames_per_clip"] == 16 and cfg["vlm"]["frame_scale"] == pytest.approx(0.7)
+    assert "neither improves nor gets worse" not in cfg["prompts"]["variants"]["progress"]
+    a = np.zeros((16, 400, 600, 3), np.uint8)
+    b = np.full((16, 400, 600, 3), 20, np.uint8)
+    stacked = _side_by_side_video(a, b, scale=cfg["vlm"]["frame_scale"])
+    assert stacked.shape == (16, 280, 840, 3) and stacked.dtype == np.uint8
+    assert not np.array_equal(stacked[:, :40, :150], 0)  # CLIP 1 label stamped in top-left
+    assert not np.array_equal(stacked[:, :40, 420:570], 20)  # CLIP 2 label stamped in top-left of right half
+
+    judge = QwenJudge(cfg["vlm"], cfg["prompts"], segment_len=cfg["pref"]["segment_len"])
+    assert "CRASHED" in judge.system and "LANDER OUT OF VIEW" in judge.system
+    msgs = judge.messages(a, b)
+    image_items = [c for c in msgs[1]["content"] if c["type"] == "image_url"]
+    assert len(image_items) == 16
+    assert image_items[0]["image_url"]["url"].startswith("data:image/jpeg;base64,")
+
 
 def test_replay_renders_exactly_what_was_logged():
     xp, rng, _ = rollout()
     renderer, k = E.Renderer(), 75
-    spans_reset = 0
     for env, start in xp.sample_pairs(rng, 6, k).reshape(-1, 2):
         ends = xp.ends(env, start, k)
-        spans_reset += len(ends) > 0
+        assert len(ends) == 0  # sampled clips never cross a hidden reset
         offsets = clip_offsets(k, 8, ends)
         sparse = renderer.frames(xp, env, start, k, offsets)  # raises if the replay leaves the logged trajectory
         assert sparse.shape == (8, 400, 600, 3) and sparse.dtype == np.uint8
         # Skipping frames must not change the picture (exhaust particles age only when rendered).
         assert (sparse == renderer.frames(xp, env, start, k)[offsets]).all()
-    assert spans_reset  # the sample covered windows that cross a hidden reset
+    # Also verify Renderer replays accurately across an explicit episode boundary
+    reset_step = int(np.flatnonzero(xp.ep_step[0, 1:] == 0)[0]) + 1
+    start = max(0, reset_step - 30)
+    ends = xp.ends(0, start, k)
+    assert len(ends) > 0
+    offsets = clip_offsets(k, 8, ends)
+    assert (renderer.frames(xp, 0, start, k, offsets) == renderer.frames(xp, 0, start, k)[offsets]).all()
 
 
 def test_out_of_view_frames_are_marked_only_when_asked():
@@ -209,26 +273,55 @@ def test_label_schedule_spends_the_budget_front_loaded():
     assert due[10] - due[0] > 2 * (due[20] - due[10])  # the first half of training gets most of the rest
 
 
-def test_judge_builds_model_inputs():
-    transformers = pytest.importorskip("transformers")
-    cfg = load_config(CONFIG)
-    try:
-        processor = transformers.AutoProcessor.from_pretrained(cfg["vlm"]["model"], revision=cfg["vlm"]["revision"])
-    except OSError:
-        pytest.skip("Qwen processor files not available offline")
-    processor.tokenizer.padding_side = "left"
-    clip = np.zeros((8, 400, 600, 3), np.uint8)
-    judge = QwenJudge(None, processor, cfg["vlm"], cfg["prompts"], segment_len=75)
-    inputs = judge.inputs([(clip, clip), (clip, clip)])
-    # 8 frames of 392x588 -> 4 frame pairs x (28 x 42 patches / 4) tokens per clip, two clips per conversation
-    assert (inputs["input_ids"] == processor.video_token_id).sum(1).tolist() == [2 * 4 * 294] * 2
-    assert inputs["second_per_grid_ts"] == pytest.approx([2 * judge.dt] * 4)  # real frame spacing, not a default fps
-    text = processor.tokenizer.decode(inputs["input_ids"][0]).replace("<|video_pad|>", "")
-    assert text.index("Clip 1:") < text.index("Clip 2:") < text.index("ANSWER: 1") and "yellow flags" in text
+def test_judge_api_requests_and_swap_check():
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+    import threading
 
-    images = QwenJudge(None, processor, dict(cfg["vlm"], input_mode="images", frames_per_clip=6), cfg["prompts"], 75)
-    inputs = images.inputs([(clip[:6], clip[:6])])
-    assert (inputs["input_ids"] == processor.image_token_id).sum().item() == 12 * 294
+    seen = []
+    lock = threading.Lock()
+
+    def make_handler(server_tag):
+        class Handler(BaseHTTPRequestHandler):
+            def do_POST(self):
+                assert self.path == "/v1/chat/completions"
+                length = int(self.headers["Content-Length"])
+                body = json.loads(self.rfile.read(length).decode("utf-8"))
+                with lock:
+                    seen.append((server_tag, body))
+                # Pick whichever side has higher mean pixel brightness (left=1, right=2)
+                n_imgs = sum(1 for c in body["messages"][1]["content"] if c["type"] == "image_url")
+                assert body["temperature"] == 0.0 and n_imgs == 16
+                reply = "ANSWER: 1" if len(seen) % 2 == 1 else "ANSWER: 2"
+                resp = json.dumps({"choices": [{"message": {"content": reply}}]}).encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(resp)))
+                self.end_headers()
+                self.wfile.write(resp)
+
+            def log_message(self, *_):
+                pass
+
+        return Handler
+
+    s1 = ThreadingHTTPServer(("127.0.0.1", 0), make_handler("s1"))
+    s2 = ThreadingHTTPServer(("127.0.0.1", 0), make_handler("s2"))
+    t1 = threading.Thread(target=s1.serve_forever, daemon=True)
+    t2 = threading.Thread(target=s2.serve_forever, daemon=True)
+    t1.start(), t2.start()
+    try:
+        cfg = load_config(CONFIG)
+        cfg["vlm"]["api_urls"] = [f"http://127.0.0.1:{s1.server_port}/v1", f"http://127.0.0.1:{s2.server_port}/v1"]
+        cfg["vlm"]["concurrency"] = 4
+        clip = np.zeros((16, 400, 600, 3), np.uint8)
+        judge = QwenJudge(cfg["vlm"], cfg["prompts"], segment_len=75)
+        results = judge.label([(clip, clip)])
+        assert len(seen) == 2  # (A, B) and (B, A) swap check
+        assert {tag for tag, _ in seen} == {"s1", "s2"}  # round-robins across both API URLs
+        assert results == [(1.0, ["ANSWER: 1", "ANSWER: 2"])]
+    finally:
+        s1.shutdown(), s2.shutdown()
+        s1.server_close(), s2.server_close()
 
 
 class FakeJudge:
@@ -244,10 +337,18 @@ def tiny_config():
     cfg.update(total_timesteps=1024, n_envs=2)
     cfg["ppo"].update(n_steps=256, batch_size=64, n_epochs=1)
     cfg["eval"].update(every=512, episodes=2, final_episodes=2, final_video_episodes=1)
-    cfg["pref"].update(n_queries=24, segment_len=30, pretrain_steps=400, pretrain_epochs=2, round_every=512,
-                       epochs_per_round=1)
+    cfg["pref"].update(n_queries=24, budget_by_labels=False, segment_len=30, pretrain_steps=400, pretrain_epochs=2,
+                       round_every=512, epochs_per_round=1)
     cfg["vlm"].update(frames_per_clip=4, save_clip_every=4)
     return cfg
+
+
+def test_budget_by_labels_retries_until_target(tmp_path):
+    cfg = tiny_config()
+    cfg["pref"].update(budget_by_labels=True, max_retry_factor=4)
+    run(cfg, "vlm", seed=0, out=tmp_path, judge=FakeJudge())
+    summary = json.loads((tmp_path / "summary.json").read_text())
+    assert summary["labels"] >= 24 and summary["asked"] > 24
 
 
 def test_run_with_learned_reward_end_to_end(tmp_path):

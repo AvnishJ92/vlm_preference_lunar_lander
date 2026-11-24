@@ -20,7 +20,7 @@ from stable_baselines3.common.logger import configure
 
 from prefrl import env as E
 from prefrl.reward_model import PrefDB, RewardEnsemble
-from prefrl.vlm import QwenJudge, clip_offsets, load_qwen
+from prefrl.vlm import QwenJudge, clip_offsets
 
 log = logging.getLogger("prefrl")
 EVAL_SEED = 10_000  # evaluation episode i uses seed EVAL_SEED + i in every run: all conditions face the same landings
@@ -80,47 +80,47 @@ class Feedback:
         """The frames of one segment that the VLM gets to see."""
         k = self.p["segment_len"]
         offsets = clip_offsets(k, self.v["frames_per_clip"], self.xp.ends(*where, k))
-        return self.renderer.frames(self.xp, *where, k, offsets, self.v["mark_out_of_view"])
+        return self.renderer.frames(
+            self.xp, *where, k, offsets, self.v["mark_out_of_view"], self.v.get("mark_landed", False)
+        )
 
     def _save_clip(self, qid, pair, shown, mu, oracle):
         """Side-by-side mp4 of a query (clip 1 left, clip 2 right) and a strip of exactly the frames the VLM saw."""
         name = {1.0: "1", 0.0: "2", 0.5: "tie", None: "none"}
-        stem = self.out / "videos/queries" / f"q{qid:05d}_vlm-{name[mu]}_oracle-{name[oracle]}"
-        full = [self.renderer.frames(self.xp, *where, self.p["segment_len"]) for where in pair]
-        E.write_video(stem.with_suffix(".mp4"), np.concatenate(full, axis=2))
+        vlm_tag = name[mu] if mu in name else f"{mu:.2f}"
+        stem = self.out / "videos/queries" / f"q{qid:05d}_vlm-{vlm_tag}_oracle-{name[oracle]}"
+        full = [
+            self.renderer.frames(
+                self.xp, *where, self.p["segment_len"],
+                mark_out_of_view=self.v["mark_out_of_view"],
+                mark_landed=self.v.get("mark_landed", False),
+            )
+            for where in pair
+        ]
+        E.write_video(stem.with_name(stem.name + ".mp4"), np.concatenate(full, axis=2))
         strip = np.concatenate([np.concatenate(list(clip[:, ::2, ::2]), axis=1) for clip in shown], axis=0)
         imageio.imwrite(stem.with_name(stem.name + "_shown.png"), strip)
 
-    def query(self, n, t):
-        """Ask for n labels on pairs of segments recorded since the previous round."""
-        k, tic = self.p["segment_len"], time.time()
-        cand = self.xp.sample_pairs(self.rng, n * self.p["candidate_factor"], k, self.mark)
-        obs, act, ret = self.xp.segments(cand, k)
-        oracle = 0.5 * (1 + np.sign(ret[:, 0] - ret[:, 1]))  # true-reward preference: 1, 0, or 0.5 on an exact tie
-        with torch.no_grad():
-            p = self.model.prefer_first(obs, act)
-        # None of these candidates is labelled yet, so this is a held-out accuracy of the current predictor.
-        clear = oracle != 0.5
-        self.pred_acc = float(((p.mean(0).numpy() > 0.5) == (oracle == 1))[clear].mean())
-        top = p.var(0).argsort(descending=True)[:n].numpy()  # the pairs the ensemble disagrees on most (2.2.4)
-
-        mu, replies = oracle[top].tolist(), [None] * n
-        by_vlm = np.flatnonzero(self.rng.random(n) >= self.oracle_fraction)
+    def _ask_batch(self, indices, cand, obs, act, ret, oracle, t):
+        """Score a batch of candidate indices (by oracle and/or VLM), log to queries.jsonl, and add valid labels to D."""
+        m_batch = len(indices)
+        mu, replies = oracle[indices].tolist(), [None] * m_batch
+        by_vlm = np.flatnonzero(self.rng.random(m_batch) >= self.oracle_fraction)
         for part in (by_vlm[a : a + 32] for a in range(0, len(by_vlm), 32)):  # bounds the frames held in memory
-            shown = [[self._shown(where) for where in cand[i]] for i in top[part]]
+            shown = [[self._shown(where) for where in cand[i]] for i in indices[part]]
             for j, clips, (m, r) in zip(part, shown, self.judge.label([tuple(c) for c in shown])):
-                mu[j], replies[j], o, s = m, r, float(oracle[top[j]]), self.vlm
+                mu[j], replies[j], o, s = m, r, float(oracle[indices[j]]), self.vlm
                 if s["asked"] % self.v["save_clip_every"] == 0:
-                    self._save_clip(self.asked + j, cand[top[j]], clips, m, o)
+                    self._save_clip(self.asked + j, cand[indices[j]], clips, m, o)
                 s["asked"] += 1
                 s["labelled"] += m is not None
                 s["ties"] += m == 0.5
-                if m in (0.0, 1.0) and o != 0.5:
+                if m is not None and m != 0.5 and o != 0.5:
                     s["hard"] += 1
-                    s["agree"] += m == o
+                    s["agree"] += (m > 0.5) == (o == 1.0)
 
         with (self.out / "queries.jsonl").open("a") as f:
-            for j, i in enumerate(top):
+            for j, i in enumerate(indices):
                 if mu[j] is not None:
                     self.db.add(obs[i], act[i], mu[j])
                 record = dict(
@@ -129,8 +129,43 @@ class Feedback:
                     replies=replies[j], mu=mu[j],
                 )  # fmt: skip
                 f.write(json.dumps(record) + "\n")
-        self.asked += n
-        log.info("t=%d asked %d queries (%d by VLM) in %.0fs; %d labels in D", t, n, len(by_vlm), time.time() - tic, len(self.db))
+        self.asked += m_batch
+        return len(by_vlm)
+
+    def query(self, n, t):
+        """Ask for n labels on pairs of segments recorded since the previous round."""
+        k, tic = self.p["segment_len"], time.time()
+        by_labels = bool(self.p.get("budget_by_labels", False))
+        max_attempts = max(n, int(self.p.get("max_retry_factor", 4) * n)) if by_labels else n
+        pool_size = max(n * self.p["candidate_factor"], max_attempts)
+        cand = self.xp.sample_pairs(self.rng, pool_size, k, self.mark)
+        obs, act, ret = self.xp.segments(cand, k)
+        oracle = 0.5 * (1 + np.sign(ret[:, 0] - ret[:, 1]))  # true-reward preference: 1, 0, or 0.5 on an exact tie
+        with torch.no_grad():
+            p = self.model.prefer_first(obs, act)
+        # None of these candidates is labelled yet, so this is a held-out accuracy of the current predictor.
+        clear = oracle != 0.5
+        self.pred_acc = float(((p.mean(0).numpy() > 0.5) == (oracle == 1))[clear].mean())
+        order = p.var(0).argsort(descending=True).numpy()  # the pairs the ensemble disagrees on most (2.2.4)
+
+        if not by_labels:
+            vlm_n = self._ask_batch(order[:n], cand, obs, act, ret, oracle, t)
+            log.info("t=%d asked %d queries (%d by VLM) in %.0fs; %d labels in D", t, n, vlm_n, time.time() - tic, len(self.db))
+            return
+
+        target_labels = len(self.db) + n
+        asked_round, vlm_round, cursor = 0, 0, 0
+        while len(self.db) < target_labels and asked_round < max_attempts and cursor < len(order):
+            need = target_labels - len(self.db)
+            est = need if self.oracle_fraction >= 1.0 else min(32, max(need, int(np.ceil(need * 2.0))))
+            m_batch = min(est, max_attempts - asked_round, len(order) - cursor)
+            vlm_round += self._ask_batch(order[cursor : cursor + m_batch], cand, obs, act, ret, oracle, t)
+            cursor += m_batch
+            asked_round += m_batch
+        log.info(
+            "t=%d asked %d queries (%d by VLM) in %.0fs; %d labels in D (target %d)",
+            t, asked_round, vlm_round, time.time() - tic, len(self.db), target_labels,
+        )
 
     def fit(self, epochs, t):
         """Train the predictor, renormalise it on the experience since the previous round, and close the round."""
@@ -179,8 +214,9 @@ class Loop(BaseCallback):
         t, p, e = self.num_timesteps, self.cfg["pref"], self.cfg["eval"]
         if self.fb and t >= self.next_round:
             due = labels_due(t, self.cfg["total_timesteps"], p["n_queries"], p["pretrain_frac"], p["anneal_tau_frac"])
-            if due > self.fb.asked:
-                self.fb.query(due - self.fb.asked, t)
+            have = len(self.fb.db) if p.get("budget_by_labels", False) else self.fb.asked
+            if due > have:
+                self.fb.query(due - have, t)
             self.fb.fit(p["epochs_per_round"], t)
             self.next_round += p["round_every"]
         if t >= self.next_eval:
@@ -215,7 +251,7 @@ def run(cfg, condition, seed, out, judge=None):
         )  # fmt: skip
         xp.reward_fn = reward_model.reward
         if judge is None and cond["oracle_fraction"] < 1:
-            judge = QwenJudge(*load_qwen(cfg["vlm"]), cfg["vlm"], cfg["prompts"], p["segment_len"])
+            judge = QwenJudge(cfg["vlm"], cfg["prompts"], p["segment_len"])
         feedback = Feedback(cfg, cond["oracle_fraction"], xp, reward_model, out, rng, judge)
         # Paper A.1: the first quarter of the comparisons is on clips of the randomly initialised policy.
         obs = xp.reset()

@@ -22,7 +22,7 @@ from stable_baselines3 import PPO
 
 from prefrl import env as E
 from prefrl.train import load_config
-from prefrl.vlm import QwenJudge, clip_offsets, load_qwen, parse
+from prefrl.vlm import QwenJudge, clip_offsets, parse
 
 log = logging.getLogger("prefrl")
 GROUPS = ("early", "mid", "late", "away")
@@ -115,13 +115,11 @@ def main():
             name = f"p{i:03d}_{group[i]}_oracle-{ {1.0: '1', 0.0: '2', 0.5: 'tie'}[oracle[i]] }.mp4"
             E.write_video(args.out / "pairs" / name, np.concatenate(clips, axis=2))
 
-    model, processor = load_qwen(cfg["vlm"])
     for variant, overrides in cfg["calibration"]["variants"].items():
         if args.variants and variant not in args.variants:
             continue
         vlm, name = {**cfg["vlm"], **overrides}, args.tag + variant
-        torch.cuda.reset_peak_memory_stats()
-        judge, tic, labels = QwenJudge(model, processor, vlm, cfg["prompts"], k), time.time(), []
+        judge, tic, labels = QwenJudge(vlm, cfg["prompts"], k), time.time(), []
         for a in range(0, n, 32):  # bounds the frames held in memory
             shown = [
                 tuple(
@@ -139,7 +137,7 @@ def main():
             row |= {f"{key}_{g}": part[key] for key in ("labelled", "clear", "agreement") if part}
         gone = [mu[i] for i in np.flatnonzero(group == "away") if mu[i] in (0.0, 1.0)]
         row["prefers_out_of_view_clip"] = float(np.mean([m == 1.0 for m in gone])) if gone else float("nan")
-        row |= {"seconds_per_query": (time.time() - tic) / n, "peak_gpu_gb": torch.cuda.max_memory_allocated() / 2**30}
+        row |= {"seconds_per_query": (time.time() - tic) / n}
         row = {key: v if key == "variant" else float(v) for key, v in row.items()}
         log.info("%s", {key: v if key == "variant" else round(v, 3) for key, v in row.items()})
         (args.out / f"score_{name}.json").write_text(json.dumps(row))
